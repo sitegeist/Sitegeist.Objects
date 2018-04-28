@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-	<file original="Modules" product-name="Sitegeist.Objects" source-language="en" datatype="plaintext" target-language="de">
+	<file original="Modules" product-name="Neos.Neos" source-language="en" datatype="plaintext" target-language="de">
 		<body>
 			<trans-unit id="sitegeist.objects.label" xml:space="preserve">
 				<source>Objects</source>
