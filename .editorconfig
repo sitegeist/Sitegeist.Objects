@@ -20,5 +20,8 @@ trim_trailing_whitespace = false
 [*.js]
 indent_style = tab
 
+[*.xlf]
+indent_style = tab
+
 [Makefile]
 indent_style = tab

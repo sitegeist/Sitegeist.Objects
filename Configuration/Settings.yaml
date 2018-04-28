@@ -1,3 +1,14 @@
 Sitegeist:
   Objects:
     rootNodeName: objects
+
+Neos:
+  Neos:
+    modules:
+      management:
+        submodules:
+          objects:
+            label: 'Neos.Neos:Modules:sitegeist.objects.label'
+            icon: icon-database
+            controller: \Sitegeist\Objects\Controller\ModuleController
+            skipI18n: false

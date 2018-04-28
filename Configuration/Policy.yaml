@@ -1,0 +1,13 @@
+privilegeTargets:
+
+  'Neos\Flow\Security\Authorization\Privilege\Method\MethodPrivilege':
+    'Sitegeist.Objects:GeneralAccess':
+      matcher: 'method(Sitegeist\Objects\Controller\ModuleController->.*Action())'
+
+roles:
+
+  'Neos.Neos:Editor':
+    privileges:
+      -
+        privilegeTarget: 'Sitegeist.Objects:GeneralAccess'
+        permission: GRANT
