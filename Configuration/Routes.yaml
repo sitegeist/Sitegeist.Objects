@@ -1,0 +1,22 @@
+-
+  name: 'Sitegeist.Objects - GraphiQL UI'
+  uriPattern: '<endpoint>'
+  defaults:
+    '@package':    'Sitegeist.Objects'
+    '@controller': 'Api'
+    '@action':     'index'
+    '@format':     'html'
+    'endpoint':    '<endpoint>'
+  appendExceedingArguments: true
+  httpMethods: [GET]
+
+-
+  name: 'Sitegeist.Objects - GraphQL API endpoint'
+  uriPattern: '<endpoint>'
+  defaults:
+    '@package':    'Sitegeist.Objects'
+    '@controller': 'Api'
+    '@action':     'query'
+    '@format':     'json'
+    'endpoint':    '<endpoint>'
+  httpMethods: [POST]

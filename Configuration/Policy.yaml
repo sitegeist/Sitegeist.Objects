@@ -2,7 +2,9 @@ privilegeTargets:
 
   'Neos\Flow\Security\Authorization\Privilege\Method\MethodPrivilege':
     'Sitegeist.Objects:GeneralAccess':
-      matcher: 'method(Sitegeist\Objects\Controller\ModuleController->.*Action())'
+      matcher: |
+        method(Sitegeist\Objects\Controller\.*Controller->.*Action()) ||
+        method(Wwwision\GraphQL\Controller\StandardController->(index|query)Action(endpoint == "neos/sitegeist/objects"))
 
 roles:
 

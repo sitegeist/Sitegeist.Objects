@@ -1,8 +1,26 @@
 Sitegeist:
   Objects:
     rootNodeName: objects
+    endpoints:
+      neos/sitegeist/objects:
+        querySchema: 'Sitegeist\Objects\GraphQl\RootQuery'
 
 Neos:
+  Flow:
+    mvc:
+      routes:
+        Sitegeist.Objects:
+          variables:
+            endpoint: neos/sitegeist/objects
+    security:
+      authentication:
+        providers:
+          'Neos.Neos:Backend':
+            requestPatterns:
+              'Sitegeist.Objects:Controllers':
+                pattern: ControllerObjectName
+                patternOptions:
+                  controllerObjectNamePattern: 'Sitegeist\Objects\Controller\.*'
   Neos:
     modules:
       management:
