@@ -131,7 +131,7 @@ class ObjectsCommandController extends CommandController
             }
         }
 
-        $storeNode = $rootNode->createNode($name, $this->nodeTypeManager->getNodeType('Sitegeist.Objects:Store'));
+        $storeNode = $rootNode->createNode($name, $nodeType);
         foreach($properties as $propertyName => $value) {
             $storeNode->setProperty($propertyName, $value);
         }
