@@ -5,3 +5,7 @@
 ## !!! WARNING:
 
 This package is currently in early development. Please, do not use it yet.
+
+## License
+
+See [LICENSE](./LICENSE.md)

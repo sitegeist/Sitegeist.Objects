@@ -1,6 +1,14 @@
 {
     "description": "Backend module for Neos CMS to manage data-centric nodes",
     "type": "neos-plugin",
+    "license": "GPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "Wilhelm Behncke",
+            "email": "behncke@sitegeist.de",
+            "role": "Developer"
+        }
+    ],
     "require": {
         "neos/neos": "*",
         "wwwision/graphql": "^2.1"
