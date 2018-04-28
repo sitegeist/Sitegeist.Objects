@@ -1,0 +1,19 @@
+{
+    "description": "Backend module for Neos CMS to manage data-centric nodes",
+    "type": "neos-plugin",
+    "require": {
+        "neos/neos": "*",
+        "wwwision/graphql": "^2.1"
+    },
+    "name": "sitegeist/objects",
+    "autoload": {
+        "psr-4": {
+            "Sitegeist\\Objects\\": "Classes/"
+        }
+    },
+    "extra": {
+        "neos": {
+            "package-key": "Sitegeist.Objects"
+        }
+    }
+}
