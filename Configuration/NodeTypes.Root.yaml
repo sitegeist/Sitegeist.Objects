@@ -1,0 +1,7 @@
+'Sitegeist.Objects:Root':
+  superTypes:
+    'Neos.Neos:Node': true
+  constraints:
+    nodeTypes:
+      '*': false
+      'Sitegeist.Objects:Store': true
