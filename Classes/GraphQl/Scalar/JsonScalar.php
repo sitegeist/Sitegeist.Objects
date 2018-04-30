@@ -15,13 +15,19 @@ namespace Sitegeist\Objects\GraphQl\Scalar;
 
 use Neos\Flow\Annotations as Flow;
 use GraphQL\Language\AST\Node as AstNode;
-use GraphQL\Language\AST\StringValue;
+use GraphQL\Language\AST\BooleanValueNode;
+use GraphQL\Language\AST\FloatValueNode;
+use GraphQL\Language\AST\IntValueNode;
+use GraphQL\Language\AST\ListValueNode;
+use GraphQL\Language\AST\ObjectValueNode;
+use GraphQL\Language\AST\StringValueNode;
 use GraphQL\Type\Definition\ScalarType;
+use GraphQL\Type\Definition\CompositeType;
 
 /**
  * Scalar for JSON objects with unpredictable structures
  */
-class JsonScalar extends ScalarType
+class JsonScalar extends ScalarType implements CompositeType
 {
     /**
      * @var JsonScalar
@@ -54,44 +60,53 @@ class JsonScalar extends ScalarType
 
     /**
      * @param mixed $value
-     * @return array|null
+     * @return mixed
      */
     public function serialize($value)
     {
-        if (!is_array($value)) {
-            return null;
-        }
-
         return $value;
     }
 
     /**
-     * @param string|array $value
-     * @return array|null
+     * @param mixed $value
+     * @return mixed
      */
     public function parseValue($value)
     {
-        if (is_string($value)) {
-            $value = json_decode($value, true);
-        }
-
-        if (is_array($value)) {
-            return $value;
-        }
-
-        return null;
+        return $value;
     }
 
     /**
-     * @param AstNode $valueAST
+     * @param AstNode $valueAstNode
      * @return array
      */
-    public function parseLiteral($valueAST)
+    public function parseLiteral($valueAstNode)
     {
-        if (!$valueAST instanceof StringValue) {
-            return null;
-        }
+        switch ($valueAstNode) {
+            case ($valueAstNode instanceof StringValueNode):
+            case ($valueAstNode instanceof BooleanValueNode):
+                return $valueAstNode->value;
 
-        return $this->parseValue($valueAST->value);
+            case ($valueAstNode instanceof IntValueNode):
+                return intval($valueAstNode->value);
+
+            case ($valueAstNode instanceof FloatValueNode):
+                return floatval($valueAstNode->value);
+
+            case ($valueAstNode instanceof ObjectValueNode): {
+                $value = [];
+                foreach ($valueAstNode->fields as $field) {
+                    $value[$field->name->value] = $this->parseLiteral($field->value);
+                }
+
+                return $value;
+            }
+
+            case ($valueAstNode instanceof ListValueNode):
+                return array_map([$this, 'parseLiteral'], $valueAstNode->values);
+
+            default:
+                return null;
+        }
     }
 }
