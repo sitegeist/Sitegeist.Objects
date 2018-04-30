@@ -41,9 +41,9 @@ class ObjectDetail
     public function __construct(NodeType $nodeType, NodeInterface $node = null)
     {
         //
-        // Invariant: $node must be of type $nodeType
+        // Invariant: $node must be equal to type $nodeType
         //
-        if ($node !== null && !$node->getNodeType()->isOfType($nodeType)) {
+        if ($node !== null && $node->getNodeType() !== $nodeType) {
             throw new \InvalidArgumentException(
                 sprintf('Node must be of type "%s"', $nodeType->getName()),
                 1524931043
