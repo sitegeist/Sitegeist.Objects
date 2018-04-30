@@ -105,7 +105,7 @@ class TableHeadConfiguration
      */
     public function getFilter()
     {
-        return ObjectAccess::getPropertyPath($this->columnConfiguration, 'sorting');
+        return ObjectAccess::getPropertyPath($this->columnConfiguration, 'filter');
     }
 
     /**
