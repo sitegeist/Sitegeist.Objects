@@ -16,8 +16,8 @@ namespace Sitegeist\Objects\GraphQl\Query\Detail;
 use Neos\Flow\Annotations as Flow;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
+use GraphQL\Type\Definition\ResolveInfo;
 use Wwwision\GraphQL\TypeResolver;
-use Neos\Utility\PositionalArraySorter;
 
 class GroupConfigurationQuery extends ObjectType
 {
@@ -29,41 +29,28 @@ class GroupConfigurationQuery extends ObjectType
             'fields' => [
                 'name' => [
                     'type' => Type::nonNull(Type::string()),
-                    'description' => 'The name of the group',
-                    'resolve' => function (GroupConfiguration $groupConfiguration) {
-                        return $groupConfiguration->getName();
-                    }
+                    'description' => 'The name of the group'
                 ],
                 'icon' => [
                     'type' => Type::string(),
-                    'description' => 'The icon of the group',
-                    'resolve' => function (GroupConfiguration $groupConfiguration) {
-                        return $groupConfiguration->getIcon();
-                    }
+                    'description' => 'The icon of the group'
                 ],
                 'label' => [
                     'type' => Type::nonNull(Type::string()),
-                    'description' => 'The label of the group',
-                    'resolve' => function (GroupConfiguration $groupConfiguration) {
-                        return $groupConfiguration->getLabel();
-                    }
+                    'description' => 'The label of the group'
                 ],
                 'description' => [
                     'type' => Type::string(),
-                    'description' => 'The description of the group',
-                    'resolve' => function (GroupConfiguration $groupConfiguration) {
-                        return $groupConfiguration->getDescription();
-                    }
+                    'description' => 'The description of the group'
                 ],
                 'propertyConfigurations' => [
                     'type' => Type::listOf($typeResolver->get(PropertyConfigurationQuery::class)),
-                    'description' => 'All property configurations belonging to this group',
-                    'resolve' => function (GroupConfiguration $groupConfiguration) {
-                        $sorter = new PositionalArraySorter(\iterator_to_array($groupConfiguration->getProperties()));
-                        return $sorter->toArray();
-                    }
+                    'description' => 'All property configurations belonging to this group'
                 ]
-            ]
+            ],
+            'resolveField'  => function(GroupConfiguration $groupConfiguration, $arguments, $context, ResolveInfo $info) {
+                return $groupConfiguration->{'get' . ucfirst($info->fieldName)}($arguments);
+            }
         ]);
     }
 }

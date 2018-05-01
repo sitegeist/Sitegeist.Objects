@@ -15,6 +15,7 @@ namespace Sitegeist\Objects\GraphQl\Query\Detail;
 
 use Neos\Flow\Annotations as Flow;
 use Neos\Utility\ObjectAccess;
+use Neos\Utility\PositionalArraySorter;
 use Sitegeist\Objects\Domain\Model\Detail\PropertyConfiguration;
 
 class GroupConfiguration
@@ -110,13 +111,18 @@ class GroupConfiguration
     /**
      * @return \Generator<PropertyConfiguration>
      */
-    public function getProperties()
+    public function getPropertyConfigurations()
     {
+        $properties = [];
+
         foreach($this->objectDetail->getNodeType()->getProperties() as $propertyName => $propertyConfiguration) {
             $groupName = ObjectAccess::getPropertyPath($propertyConfiguration, 'ui.sitegeist/objects/detail.group');
             if ($groupName === $this->groupName) {
-                yield new PropertyConfiguration($this->objectDetail, $propertyName);
+                $properties[$propertyName] = new PropertyConfiguration($this->objectDetail, $propertyName);
             }
         }
+
+        $sorter = new PositionalArraySorter($properties);
+        return $sorter->toArray();
     }
 }
