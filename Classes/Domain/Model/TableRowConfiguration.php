@@ -111,6 +111,16 @@ class TableRowConfiguration
     }
 
     /**
+     * Get if the object node has been removed
+     *
+     * @return boolean
+     */
+    public function getIsRemoved()
+    {
+        return $this->objectNode->isRemoved();
+    }
+
+    /**
      * Get the table cell configurations
      *
      * @return \Generator<TableCellConfiguration>
