@@ -1,5 +1,5 @@
 <?php
-namespace Sitegeist\Objects\Domain\Model\Detail;
+namespace Sitegeist\Objects\GraphQl\Query\Detail;
 
 /*
  * Copyright notice
@@ -17,6 +17,7 @@ use Neos\Flow\Annotations as Flow;
 use Neos\Utility\ObjectAccess;
 use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\ContentRepository\Domain\Model\NodeType;
+use Sitegeist\Objects\Domain\Model\Detail\TabConfiguration;
 
 /**
  * Provides information about a (possibly empty) object node

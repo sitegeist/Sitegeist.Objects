@@ -15,6 +15,7 @@ namespace Sitegeist\Objects\Domain\Model\Detail;
 
 use Neos\Flow\Annotations as Flow;
 use Neos\Utility\ObjectAccess;
+use Sitegeist\Objects\GraphQl\Query\Detail\ObjectDetail;
 
 class PropertyConfiguration
 {

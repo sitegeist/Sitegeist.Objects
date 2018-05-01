@@ -18,7 +18,7 @@ use Neos\ContentRepository\Domain\Service\ContextFactoryInterface;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use Wwwision\GraphQL\TypeResolver;
-use Sitegeist\Objects\Domain\Model\Detail\ObjectDetail;
+use Sitegeist\Objects\GraphQl\Query\Detail\ObjectDetail;
 use Sitegeist\Objects\GraphQl\Input\ContentContextInput;
 use Sitegeist\Objects\GraphQl\Mutation\StoreMutation;
 use Sitegeist\Objects\GraphQl\Query\Detail\ObjectDetailQuery;

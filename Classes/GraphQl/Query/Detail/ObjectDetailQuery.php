@@ -19,7 +19,7 @@ use Neos\ContentRepository\Domain\Model\NodeInterface;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use Wwwision\GraphQL\TypeResolver;
-use Sitegeist\Objects\Domain\Model\Detail\ObjectDetail;
+use Sitegeist\Objects\GraphQl\Query\Detail\ObjectDetail;
 use Sitegeist\Objects\Service\NodeService;
 use Sitegeist\Objects\GraphQl\Query\NodeTypeQuery;
 
