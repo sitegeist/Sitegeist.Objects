@@ -95,9 +95,15 @@
 window.Sitegeist = window.Sitegeist || {};
 window.Sitegeist.Objects = {};
 
-window.Sitegeist.Objects.ping = function () {
-  console.log('pong');
-};
+//
+// Expose app container
+//
+window.Sitegeist.Objects.appContainer = document.getElementById('app');
+
+//
+// Expose csrfToken
+//
+window.Sitegeist.Objects.csrfToken = window.Sitegeist.Objects.appContainer.querySelector('[itemprop="csrfToken"]').getAttribute('content');
 
 /***/ })
 

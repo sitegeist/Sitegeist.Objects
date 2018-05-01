@@ -9,5 +9,9 @@
  * For the full copyright and license information, please read the
  * LICENSE.md file that was distributed with this source code.
  */
+import React from 'react';
+import {render} from 'react-dom';
 
-window.Sitegeist.Objects.ping();
+const {appContainer} = window.Sitegeist.Objects;
+
+render(<h1>Hello World!</h1>, appContainer);
