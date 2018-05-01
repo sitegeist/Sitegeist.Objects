@@ -19,9 +19,16 @@ use GraphQL\Type\Definition\Type;
 use Wwwision\GraphQL\TypeResolver;
 use Sitegeist\Objects\Domain\Model\TableRowConfiguration;
 use Sitegeist\Objects\GraphQl\Scalar\JsonScalar;
+use Sitegeist\Objects\Service\NodeService;
 
 class TableRowConfigurationQuery extends ObjectType
 {
+    /**
+     * @Flow\Inject
+     * @var NodeService
+     */
+    protected $nodeService;
+
     /**
      * @param TypeResolver $typeResolver
      */
@@ -64,6 +71,13 @@ class TableRowConfigurationQuery extends ObjectType
                     'description' => 'Has the row been removed?',
                     'resolve' => function (TableRowConfiguration $tableRowConfiguration) {
                         return $tableRowConfiguration->getIsRemoved();
+                    }
+                ],
+                'hasUnpublishedChanges' => [
+                    'type' => Type::boolean(),
+                    'description' => 'Does the object have unpublished changes?',
+                    'resolve' => function (TableRowConfiguration $tableRowConfiguration) {
+                        return $this->nodeService->checkIfNodeHasUnpublishedChanges($tableRowConfiguration->getNode());
                     }
                 ],
                 'tableCellConfigurations' => [
