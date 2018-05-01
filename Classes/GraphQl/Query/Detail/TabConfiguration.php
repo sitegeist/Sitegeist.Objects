@@ -15,6 +15,7 @@ namespace Sitegeist\Objects\GraphQl\Query\Detail;
 
 use Neos\Flow\Annotations as Flow;
 use Neos\Utility\ObjectAccess;
+use Neos\Utility\PositionalArraySorter;
 use Sitegeist\Objects\Domain\Model\Detail\GroupConfiguration;
 
 class TabConfiguration
@@ -110,16 +111,18 @@ class TabConfiguration
     /**
      * @return \Generator<GroupConfiguration>
      */
-    public function getGroups()
+    public function getGroupConfigurations()
     {
-        $alreadyYieldedGroupConfigurations = [];
+        $groupConfigurations = [];
 
         foreach($this->objectDetail->getNodeType()->getProperties() as $propertyConfiguration) {
             $groupName = ObjectAccess::getPropertyPath($propertyConfiguration, 'ui.sitegeist/objects/detail.group');
-            if ($groupName && !in_array($groupName, $alreadyYieldedGroupConfigurations)) {
-                $alreadyYieldedGroupConfigurations[] = $groupName;
-                yield new GroupConfiguration($this->objectDetail, $groupName);
+            if ($groupName && !array_key_exists($groupName, $groupConfigurations)) {
+                $groupConfigurations[$groupName] = new GroupConfiguration($this->objectDetail, $groupName);
             }
         }
+
+        $sorter = new PositionalArraySorter($groupConfigurations);
+        return $sorter->toArray();
     }
 }

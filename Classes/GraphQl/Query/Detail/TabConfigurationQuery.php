@@ -14,9 +14,9 @@ namespace Sitegeist\Objects\GraphQl\Query\Detail;
  */
 
 use Neos\Flow\Annotations as Flow;
-use Neos\Utility\PositionalArraySorter;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
+use GraphQL\Type\Definition\ResolveInfo;
 use Wwwision\GraphQL\TypeResolver;
 
 class TabConfigurationQuery extends ObjectType
@@ -29,41 +29,28 @@ class TabConfigurationQuery extends ObjectType
             'fields' => [
                 'name' => [
                     'type' => Type::nonNull(Type::string()),
-                    'description' => 'The name of the tab',
-                    'resolve' => function (TabConfiguration $tabConfiguration) {
-                        return $tabConfiguration->getName();
-                    }
+                    'description' => 'The name of the tab'
                 ],
                 'icon' => [
                     'type' => Type::string(),
-                    'description' => 'The icon of the tab',
-                    'resolve' => function (TabConfiguration $tabConfiguration) {
-                        return $tabConfiguration->getIcon();
-                    }
+                    'description' => 'The icon of the tab'
                 ],
                 'label' => [
                     'type' => Type::nonNull(Type::string()),
-                    'description' => 'The label of the tab',
-                    'resolve' => function (TabConfiguration $tabConfiguration) {
-                        return $tabConfiguration->getLabel();
-                    }
+                    'description' => 'The label of the tab'
                 ],
                 'description' => [
                     'type' => Type::string(),
-                    'description' => 'The description of the tab',
-                    'resolve' => function (TabConfiguration $tabConfiguration) {
-                        return $tabConfiguration->getDescription();
-                    }
+                    'description' => 'The description of the tab'
                 ],
                 'groupConfigurations' => [
                     'type' => Type::listOf($typeResolver->get(GroupConfigurationQuery::class)),
-                    'description' => 'All group configurations belonging to this tab',
-                    'resolve' => function (TabConfiguration $tabConfiguration) {
-                        $sorter = new PositionalArraySorter(\iterator_to_array($tabConfiguration->getGroups()));
-                        return $sorter->toArray();
-                    }
+                    'description' => 'All group configurations belonging to this tab'
                 ]
-            ]
+            ],
+            'resolveField'  => function(TabConfiguration $tabConfiguration, $arguments, $context, ResolveInfo $info) {
+                return $tabConfiguration->{'get' . ucfirst($info->fieldName)}($arguments);
+            }
         ]);
     }
 }
