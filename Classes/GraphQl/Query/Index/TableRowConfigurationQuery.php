@@ -16,18 +16,12 @@ namespace Sitegeist\Objects\GraphQl\Query\Index;
 use Neos\Flow\Annotations as Flow;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
+use GraphQL\Type\Definition\ResolveInfo;
 use Wwwision\GraphQL\TypeResolver;
 use Sitegeist\Objects\GraphQl\Scalar\JsonScalar;
-use Sitegeist\Objects\Service\NodeService;
 
 class TableRowConfigurationQuery extends ObjectType
 {
-    /**
-     * @Flow\Inject
-     * @var NodeService
-     */
-    protected $nodeService;
-
     /**
      * @param TypeResolver $typeResolver
      */
@@ -39,55 +33,36 @@ class TableRowConfigurationQuery extends ObjectType
             'fields' => [
                 'identifier' => [
                     'type' => Type::nonNull(Type::string()),
-                    'description' => 'Identifier of the row',
-                    'resolve' => function (TableRowConfiguration $tableRowConfiguration) {
-                        return $tableRowConfiguration->getIdentifier();
-                    }
+                    'description' => 'Identifier of the row'
                 ],
                 'icon' => [
                     'type' => Type::string(),
-                    'description' => 'Icon of the row',
-                    'resolve' => function (TableRowConfiguration $tableRowConfiguration) {
-                        return $tableRowConfiguration->getIcon();
-                    }
+                    'description' => 'Icon of the row'
                 ],
                 'label' => [
                     'type' => Type::string(),
-                    'description' => 'Label of the row',
-                    'resolve' => function (TableRowConfiguration $tableRowConfiguration) {
-                        return $tableRowConfiguration->getLabel();
-                    }
+                    'description' => 'Label of the row'
                 ],
                 'isHidden' => [
                     'type' => Type::boolean(),
-                    'description' => 'Is the row hidden?',
-                    'resolve' => function (TableRowConfiguration $tableRowConfiguration) {
-                        return $tableRowConfiguration->getNode()->isHidden();
-                    }
+                    'description' => 'Is the row hidden?'
                 ],
                 'isRemoved' => [
                     'type' => Type::boolean(),
-                    'description' => 'Has the row been removed?',
-                    'resolve' => function (TableRowConfiguration $tableRowConfiguration) {
-                        return $tableRowConfiguration->getIsRemoved();
-                    }
+                    'description' => 'Has the row been removed?'
                 ],
                 'hasUnpublishedChanges' => [
                     'type' => Type::boolean(),
-                    'description' => 'Does the object have unpublished changes?',
-                    'resolve' => function (TableRowConfiguration $tableRowConfiguration) {
-                        return $this->nodeService->checkIfNodeHasUnpublishedChanges($tableRowConfiguration->getNode());
-                    }
+                    'description' => 'Does the object have unpublished changes?'
                 ],
                 'tableCellConfigurations' => [
                     'type' => Type::listOf($typeResolver->get(TableCellConfigurationQuery::class)),
-                    'description' => 'All cells of this row',
-                    'resolve' => function (TableRowConfiguration $tableRowConfiguration) {
-                        return $tableRowConfiguration->getTableCellConfigurations();
-                    }
+                    'description' => 'All cells of this row'
                 ]
-
-            ]
+            ],
+            'resolveField'  => function(TableRowConfiguration $tableRowConfiguration, $arguments, $context, ResolveInfo $info) {
+                return $tableRowConfiguration->{'get' . ucfirst($info->fieldName)}($arguments);
+            }
         ]);
     }
 }

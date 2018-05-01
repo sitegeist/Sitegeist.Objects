@@ -20,9 +20,15 @@ use Neos\Eel\Helper\StringHelper;
 use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\ContentRepository\Domain\Model\NodeType;
 use Sitegeist\Objects\Domain\Model\Index\TableCellConfiguration;
+use Sitegeist\Objects\Service\NodeService;
 
 class TableRowConfiguration
 {
+    /**
+     * @Flow\Inject
+     * @var NodeService
+     */
+    protected $nodeService;
 
     /**
      * @var NodeInterface
@@ -122,6 +128,16 @@ class TableRowConfiguration
     }
 
     /**
+     * Get if the object node is hidden
+     *
+     * @return boolean
+     */
+    public function getIsHidden()
+    {
+        return $this->objectNode->isHidden();
+    }
+
+    /**
      * Get if the object node has been removed
      *
      * @return boolean
@@ -129,6 +145,16 @@ class TableRowConfiguration
     public function getIsRemoved()
     {
         return $this->objectNode->isRemoved();
+    }
+
+    /**
+     * Get if the object node has unpublished changes
+     *
+     * @return boolean
+     */
+    public function getHasUnpublishedChanges()
+    {
+        return $this->nodeService->checkIfNodeHasUnpublishedChanges($this->getNode());
     }
 
     /**
