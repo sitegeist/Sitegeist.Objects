@@ -16,6 +16,7 @@ namespace Sitegeist\Objects\Service;
 use Neos\Flow\Annotations as Flow;
 use Neos\Eel\Helper\StringHelper;
 use Neos\ContentRepository\Domain\Model\NodeInterface;
+use Neos\ContentRepository\Domain\Service\NodeServiceInterface;
 use Neos\ContentRepository\Domain\Service\PublishingServiceInterface;
 
 /**
@@ -36,12 +37,47 @@ class NodeService
     protected $publishingService;
 
     /**
+     * @Flow\Inject
+     * @var NodeServiceInterface
+     */
+    protected $nativeNodeService;
+
+    /**
      * For debugging purposes only!
      *
      * @Flow\Inject
      * @var \Neos\Flow\Log\SystemLoggerInterface
      */
     protected $logger;
+
+    /**
+     * Generate a unique node name
+     *
+     * @param NodeInterface $parentNode
+     * @param string $proposedName
+     * @return string
+     */
+    public function generateUniqueNodeName(NodeInterface $parentNode, $proposedName = 'object')
+    {
+        return $this->nativeNodeService->generateUniqueNodeName($parentNode->getPath(), $proposedName);
+    }
+
+    /**
+     * Apply properties to node
+     *
+     * @param NodeInterface $node
+     * @param array $properties
+     * @return void
+     */
+    public function applyPropertiesToNode(NodeInterface $node, array $properties)
+    {
+        foreach ($properties as $propertyName => $propertyValue) {
+            //
+            // @TODO: Apply type converter first
+            //
+            $node->setProperty($propertyName, $propertyValue);
+        }
+    }
 
     /**
      * @param NodeInterface $node
@@ -73,5 +109,29 @@ class NodeService
         }
 
         return false;
+    }
+
+    /**
+     * @param NodeInterface $node
+     * @return \Generator<NodeInterface>
+     */
+    public function publishNode(NodeInterface $node)
+    {
+        foreach ($this->getUnpublishedNodesBeneathNode($node) as $unpublishedNode) {
+            $this->publishingService->publishNode($unpublishedNode);
+            yield $unpublishedNode;
+        }
+    }
+
+    /**
+     * @param NodeInterface $node
+     * @return \Generator<NodeInterface>
+     */
+    public function discardNode(NodeInterface $node)
+    {
+        foreach ($this->getUnpublishedNodesBeneathNode($node) as $unpublishedNode) {
+            $this->publishingService->discardNode($unpublishedNode);
+            yield $unpublishedNode;
+        }
     }
 }
