@@ -14,23 +14,16 @@ namespace Sitegeist\Objects\GraphQl\Query\Detail;
  */
 
 use Neos\Flow\Annotations as Flow;
-use Neos\Utility\PositionalArraySorter;
 use Neos\ContentRepository\Domain\Model\NodeInterface;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
+use GraphQL\Type\Definition\ResolveInfo;
 use Wwwision\GraphQL\TypeResolver;
 use Sitegeist\Objects\GraphQl\Query\Detail\ObjectDetail;
-use Sitegeist\Objects\Service\NodeService;
 use Sitegeist\Objects\GraphQl\Query\NodeTypeQuery;
 
 class ObjectDetailQuery extends ObjectType
 {
-    /**
-     * @Flow\Inject
-     * @var NodeService
-     */
-    protected $nodeService;
-
     /**
      * @param TypeResolver $typeResolver
      */
@@ -42,62 +35,40 @@ class ObjectDetailQuery extends ObjectType
             'fields' => [
                 'identifier' => [
                     'type' => Type::id(),
-                    'description' => 'The id of the object node or null if empty',
-                    'resolve' => function (ObjectDetail $objectDetail) {
-                        return $objectDetail->getIdentifier();
-                    }
+                    'description' => 'The id of the object node or null if empty'
                 ],
                 'icon' => [
                     'type' => Type::string(),
-                    'description' => 'The icon of the object node',
-                    'resolve' => function (ObjectDetail $objectDetail) {
-                        return $objectDetail->getIcon();
-                    }
+                    'description' => 'The icon of the object node'
                 ],
                 'label' => [
                     'type' => Type::string(),
-                    'description' => 'The label of the object node or null if empty',
-                    'resolve' => function (ObjectDetail $objectDetail) {
-                        return $objectDetail->getLabel();
-                    }
+                    'description' => 'The label of the object node or null if empty'
                 ],
                 'isHidden' => [
                     'type' => Type::boolean(),
-                    'description' => 'Is the object hidden?',
-                    'resolve' => function (ObjectDetail $objectDetail) {
-                        return $objectDetail->getNode()->isHidden();
-                    }
+                    'description' => 'Is the object hidden?'
                 ],
                 'isRemoved' => [
                     'type' => Type::boolean(),
-                    'description' => 'Has the object been removed?',
-                    'resolve' => function (ObjectDetail $objectDetail) {
-                        return $objectDetail->getIsRemoved();
-                    }
+                    'description' => 'Has the object been removed?'
                 ],
                 'hasUnpublishedChanges' => [
                     'type' => Type::boolean(),
-                    'description' => 'Does the object have unpublished changes?',
-                    'resolve' => function (ObjectDetail $objectDetail) {
-                        return $this->nodeService->checkIfNodeHasUnpublishedChanges($objectDetail->getNode());
-                    }
+                    'description' => 'Does the object have unpublished changes?'
                 ],
                 'nodeType' => [
                     'type' => $typeResolver->get(NodeTypeQuery::class),
-                    'description' => 'The node type of the object node',
-                    'resolve' => function(ObjectDetail $objectDetail) {
-                        return $objectDetail->getNodeType();
-                    }
+                    'description' => 'The node type of the object node'
                 ],
                 'tabConfigurations' => [
                     'type' => Type::listOf($typeResolver->get(TabConfigurationQuery::class)),
-                    'description' => 'The tab configuration of the object node',
-                    'resolve' => function(ObjectDetail $objectDetail) {
-                        $sorter = new PositionalArraySorter(\iterator_to_array($objectDetail->getTabs()));
-                        return $sorter->toArray();
-                    }
+                    'description' => 'The tab configuration of the object node'
                 ]
-            ]
+            ],
+            'resolveField'  => function(ObjectDetail $objectDetail, $arguments, $context, ResolveInfo $info) {
+                return $objectDetail->{'get' . ucfirst($info->fieldName)}($arguments);
+            }
         ]);
     }
 }

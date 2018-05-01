@@ -15,9 +15,11 @@ namespace Sitegeist\Objects\GraphQl\Query\Detail;
 
 use Neos\Flow\Annotations as Flow;
 use Neos\Utility\ObjectAccess;
+use Neos\Utility\PositionalArraySorter;
 use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\ContentRepository\Domain\Model\NodeType;
 use Sitegeist\Objects\Domain\Model\Detail\TabConfiguration;
+use Sitegeist\Objects\Service\NodeService;
 
 /**
  * Provides information about a (possibly empty) object node
@@ -35,6 +37,12 @@ class ObjectDetail
     protected $node;
 
     /**
+     * @Flow\Inject
+     * @var NodeService
+     */
+    protected $nodeService;
+
+    /**
      * @param NodeType $nodeType
      * @param NodeInterface|null $node
      * @throws \InvalidArgumentException
@@ -42,7 +50,7 @@ class ObjectDetail
     public function __construct(NodeType $nodeType, NodeInterface $node = null)
     {
         //
-        // Invariant: $node must be equal to type $nodeType
+        // Invariant: Type of $node must be equal to type $nodeType
         //
         if ($node !== null && $node->getNodeType() !== $nodeType) {
             throw new \InvalidArgumentException(
@@ -120,6 +128,20 @@ class ObjectDetail
     }
 
     /**
+     * Get if the object node is hidden
+     *
+     * @return boolean
+     */
+    public function getIsHidden()
+    {
+        if ($this->hasNode()) {
+            return $this->node->isHidden();
+        }
+
+        return false;
+    }
+
+    /**
      * Get if the object node has been removed
      *
      * @return boolean
@@ -129,14 +151,30 @@ class ObjectDetail
         if ($this->hasNode()) {
             return $this->node->isRemoved();
         }
+
+        return false;
     }
 
     /**
-     * @return \Generator<TabConfiguration>
+     * Get if the object node has unpublished changes
+     *
+     * @return boolean
      */
-    public function getTabs()
+    public function getHasUnpublishedChanges()
     {
-        $alreadyYieldedTabConfigurations = [];
+        if ($this->hasNode()) {
+            return $this->nodeService->checkIfNodeHasUnpublishedChanges($this->getNode());
+        }
+
+        return false;
+    }
+
+    /**
+     * @return array<TabConfiguration>
+     */
+    public function getTabConfigurations()
+    {
+        $tabConfigurations = [];
 
         foreach($this->nodeType->getProperties() as $propertyConfiguration) {
             $groupName = ObjectAccess::getPropertyPath($propertyConfiguration, 'ui.sitegeist/objects/detail.group');
@@ -144,11 +182,13 @@ class ObjectDetail
                 $tabName = $this->nodeType
                     ->getConfiguration('ui.sitegeist/objects/detail.groups.' . $groupName . '.tab');
 
-                if ($tabName && !in_array($tabName, $alreadyYieldedTabConfigurations)) {
-                    $alreadyYieldedTabConfigurations[] = $tabName;
-                    yield new TabConfiguration($this, $tabName);
+                if ($tabName && !array_key_exists($tabName, $tabConfigurations)) {
+                    $tabConfigurations[$tabName] = new TabConfiguration($this, $tabName);
                 }
             }
         }
+
+        $sorter = new PositionalArraySorter($tabConfigurations);
+        return $sorter->toArray();
     }
 }
