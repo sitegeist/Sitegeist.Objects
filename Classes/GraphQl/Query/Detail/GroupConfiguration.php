@@ -16,7 +16,6 @@ namespace Sitegeist\Objects\GraphQl\Query\Detail;
 use Neos\Flow\Annotations as Flow;
 use Neos\Utility\ObjectAccess;
 use Neos\Utility\PositionalArraySorter;
-use Sitegeist\Objects\Domain\Model\Detail\PropertyConfiguration;
 
 class GroupConfiguration
 {
