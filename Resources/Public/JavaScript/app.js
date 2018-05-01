@@ -79,6 +79,8 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+
+
 /*
  * Copyright notice
  *
@@ -91,6 +93,7 @@
  * LICENSE.md file that was distributed with this source code.
  */
 
+window.Sitegeist.Objects.ping();
 
 /***/ })
 
