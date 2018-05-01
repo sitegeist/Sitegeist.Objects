@@ -17,9 +17,9 @@ use Neos\Flow\Annotations as Flow;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use Wwwision\GraphQL\TypeResolver;
-use Sitegeist\Objects\Domain\Model\ObjectList;
+use Sitegeist\Objects\Domain\Model\ObjectIndex;
 
-class ObjectListQuery extends ObjectType
+class ObjectIndexQuery extends ObjectType
 {
     /**
      * @param TypeResolver $typeResolver
@@ -27,20 +27,20 @@ class ObjectListQuery extends ObjectType
     public function __construct(TypeResolver $typeResolver)
     {
         return parent::__construct([
-            'name' => 'ObjectList',
+            'name' => 'ObjectIndex',
             'description' => 'A List of Object',
             'fields' => [
                 'tableHeadConfigurations' => [
                     'type' => Type::listOf($typeResolver->get(TableHeadConfigurationQuery::class)),
                     'description' => 'All table heads for this list',
-                    'resolve' => function (ObjectList $objectList) {
+                    'resolve' => function (ObjectIndex $objectList) {
                         return $objectList->getTableHeadConfigurations();
                     }
                 ],
                 'tableRowConfigurations' => [
                     'type' => Type::listOf($typeResolver->get(TableRowConfigurationQuery::class)),
                     'description' => 'All table rows for this list',
-                    'resolve' => function (ObjectList $objectList) {
+                    'resolve' => function (ObjectIndex $objectList) {
                         return $objectList->getTableRowConfigurations();
                     }
                 ]

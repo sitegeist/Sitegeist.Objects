@@ -22,7 +22,7 @@ use GraphQL\Type\Definition\Type;
 use Wwwision\GraphQL\TypeResolver;
 use Neos\Eel\Helper\StringHelper;
 use Sitegeist\Objects\Domain\Model\Detail\ObjectDetail;
-use Sitegeist\Objects\Domain\Model\ObjectList;
+use Sitegeist\Objects\Domain\Model\ObjectIndex;
 use Sitegeist\Objects\GraphQl\Query\Detail\ObjectDetailQuery;
 
 class StoreQuery extends ObjectType
@@ -98,18 +98,18 @@ class StoreQuery extends ObjectType
                         return $storeNode->getNodeType();
                     }
                 ],
-                'objectList' => [
-                    'type' => Type::nonNull($typeResolver->get(ObjectListQuery::class)),
-                    'description' => 'List of all objects in the store',
+                'objectIndex' => [
+                    'type' => Type::nonNull($typeResolver->get(ObjectIndexQuery::class)),
+                    'description' => 'Index of all objects in the store',
                     'args' => [
                         'from' => [
                             'type' => Type::int(),
-                            'description' => 'Limit list length, starting at {from}',
+                            'description' => 'Limit index length, starting at {from}',
                             'defaultValue' => 0
                         ],
                         'length' => [
                             'type' => Type::int(),
-                            'description' => 'Limit list length',
+                            'description' => 'Limit index length',
                             'defaultValue' => 10
                         ],
                         'sort' => [
@@ -137,7 +137,7 @@ class StoreQuery extends ObjectType
 
                         $nodes = $flowQuery->get();
 
-                        return new ObjectList($storeNode, $nodes);
+                        return new ObjectIndex($storeNode, $nodes);
                     }
                 ],
                 'objectDetail' => [
