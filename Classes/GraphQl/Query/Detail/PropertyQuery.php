@@ -20,13 +20,13 @@ use GraphQL\Type\Definition\ResolveInfo;
 use Wwwision\GraphQL\TypeResolver;
 use Sitegeist\Objects\GraphQl\Scalar\JsonScalar;
 
-class PropertyConfigurationQuery extends ObjectType
+class PropertyQuery extends ObjectType
 {
     public function __construct(TypeResolver $typeResolver)
     {
         return parent::__construct([
-            'name' => 'PropertyConfiguration',
-            'description' => 'An property configuration',
+            'name' => 'Property',
+            'description' => 'A property configuration',
             'fields' => [
                 'name' => [
                     'type' => Type::nonNull(Type::string()),
@@ -53,7 +53,7 @@ class PropertyConfigurationQuery extends ObjectType
                     'description' => 'The value of the property'
                 ]
             ],
-            'resolveField'  => function(PropertyConfiguration $propertyConfiguration, $arguments, $context, ResolveInfo $info) {
+            'resolveField'  => function(PropertyHelper $propertyConfiguration, $arguments, $context, ResolveInfo $info) {
                 return $propertyConfiguration->{'get' . ucfirst($info->fieldName)}($arguments);
             }
         ]);

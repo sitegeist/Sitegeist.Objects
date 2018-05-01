@@ -108,16 +108,16 @@ class GroupHelper
     }
 
     /**
-     * @return \Generator<PropertyConfiguration>
+     * @return \Generator<PropertyHelper>
      */
-    public function getPropertyConfigurations()
+    public function getProperties()
     {
         $properties = [];
 
         foreach($this->objectDetail->getNodeType()->getProperties() as $propertyName => $propertyConfiguration) {
             $groupName = ObjectAccess::getPropertyPath($propertyConfiguration, 'ui.sitegeist/objects/detail.group');
             if ($groupName === $this->groupName) {
-                $properties[$propertyName] = new PropertyConfiguration($this->objectDetail, $propertyName);
+                $properties[$propertyName] = new PropertyHelper($this->objectDetail, $propertyName);
             }
         }
 

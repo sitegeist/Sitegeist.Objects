@@ -16,7 +16,7 @@ namespace Sitegeist\Objects\GraphQl\Query\Detail;
 use Neos\Flow\Annotations as Flow;
 use Neos\Utility\ObjectAccess;
 
-class PropertyConfiguration
+class PropertyHelper
 {
     /**
      * @var ObjectDetail

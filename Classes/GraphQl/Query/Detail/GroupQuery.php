@@ -43,9 +43,9 @@ class GroupQuery extends ObjectType
                     'type' => Type::string(),
                     'description' => 'The description of the group'
                 ],
-                'propertyConfigurations' => [
-                    'type' => Type::listOf($typeResolver->get(PropertyConfigurationQuery::class)),
-                    'description' => 'All property configurations belonging to this group'
+                'properties' => [
+                    'type' => Type::listOf($typeResolver->get(PropertyQuery::class)),
+                    'description' => 'All properties belonging to this group'
                 ]
             ],
             'resolveField'  => function(GroupHelper $groupConfiguration, $arguments, $context, ResolveInfo $info) {
