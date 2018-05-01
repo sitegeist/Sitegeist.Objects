@@ -18,10 +18,10 @@ use Neos\ContentRepository\Domain\Service\ContextFactoryInterface;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use Wwwision\GraphQL\TypeResolver;
-use Sitegeist\Objects\GraphQl\Query\Detail\ObjectDetail;
+use Sitegeist\Objects\GraphQl\Query\Detail\DetailHelper;
 use Sitegeist\Objects\GraphQl\Input\ContentContextInput;
 use Sitegeist\Objects\GraphQl\Mutation\StoreMutation;
-use Sitegeist\Objects\GraphQl\Query\Detail\ObjectDetailQuery;
+use Sitegeist\Objects\GraphQl\Query\Detail\DetailQuery;
 use Sitegeist\Objects\Service\NodeService;
 
 class RootMutation extends ObjectType
@@ -84,7 +84,7 @@ class RootMutation extends ObjectType
                     }
                 ],
                 'publishAll' => [
-                    'type' => Type::listOf($typeResolver->get(ObjectDetailQuery::class)),
+                    'type' => Type::listOf($typeResolver->get(DetailQuery::class)),
                     'description' => 'Publish all objects',
                     'args' => [
                         'context' => [
@@ -98,13 +98,13 @@ class RootMutation extends ObjectType
 
                         foreach($this->nodeService->publishNode($rootNode) as $publishedNode) {
                             if ($publishedNode->getNodeType()->isOfType('Sitegeist.Objects:Object')) {
-                                yield new ObjectDetail($publishedNode->getNodeType(), $publishedNode);
+                                yield new DetailHelper($publishedNode->getNodeType(), $publishedNode);
                             }
                         }
                     }
                 ],
                 'discardAll' => [
-                    'type' => Type::listOf($typeResolver->get(ObjectDetailQuery::class)),
+                    'type' => Type::listOf($typeResolver->get(DetailQuery::class)),
                     'description' => 'Discard all objects',
                     'args' => [
                         'context' => [
@@ -118,7 +118,7 @@ class RootMutation extends ObjectType
 
                         foreach($this->nodeService->discardNode($rootNode) as $discardedNode) {
                             if ($discardedNode->getNodeType()->isOfType('Sitegeist.Objects:Object')) {
-                                yield new ObjectDetail($discardedNode->getNodeType(), $discardedNode);
+                                yield new DetailHelper($discardedNode->getNodeType(), $discardedNode);
                             }
                         }
                     }

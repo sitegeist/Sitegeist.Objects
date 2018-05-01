@@ -19,10 +19,10 @@ use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
 use Wwwision\GraphQL\TypeResolver;
-use Sitegeist\Objects\GraphQl\Query\Detail\ObjectDetail;
+use Sitegeist\Objects\GraphQl\Query\Detail\DetailHelper;
 use Sitegeist\Objects\GraphQl\Query\NodeTypeQuery;
 
-class ObjectDetailQuery extends ObjectType
+class DetailQuery extends ObjectType
 {
     /**
      * @param TypeResolver $typeResolver
@@ -30,8 +30,8 @@ class ObjectDetailQuery extends ObjectType
     public function __construct(TypeResolver $typeResolver)
     {
         return parent::__construct([
-            'name' => 'Object',
-            'description' => 'An Object',
+            'name' => 'Detail',
+            'description' => 'Detailed information about an object',
             'fields' => [
                 'identifier' => [
                     'type' => Type::id(),
@@ -66,7 +66,7 @@ class ObjectDetailQuery extends ObjectType
                     'description' => 'The tab configuration of the object node'
                 ]
             ],
-            'resolveField'  => function(ObjectDetail $objectDetail, $arguments, $context, ResolveInfo $info) {
+            'resolveField'  => function(DetailHelper $objectDetail, $arguments, $context, ResolveInfo $info) {
                 return $objectDetail->{'get' . ucfirst($info->fieldName)}($arguments);
             }
         ]);

@@ -23,7 +23,7 @@ use Sitegeist\Objects\Service\NodeService;
 /**
  * Provides information about a (possibly empty) object node
  */
-class ObjectDetail
+class DetailHelper
 {
     /**
      * @var NodeType

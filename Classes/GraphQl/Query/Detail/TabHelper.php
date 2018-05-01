@@ -20,7 +20,7 @@ use Neos\Utility\PositionalArraySorter;
 class TabHelper
 {
     /**
-     * @var ObjectDetail
+     * @var DetailHelper
      */
     protected $objectDetail;
 
@@ -34,7 +34,7 @@ class TabHelper
      */
     protected $tabConfiguration;
 
-    public function __construct(ObjectDetail $objectDetail, string $tabName)
+    public function __construct(DetailHelper $objectDetail, string $tabName)
     {
         $this->objectDetail = $objectDetail;
         $this->tabName = $tabName;
@@ -58,11 +58,11 @@ class TabHelper
     }
 
     /**
-     * Get the ObjectDetail
+     * Get the DetailHelper
      *
-     * @return ObjectDetail
+     * @return DetailHelper
      */
-    public function getObjectDetail() : ObjectDetail
+    public function getDetailHelper() : DetailHelper
     {
         return $this->objectDetail;
     }

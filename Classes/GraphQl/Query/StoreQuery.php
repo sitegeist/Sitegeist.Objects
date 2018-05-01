@@ -21,8 +21,8 @@ use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use Wwwision\GraphQL\TypeResolver;
 use Neos\Eel\Helper\StringHelper;
-use Sitegeist\Objects\GraphQl\Query\Detail\ObjectDetail;
-use Sitegeist\Objects\GraphQl\Query\Detail\ObjectDetailQuery;
+use Sitegeist\Objects\GraphQl\Query\Detail\DetailHelper;
+use Sitegeist\Objects\GraphQl\Query\Detail\DetailQuery;
 use Sitegeist\Objects\GraphQl\Query\Index\ObjectIndex;
 use Sitegeist\Objects\GraphQl\Query\Index\ObjectIndexQuery;
 
@@ -142,7 +142,7 @@ class StoreQuery extends ObjectType
                     }
                 ],
                 'objectDetail' => [
-                    'type' => Type::nonNull($typeResolver->get(ObjectDetailQuery::class)),
+                    'type' => Type::nonNull($typeResolver->get(DetailQuery::class)),
                     'description' => 'Information to edit or create an object node',
                     'args' => [
                         'nodeType' => [
@@ -192,7 +192,7 @@ class StoreQuery extends ObjectType
                                 );
                             }
 
-                            return new ObjectDetail($objectNode->getNodeType(), $objectNode);
+                            return new DetailHelper($objectNode->getNodeType(), $objectNode);
                         } else if (array_key_exists('nodeType', $arguments)) {
                             $nodeType = $this->nodeTypeManager->getNodeType($arguments['nodeType']);
 
@@ -220,7 +220,7 @@ class StoreQuery extends ObjectType
                                 );
                             }
 
-                            return new ObjectDetail($nodeType);
+                            return new DetailHelper($nodeType);
                         }
 
                         //

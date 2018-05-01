@@ -21,8 +21,8 @@ use Neos\ContentRepository\Domain\Service\NodeTypeManager;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use Wwwision\GraphQL\TypeResolver;
-use Sitegeist\Objects\GraphQl\Query\Detail\ObjectDetail;
-use Sitegeist\Objects\GraphQl\Query\Detail\ObjectDetailQuery;
+use Sitegeist\Objects\GraphQl\Query\Detail\DetailHelper;
+use Sitegeist\Objects\GraphQl\Query\Detail\DetailQuery;
 use Sitegeist\Objects\GraphQl\Query\StoreQuery;
 use Sitegeist\Objects\GraphQl\Scalar\JsonScalar;
 use Sitegeist\Objects\Service\NodeService;
@@ -56,7 +56,7 @@ class StoreMutation extends ObjectType
             'name' => 'StoreMutation',
             'fields' => [
                 'createObject' => [
-                    'type' => Type::nonNull($typeResolver->get(ObjectDetailQuery::class)),
+                    'type' => Type::nonNull($typeResolver->get(DetailQuery::class)),
                     'description' => 'Create a new object',
                     'args' => [
                         'nodeType' => [
@@ -79,7 +79,7 @@ class StoreMutation extends ObjectType
 
                         $this->nodeService->applyPropertiesToNode($objectNode, $arguments['properties']);
 
-                        return new ObjectDetail($objectNode->getNodeType(), $objectNode);
+                        return new DetailHelper($objectNode->getNodeType(), $objectNode);
                     }
                 ],
                 'object' => [
@@ -134,23 +134,23 @@ class StoreMutation extends ObjectType
                     }
                 ],
                 'publish' => [
-                    'type' => Type::listOf($typeResolver->get(ObjectDetailQuery::class)),
+                    'type' => Type::listOf($typeResolver->get(DetailQuery::class)),
                     'description' => 'Publish all objects in the store',
                     'resolve' => function (NodeInterface $storeNode) {
                         foreach($this->nodeService->publishNode($storeNode) as $publishedNode) {
                             if ($publishedNode->getNodeType()->isOfType('Sitegeist.Objects:Object')) {
-                                yield new ObjectDetail($publishedNode->getNodeType(), $publishedNode);
+                                yield new DetailHelper($publishedNode->getNodeType(), $publishedNode);
                             }
                         }
                     }
                 ],
                 'discard' => [
-                    'type' => Type::listOf($typeResolver->get(ObjectDetailQuery::class)),
+                    'type' => Type::listOf($typeResolver->get(DetailQuery::class)),
                     'description' => 'Discard all objects in the store',
                     'resolve' => function (NodeInterface $storeNode) {
                         foreach($this->nodeService->discardNode($storeNode) as $discardedNode) {
                             if ($discardedNode->getNodeType()->isOfType('Sitegeist.Objects:Object')) {
-                                yield new ObjectDetail($discardedNode->getNodeType(), $discardedNode);
+                                yield new DetailHelper($discardedNode->getNodeType(), $discardedNode);
                             }
                         }
                     }

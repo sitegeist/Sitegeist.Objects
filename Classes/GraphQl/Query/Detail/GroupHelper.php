@@ -20,7 +20,7 @@ use Neos\Utility\PositionalArraySorter;
 class GroupHelper
 {
     /**
-     * @var ObjectDetail
+     * @var DetailHelper
      */
     protected $objectDetail;
 
@@ -34,7 +34,7 @@ class GroupHelper
      */
     protected $groupConfiguration;
 
-    public function __construct(ObjectDetail $objectDetail, string $groupName)
+    public function __construct(DetailHelper $objectDetail, string $groupName)
     {
         $this->objectDetail = $objectDetail;
         $this->groupName = $groupName;
@@ -58,11 +58,11 @@ class GroupHelper
     }
 
     /**
-     * Get the ObjectDetail
+     * Get the DetailHelper
      *
-     * @return ObjectDetail
+     * @return DetailHelper
      */
-    public function getObjectDetail() : ObjectDetail
+    public function getDetailHelper() : DetailHelper
     {
         return $this->objectDetail;
     }

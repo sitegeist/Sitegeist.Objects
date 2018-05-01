@@ -19,7 +19,7 @@ use Neos\Utility\ObjectAccess;
 class PropertyHelper
 {
     /**
-     * @var ObjectDetail
+     * @var DetailHelper
      */
     protected $objectDetail;
 
@@ -33,7 +33,7 @@ class PropertyHelper
      */
     protected $propertyConfiguration;
 
-    public function __construct(ObjectDetail $objectDetail, string $propertyName)
+    public function __construct(DetailHelper $objectDetail, string $propertyName)
     {
         $this->objectDetail = $objectDetail;
         $this->propertyName = $propertyName;
@@ -57,11 +57,11 @@ class PropertyHelper
     }
 
     /**
-     * Get the ObjectDetail
+     * Get the DetailHelper
      *
-     * @return ObjectDetail
+     * @return DetailHelper
      */
-    public function getObjectDetail() : ObjectDetail
+    public function getDetailHelper() : DetailHelper
     {
         return $this->objectDetail;
     }
