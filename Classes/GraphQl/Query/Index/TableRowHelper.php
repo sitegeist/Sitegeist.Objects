@@ -21,7 +21,7 @@ use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\ContentRepository\Domain\Model\NodeType;
 use Sitegeist\Objects\Service\NodeService;
 
-class TableRowConfiguration
+class TableRowHelper
 {
     /**
      * @Flow\Inject

@@ -70,12 +70,12 @@ class ObjectIndex
     /**
      * Get the table row configurations
      *
-     * @return \Generator<TableRowConfiguration>
+     * @return \Generator<TableRowHelper>
      */
-    public function getTableRowConfigurations()
+    public function getTableRows()
     {
         foreach($this->nodes as $objectNode) {
-            yield new TableRowConfiguration($this->storeNode, $objectNode);
+            yield new TableRowHelper($this->storeNode, $objectNode);
         }
     }
 }

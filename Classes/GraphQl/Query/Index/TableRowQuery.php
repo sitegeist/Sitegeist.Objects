@@ -20,7 +20,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 use Wwwision\GraphQL\TypeResolver;
 use Sitegeist\Objects\GraphQl\Scalar\JsonScalar;
 
-class TableRowConfigurationQuery extends ObjectType
+class TableRowQuery extends ObjectType
 {
     /**
      * @param TypeResolver $typeResolver
@@ -28,7 +28,7 @@ class TableRowConfigurationQuery extends ObjectType
     public function __construct(TypeResolver $typeResolver)
     {
         return parent::__construct([
-            'name' => 'TableRowConfiguration',
+            'name' => 'TableRow',
             'description' => 'Configuration for a table row',
             'fields' => [
                 'identifier' => [
@@ -60,7 +60,7 @@ class TableRowConfigurationQuery extends ObjectType
                     'description' => 'All cells of this row'
                 ]
             ],
-            'resolveField'  => function(TableRowConfiguration $tableRowConfiguration, $arguments, $context, ResolveInfo $info) {
+            'resolveField'  => function(TableRowHelper $tableRowConfiguration, $arguments, $context, ResolveInfo $info) {
                 return $tableRowConfiguration->{'get' . ucfirst($info->fieldName)}($arguments);
             }
         ]);
