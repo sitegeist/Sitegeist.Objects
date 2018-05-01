@@ -61,8 +61,8 @@ class ObjectDetailQuery extends ObjectType
                     'type' => $typeResolver->get(NodeTypeQuery::class),
                     'description' => 'The node type of the object node'
                 ],
-                'tabConfigurations' => [
-                    'type' => Type::listOf($typeResolver->get(TabConfigurationQuery::class)),
+                'tabs' => [
+                    'type' => Type::listOf($typeResolver->get(TabQuery::class)),
                     'description' => 'The tab configuration of the object node'
                 ]
             ],

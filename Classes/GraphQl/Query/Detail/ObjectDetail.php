@@ -169,9 +169,9 @@ class ObjectDetail
     }
 
     /**
-     * @return array<TabConfiguration>
+     * @return array<TabHelper>
      */
-    public function getTabConfigurations()
+    public function getTabs()
     {
         $tabConfigurations = [];
 
@@ -182,7 +182,7 @@ class ObjectDetail
                     ->getConfiguration('ui.sitegeist/objects/detail.groups.' . $groupName . '.tab');
 
                 if ($tabName && !array_key_exists($tabName, $tabConfigurations)) {
-                    $tabConfigurations[$tabName] = new TabConfiguration($this, $tabName);
+                    $tabConfigurations[$tabName] = new TabHelper($this, $tabName);
                 }
             }
         }

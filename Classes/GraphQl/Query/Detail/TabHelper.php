@@ -17,7 +17,7 @@ use Neos\Flow\Annotations as Flow;
 use Neos\Utility\ObjectAccess;
 use Neos\Utility\PositionalArraySorter;
 
-class TabConfiguration
+class TabHelper
 {
     /**
      * @var ObjectDetail

@@ -19,13 +19,13 @@ use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
 use Wwwision\GraphQL\TypeResolver;
 
-class TabConfigurationQuery extends ObjectType
+class TabQuery extends ObjectType
 {
     public function __construct(TypeResolver $typeResolver)
     {
         return parent::__construct([
-            'name' => 'TabConfiguration',
-            'description' => 'An tab configuration',
+            'name' => 'Tab',
+            'description' => 'A tab configuration',
             'fields' => [
                 'name' => [
                     'type' => Type::nonNull(Type::string()),
@@ -48,7 +48,7 @@ class TabConfigurationQuery extends ObjectType
                     'description' => 'All groups belonging to this tab'
                 ]
             ],
-            'resolveField'  => function(TabConfiguration $tabConfiguration, $arguments, $context, ResolveInfo $info) {
+            'resolveField'  => function(TabHelper $tabConfiguration, $arguments, $context, ResolveInfo $info) {
                 return $tabConfiguration->{'get' . ucfirst($info->fieldName)}($arguments);
             }
         ]);
