@@ -19,7 +19,6 @@ use Neos\Utility\PositionalArraySorter;
 use Neos\Eel\Helper\StringHelper;
 use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\ContentRepository\Domain\Model\NodeType;
-use Sitegeist\Objects\Domain\Model\Index\TableCellConfiguration;
 use Sitegeist\Objects\Service\NodeService;
 
 class TableRowConfiguration
