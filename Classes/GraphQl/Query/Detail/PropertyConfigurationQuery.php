@@ -16,6 +16,7 @@ namespace Sitegeist\Objects\GraphQl\Query\Detail;
 use Neos\Flow\Annotations as Flow;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
+use GraphQL\Type\Definition\ResolveInfo;
 use Wwwision\GraphQL\TypeResolver;
 use Sitegeist\Objects\GraphQl\Scalar\JsonScalar;
 
@@ -29,47 +30,32 @@ class PropertyConfigurationQuery extends ObjectType
             'fields' => [
                 'name' => [
                     'type' => Type::nonNull(Type::string()),
-                    'description' => 'The name of the property',
-                    'resolve' => function (PropertyConfiguration $propertyConfiguration) {
-                        return $propertyConfiguration->getName();
-                    }
+                    'description' => 'The name of the property'
                 ],
                 'label' => [
                     'type' => Type::nonNull(Type::string()),
-                    'description' => 'The label of the property',
-                    'resolve' => function (PropertyConfiguration $propertyConfiguration) {
-                        return $propertyConfiguration->getLabel();
-                    }
+                    'description' => 'The label of the property'
                 ],
                 'editable' => [
                     'type' => Type::nonNull(Type::boolean()),
-                    'description' => 'true, if the property is editable in detail view',
-                    'resolve' => function (PropertyConfiguration $propertyConfiguration) {
-                        return $propertyConfiguration->getEditable();
-                    }
+                    'description' => 'true, if the property is editable in detail view'
                 ],
                 'editor' => [
                     'type' => Type::nonNull(Type::string()),
-                    'description' => 'The editor for the property',
-                    'resolve' => function (PropertyConfiguration $propertyConfiguration) {
-                        return $propertyConfiguration->getEditor();
-                    }
+                    'description' => 'The editor for the property'
                 ],
                 'editorOptions' => [
                     'type' => JsonScalar::type(),
-                    'description' => 'The editor options for the property',
-                    'resolve' => function (PropertyConfiguration $propertyConfiguration) {
-                        return $propertyConfiguration->getEditorOptions();
-                    }
+                    'description' => 'The editor options for the property'
                 ],
                 'value' => [
                     'type' => JsonScalar::type(),
-                    'description' => 'The value of the property',
-                    'resolve' => function (PropertyConfiguration $propertyConfiguration) {
-                        return $propertyConfiguration->getValue();
-                    }
+                    'description' => 'The value of the property'
                 ]
-            ]
+            ],
+            'resolveField'  => function(PropertyConfiguration $propertyConfiguration, $arguments, $context, ResolveInfo $info) {
+                return $propertyConfiguration->{'get' . ucfirst($info->fieldName)}($arguments);
+            }
         ]);
     }
 }
