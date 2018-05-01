@@ -16,6 +16,7 @@ namespace Sitegeist\Objects\GraphQl\Query\Index;
 use Neos\Flow\Annotations as Flow;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
+use GraphQL\Type\Definition\ResolveInfo;
 use Wwwision\GraphQL\TypeResolver;
 
 class ObjectIndexQuery extends ObjectType
@@ -31,19 +32,16 @@ class ObjectIndexQuery extends ObjectType
             'fields' => [
                 'tableHeadConfigurations' => [
                     'type' => Type::listOf($typeResolver->get(TableHeadConfigurationQuery::class)),
-                    'description' => 'All table heads for this list',
-                    'resolve' => function (ObjectIndex $objectList) {
-                        return $objectList->getTableHeadConfigurations();
-                    }
+                    'description' => 'All table heads for this list'
                 ],
                 'tableRowConfigurations' => [
                     'type' => Type::listOf($typeResolver->get(TableRowConfigurationQuery::class)),
-                    'description' => 'All table rows for this list',
-                    'resolve' => function (ObjectIndex $objectList) {
-                        return $objectList->getTableRowConfigurations();
-                    }
+                    'description' => 'All table rows for this list'
                 ]
-            ]
+            ],
+            'resolveField'  => function(ObjectIndex $objectList, $arguments, $context, ResolveInfo $info) {
+                return $objectList->{'get' . ucfirst($info->fieldName)}($arguments);
+            }
         ]);
     }
 }
