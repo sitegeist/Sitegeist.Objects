@@ -81,6 +81,16 @@ class TableRowConfiguration
     }
 
     /**
+     * Get the node
+     *
+     * @return NodeInterface
+     */
+    public function getNode()
+    {
+        return $this->objectNode;
+    }
+
+    /**
      * Get the identifier
      *
      * @return string
