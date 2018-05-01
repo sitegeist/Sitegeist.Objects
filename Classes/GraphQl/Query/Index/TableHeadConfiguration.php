@@ -1,5 +1,5 @@
 <?php
-namespace Sitegeist\Objects\Domain\Model\Index;
+namespace Sitegeist\Objects\GraphQl\Query\Index;
 
 /*
  * Copyright notice
