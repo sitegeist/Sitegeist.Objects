@@ -1,5 +1,5 @@
 <?php
-namespace Sitegeist\Objects\Domain\Model;
+namespace Sitegeist\Objects\Domain\Model\Index;
 
 /*
  * Copyright notice

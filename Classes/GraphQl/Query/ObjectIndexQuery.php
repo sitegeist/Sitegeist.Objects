@@ -17,7 +17,7 @@ use Neos\Flow\Annotations as Flow;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use Wwwision\GraphQL\TypeResolver;
-use Sitegeist\Objects\Domain\Model\ObjectIndex;
+use Sitegeist\Objects\Domain\Model\Index\ObjectIndex;
 
 class ObjectIndexQuery extends ObjectType
 {

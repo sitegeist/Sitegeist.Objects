@@ -22,7 +22,7 @@ use GraphQL\Type\Definition\Type;
 use Wwwision\GraphQL\TypeResolver;
 use Neos\Eel\Helper\StringHelper;
 use Sitegeist\Objects\Domain\Model\Detail\ObjectDetail;
-use Sitegeist\Objects\Domain\Model\ObjectIndex;
+use Sitegeist\Objects\Domain\Model\Index\ObjectIndex;
 use Sitegeist\Objects\GraphQl\Query\Detail\ObjectDetailQuery;
 
 class StoreQuery extends ObjectType
