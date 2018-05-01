@@ -55,15 +55,15 @@ class ObjectIndex
     /**
      * Get the table head configurations
      *
-     * @return \Generator<TableHeadConfiguration>
+     * @return \Generator<TableHeadHelper>
      */
-    public function getTableHeadConfigurations()
+    public function getTableHeads()
     {
         $columnConfigurations = $this->storeNode->getNodeType()->getConfiguration('ui.sitegeist/objects/list.columns');
         $sorter = new PositionalArraySorter($columnConfigurations);
 
         foreach($sorter->toArray() as $columnName => $columnConfiguration) {
-            yield new TableHeadConfiguration($this->storeNode, $columnName);
+            yield new TableHeadHelper($this->storeNode, $columnName);
         }
     }
 

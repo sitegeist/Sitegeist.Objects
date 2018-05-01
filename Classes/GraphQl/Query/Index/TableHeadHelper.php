@@ -19,7 +19,7 @@ use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\ContentRepository\Domain\Model\NodeType;
 use Neos\ContentRepository\Domain\Service\NodeTypeManager;
 
-class TableHeadConfiguration
+class TableHeadHelper
 {
     /**
      * @var string

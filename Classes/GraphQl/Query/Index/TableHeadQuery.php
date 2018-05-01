@@ -20,7 +20,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 use Wwwision\GraphQL\TypeResolver;
 use Sitegeist\Objects\GraphQl\Scalar\JsonScalar;
 
-class TableHeadConfigurationQuery extends ObjectType
+class TableHeadQuery extends ObjectType
 {
     /**
      * @param TypeResolver $typeResolver
@@ -28,7 +28,7 @@ class TableHeadConfigurationQuery extends ObjectType
     public function __construct(TypeResolver $typeResolver)
     {
         return parent::__construct([
-            'name' => 'TableHeadConfiguration',
+            'name' => 'TableHead',
             'description' => 'Configuration for a table head',
             'fields' => [
                 'name' => [
@@ -56,7 +56,7 @@ class TableHeadConfigurationQuery extends ObjectType
                     'description' => 'Filter operations configuration of the column'
                 ]
             ],
-            'resolveField'  => function(TableHeadConfiguration $tableHeadConfiguration, $arguments, $context, ResolveInfo $info) {
+            'resolveField'  => function(TableHeadHelper $tableHeadConfiguration, $arguments, $context, ResolveInfo $info) {
                 return $tableHeadConfiguration->{'get' . ucfirst($info->fieldName)}($arguments);
             }
         ]);

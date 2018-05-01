@@ -30,8 +30,8 @@ class ObjectIndexQuery extends ObjectType
             'name' => 'ObjectIndex',
             'description' => 'A List of Object',
             'fields' => [
-                'tableHeadConfigurations' => [
-                    'type' => Type::listOf($typeResolver->get(TableHeadConfigurationQuery::class)),
+                'tableHeads' => [
+                    'type' => Type::listOf($typeResolver->get(TableHeadQuery::class)),
                     'description' => 'All table heads for this list'
                 ],
                 'tableRowConfigurations' => [
