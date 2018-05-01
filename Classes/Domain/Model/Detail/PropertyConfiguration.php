@@ -83,7 +83,8 @@ class PropertyConfiguration
      */
     public function getLabel()
     {
-        return $this->objectDetail->getNodeType()->getConfiguration('properties.' . $propertyName . '.ui.label');
+        return $this->objectDetail->getNodeType()
+            ->getConfiguration('properties.' . $this->propertyName . '.ui.label');
     }
 
     /**
