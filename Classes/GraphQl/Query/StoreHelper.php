@@ -81,6 +81,17 @@ class StoreHelper
     }
 
     /**
+     * Get parent nodes
+     *
+     * @return array<NodeInterface>
+     */
+    public function getParents()
+    {
+        $flowQuery = new FlowQuery([$this->node]);
+        return $flowQuery->parentsUntil('[instanceof Sitegeist.Objects:Root]')->get();
+    }
+
+    /**
      * Get the node
      *
      * @return NodeInterface
@@ -223,7 +234,7 @@ class StoreHelper
                 );
             }
 
-            return ObjectHelper::createFromNodeType($nodeType);
+            return ObjectHelper::createFromNodeType($nodeType, $this->node);
         }
 
         //

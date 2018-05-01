@@ -33,6 +33,14 @@ class StoreQuery extends ObjectType
             'name' => 'Store',
             'description' => 'A store',
             'fields' => [
+                'identifier' => [
+                    'type' => Type::string(),
+                    'description' => 'The identifier of this store'
+                ],
+                'parents' => [
+                    'type' => Type::listOf($typeResolver->get(ParentQuery::class)),
+                    'description' => 'The parents of this store'
+                ],
                 'name' => [
                     'type' => Type::string(),
                     'description' => 'The name of this store'

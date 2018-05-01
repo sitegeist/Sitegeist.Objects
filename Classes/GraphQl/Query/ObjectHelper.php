@@ -14,6 +14,7 @@ namespace Sitegeist\Objects\GraphQl\Query;
  */
 
 use Neos\Flow\Annotations as Flow;
+use Neos\Eel\FlowQuery\FlowQuery;
 use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\ContentRepository\Domain\Model\NodeType;
 use Sitegeist\Objects\Service\NodeService;
@@ -40,10 +41,11 @@ class ObjectHelper
      * Protected Constructor: Use factory methods below!
      *
      * @param NodeType $nodeType
+     * @param NodeInterface $parentNode
      * @param NodeInterface|null $node
      * @throws \InvalidArgumentException
      */
-    protected function __construct(NodeType $nodeType, NodeInterface $node = null)
+    protected function __construct(NodeType $nodeType, NodeInterface $parentNode, NodeInterface $node = null)
     {
         //
         // Invariant: Type of $node must be equal to type $nodeType
@@ -56,6 +58,7 @@ class ObjectHelper
         }
 
         $this->nodeType = $nodeType;
+        $this->parentNode = $parentNode;
         $this->node = $node;
 
         //
@@ -73,22 +76,23 @@ class ObjectHelper
      * Factory method to create ObjectHelper from node type
      *
      * @param NodeType $nodeType
+     * @param NodeInterface $parentNode
      * @return ObjectHelper
      */
-    public static function createFromNodeType(NodeType $nodeType)
+    public static function createFromNodeType(NodeType $nodeType, NodeInterface $parentNode)
     {
-        return new static($nodeType);
+        return new static($nodeType, $parentNode);
     }
 
     /**
      * Factory method to create ObjectHelper from node type
      *
-     * @param NodeType $nodeType
+     * @param NodeInterface $node
      * @return ObjectHelper
      */
     public static function createFromNode(NodeInterface $node)
     {
-        return new static($node->getNodeType(), $node);
+        return new static($node->getNodeType(), $node->getParent(), $node);
     }
 
     /**
@@ -99,6 +103,19 @@ class ObjectHelper
     public function getNodeType() : NodeType
     {
         return $this->nodeType;
+    }
+
+    /**
+     * Get parent nodes
+     *
+     * @return \Generator<NodeInterface>
+     */
+    public function getParents()
+    {
+        yield $this->parentNode;
+
+        $flowQuery = new FlowQuery([$this->parentNode]);
+        return $flowQuery->parentsUntil('[instanceof Sitegeist.Objects:Root]')->get();
     }
 
     /**

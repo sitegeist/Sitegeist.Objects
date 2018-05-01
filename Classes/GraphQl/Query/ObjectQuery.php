@@ -39,6 +39,10 @@ class ObjectQuery extends ObjectType
                     'type' => $typeResolver->get(NodeTypeQuery::class),
                     'description' => 'The node type of the object node'
                 ],
+                'parents' => [
+                    'type' => Type::listOf($typeResolver->get(ParentQuery::class)),
+                    'description' => 'The parents of the object node'
+                ],
                 'icon' => [
                     'type' => Type::string(),
                     'description' => 'The icon of the object node'
