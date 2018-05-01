@@ -52,6 +52,20 @@ class TableRowConfigurationQuery extends ObjectType
                         return $tableRowConfiguration->getLabel();
                     }
                 ],
+                'isHidden' => [
+                    'type' => Type::boolean(),
+                    'description' => 'Is the row hidden?',
+                    'resolve' => function (TableRowConfiguration $tableRowConfiguration) {
+                        return $tableRowConfiguration->getNode()->isHidden();
+                    }
+                ],
+                'isRemoved' => [
+                    'type' => Type::boolean(),
+                    'description' => 'Has the row been removed?',
+                    'resolve' => function (TableRowConfiguration $tableRowConfiguration) {
+                        return $tableRowConfiguration->getIsRemoved();
+                    }
+                ],
                 'tableCellConfigurations' => [
                     'type' => Type::listOf($typeResolver->get(TableCellConfigurationQuery::class)),
                     'description' => 'All cells of this row',
