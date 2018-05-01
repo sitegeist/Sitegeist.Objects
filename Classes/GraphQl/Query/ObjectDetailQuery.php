@@ -53,6 +53,20 @@ class ObjectDetailQuery extends ObjectType
                         return $objectDetail->getLabel();
                     }
                 ],
+                'isHidden' => [
+                    'type' => Type::boolean(),
+                    'description' => 'Is the object hidden?',
+                    'resolve' => function (ObjectDetail $objectDetail) {
+                        return $objectDetail->getNode()->isHidden();
+                    }
+                ],
+                'isRemoved' => [
+                    'type' => Type::boolean(),
+                    'description' => 'Has the object been removed?',
+                    'resolve' => function (ObjectDetail $objectDetail) {
+                        return $objectDetail->getIsRemoved();
+                    }
+                ],
                 'nodeType' => [
                     'type' => $typeResolver->get(NodeTypeQuery::class),
                     'description' => 'The node type of the object node',
