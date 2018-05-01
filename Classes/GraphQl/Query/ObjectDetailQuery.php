@@ -19,7 +19,7 @@ use Neos\ContentRepository\Domain\Model\NodeInterface;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use Wwwision\GraphQL\TypeResolver;
-use Sitegeist\Objects\Domain\Model\ObjectDetail;
+use Sitegeist\Objects\Domain\Model\Detail\ObjectDetail;
 use Sitegeist\Objects\Service\NodeService;
 
 class ObjectDetailQuery extends ObjectType

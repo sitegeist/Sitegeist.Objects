@@ -21,7 +21,7 @@ use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use Wwwision\GraphQL\TypeResolver;
 use Neos\Eel\Helper\StringHelper;
-use Sitegeist\Objects\Domain\Model\ObjectDetail;
+use Sitegeist\Objects\Domain\Model\Detail\ObjectDetail;
 use Sitegeist\Objects\Domain\Model\ObjectList;
 
 class StoreQuery extends ObjectType
