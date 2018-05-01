@@ -18,7 +18,6 @@ use Neos\Utility\PositionalArraySorter;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use Wwwision\GraphQL\TypeResolver;
-use Sitegeist\Objects\Domain\Model\Detail\TabConfiguration;
 
 class TabConfigurationQuery extends ObjectType
 {
