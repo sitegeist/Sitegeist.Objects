@@ -2,8 +2,8 @@ module.exports = {
 	mode: process.env.NODE_ENV || 'development',
 	devtool: 'source-map',
 	entry: {
-		'app': `./Resources/Private/JavaScript/index.js`,
-		'env': `./Resources/Private/JavaScript/env.js`
+		app: `./Resources/Private/JavaScript/index.js`,
+		env: `./Resources/Private/JavaScript/env.js`
 	},
 	module: {
 		rules: [
