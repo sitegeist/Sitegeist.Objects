@@ -22,7 +22,7 @@ use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use Wwwision\GraphQL\TypeResolver;
 use Sitegeist\Objects\Domain\Model\Detail\ObjectDetail;
-use Sitegeist\Objects\GraphQl\Query\ObjectDetailQuery;
+use Sitegeist\Objects\GraphQl\Query\Detail\ObjectDetailQuery;
 use Sitegeist\Objects\GraphQl\Query\StoreQuery;
 use Sitegeist\Objects\GraphQl\Scalar\JsonScalar;
 use Sitegeist\Objects\Service\NodeService;

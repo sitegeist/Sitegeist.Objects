@@ -1,5 +1,5 @@
 <?php
-namespace Sitegeist\Objects\GraphQl\Query;
+namespace Sitegeist\Objects\GraphQl\Query\Detail;
 
 /*
  * Copyright notice
@@ -21,6 +21,7 @@ use GraphQL\Type\Definition\Type;
 use Wwwision\GraphQL\TypeResolver;
 use Sitegeist\Objects\Domain\Model\Detail\ObjectDetail;
 use Sitegeist\Objects\Service\NodeService;
+use Sitegeist\Objects\GraphQl\Query\NodeTypeQuery;
 
 class ObjectDetailQuery extends ObjectType
 {

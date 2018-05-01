@@ -1,5 +1,5 @@
 <?php
-namespace Sitegeist\Objects\GraphQl\Query;
+namespace Sitegeist\Objects\GraphQl\Query\Detail;
 
 /*
  * Copyright notice
