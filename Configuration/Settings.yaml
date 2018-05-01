@@ -4,6 +4,7 @@ Sitegeist:
     endpoints:
       neos/sitegeist/objects:
         querySchema: 'Sitegeist\Objects\GraphQl\RootQuery'
+        mutationSchema: 'Sitegeist\Objects\GraphQl\RootMutation'
 
 Neos:
   Flow:
