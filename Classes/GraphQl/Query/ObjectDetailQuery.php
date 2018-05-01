@@ -20,9 +20,16 @@ use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use Wwwision\GraphQL\TypeResolver;
 use Sitegeist\Objects\Domain\Model\ObjectDetail;
+use Sitegeist\Objects\Service\NodeService;
 
 class ObjectDetailQuery extends ObjectType
 {
+    /**
+     * @Flow\Inject
+     * @var NodeService
+     */
+    protected $nodeService;
+
     /**
      * @param TypeResolver $typeResolver
      */
@@ -65,6 +72,13 @@ class ObjectDetailQuery extends ObjectType
                     'description' => 'Has the object been removed?',
                     'resolve' => function (ObjectDetail $objectDetail) {
                         return $objectDetail->getIsRemoved();
+                    }
+                ],
+                'hasUnpublishedChanges' => [
+                    'type' => Type::boolean(),
+                    'description' => 'Does the object have unpublished changes?',
+                    'resolve' => function (ObjectDetail $objectDetail) {
+                        return $this->nodeService->checkIfNodeHasUnpublishedChanges($objectDetail->getNode());
                     }
                 ],
                 'nodeType' => [
