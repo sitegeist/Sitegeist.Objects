@@ -19,13 +19,13 @@ use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
 use Wwwision\GraphQL\TypeResolver;
 
-class GroupConfigurationQuery extends ObjectType
+class GroupQuery extends ObjectType
 {
     public function __construct(TypeResolver $typeResolver)
     {
         return parent::__construct([
-            'name' => 'GroupConfiguration',
-            'description' => 'An group configuration',
+            'name' => 'Group',
+            'description' => 'A group configuration',
             'fields' => [
                 'name' => [
                     'type' => Type::nonNull(Type::string()),
@@ -48,7 +48,7 @@ class GroupConfigurationQuery extends ObjectType
                     'description' => 'All property configurations belonging to this group'
                 ]
             ],
-            'resolveField'  => function(GroupConfiguration $groupConfiguration, $arguments, $context, ResolveInfo $info) {
+            'resolveField'  => function(GroupHelper $groupConfiguration, $arguments, $context, ResolveInfo $info) {
                 return $groupConfiguration->{'get' . ucfirst($info->fieldName)}($arguments);
             }
         ]);

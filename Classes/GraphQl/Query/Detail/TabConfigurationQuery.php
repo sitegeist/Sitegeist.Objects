@@ -43,9 +43,9 @@ class TabConfigurationQuery extends ObjectType
                     'type' => Type::string(),
                     'description' => 'The description of the tab'
                 ],
-                'groupConfigurations' => [
-                    'type' => Type::listOf($typeResolver->get(GroupConfigurationQuery::class)),
-                    'description' => 'All group configurations belonging to this tab'
+                'groups' => [
+                    'type' => Type::listOf($typeResolver->get(GroupQuery::class)),
+                    'description' => 'All groups belonging to this tab'
                 ]
             ],
             'resolveField'  => function(TabConfiguration $tabConfiguration, $arguments, $context, ResolveInfo $info) {

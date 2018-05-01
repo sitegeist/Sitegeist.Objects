@@ -108,16 +108,16 @@ class TabConfiguration
     }
 
     /**
-     * @return \Generator<GroupConfiguration>
+     * @return \Generator<GroupHelper>
      */
-    public function getGroupConfigurations()
+    public function getGroups()
     {
         $groupConfigurations = [];
 
         foreach($this->objectDetail->getNodeType()->getProperties() as $propertyConfiguration) {
             $groupName = ObjectAccess::getPropertyPath($propertyConfiguration, 'ui.sitegeist/objects/detail.group');
             if ($groupName && !array_key_exists($groupName, $groupConfigurations)) {
-                $groupConfigurations[$groupName] = new GroupConfiguration($this->objectDetail, $groupName);
+                $groupConfigurations[$groupName] = new GroupHelper($this->objectDetail, $groupName);
             }
         }
 
