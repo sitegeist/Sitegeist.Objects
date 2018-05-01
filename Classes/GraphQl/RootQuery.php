@@ -14,13 +14,22 @@ namespace Sitegeist\Objects\GraphQl;
  */
 
 use Neos\Flow\Annotations as Flow;
+use Neos\ContentRepository\Domain\Service\NodeTypeManager;
 use Neos\Neos\Domain\Service\UserService;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use Wwwision\GraphQL\TypeResolver;
+use Sitegeist\Objects\GraphQl\Query\NodeTypeQuery;
 
 class RootQuery extends ObjectType
 {
+
+    /**
+     * @Flow\Inject
+     * @var NodeTypeManager
+     */
+    protected $nodeTypeManager;
+
     /**
      * @Flow\Inject
      * @var UserService
@@ -42,6 +51,19 @@ class RootQuery extends ObjectType
                         $user = $this->userService->getCurrentUser();
 
                         return $this->userService->getUserName($user);
+                    }
+                ],
+                'nodeType' => [
+                    'type' => $typeResolver->get(NodeTypeQuery::class),
+                    'description' => 'Information about the given Neos.ContentRepository node type',
+                    'args' => [
+                        'name' => [
+                            'type' => Type::nonNull(Type::string()),
+                            'description' => 'The name of the node type'
+                        ]
+                    ],
+                    'resolve' => function($_, $arguments) {
+                        return $this->nodeTypeManager->getNodeType($arguments['name']);
                     }
                 ]
             ]
