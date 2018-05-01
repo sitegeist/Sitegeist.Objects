@@ -19,6 +19,7 @@ use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
 use Wwwision\GraphQL\TypeResolver;
 use Sitegeist\Objects\GraphQl\Scalar\JsonScalar;
+use Sitegeist\Objects\GraphQl\Query\ObjectQuery;
 
 class TableCellQuery extends ObjectType
 {
@@ -31,6 +32,10 @@ class TableCellQuery extends ObjectType
             'name' => 'TableCell',
             'description' => 'Configuration for a table cell',
             'fields' => [
+                'object' => [
+                    'type' => Type::nonNull($typeResolver->get(ObjectQuery::class)),
+                    'description' => 'Get the object associated with this cell'
+                ],
                 'view' => [
                     'type' => Type::string(),
                     'description' => 'The View for this cell'

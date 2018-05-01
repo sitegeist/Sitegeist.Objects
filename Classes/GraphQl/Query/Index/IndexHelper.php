@@ -18,6 +18,7 @@ use Neos\Utility\ObjectAccess;
 use Neos\Utility\PositionalArraySorter;
 use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\ContentRepository\Domain\Model\NodeType;
+use Sitegeist\Objects\GraphQl\Query\ObjectHelper;
 
 class IndexHelper
 {
@@ -75,7 +76,7 @@ class IndexHelper
     public function getTableRows()
     {
         foreach($this->nodes as $objectNode) {
-            yield new TableRowHelper($this->storeNode, $objectNode);
+            yield new TableRowHelper($this->storeNode, ObjectHelper::createFromNode($objectNode));
         }
     }
 }

@@ -20,6 +20,7 @@ use Neos\Eel\Helper\StringHelper;
 use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\ContentRepository\Domain\Model\NodeType;
 use Sitegeist\Objects\Service\NodeService;
+use Sitegeist\Objects\GraphQl\Query\ObjectHelper;
 
 class TableRowHelper
 {
@@ -35,9 +36,9 @@ class TableRowHelper
     protected $storeNode;
 
     /**
-     * @var NodeInterface
+     * @var ObjectHelper
      */
-    protected $objectNode;
+    protected $object;
 
     /**
      * @param NodeInterface $storeNode
@@ -45,7 +46,7 @@ class TableRowHelper
      * @param string $columnName
      * @throws \InvalidArgumentException
      */
-    public function __construct(NodeInterface $storeNode, NodeInterface $objectNode)
+    public function __construct(NodeInterface $storeNode, ObjectHelper $object)
     {
         //
         // Invariant: $storeNode must be of type 'Sitegeist.Objects:Store'
@@ -58,102 +59,32 @@ class TableRowHelper
         }
 
         //
-        // Invariant: $objectNode must be of type 'Sitegeist.Objects:Object'
-        //
-        if (!$objectNode->getNodeType()->isOfType('Sitegeist.Objects:Object')) {
-            throw new \InvalidArgumentException(
-                'ObjectNode must be of type "Sitegeist.Objects:Object".',
-                1525007201
-            );
-        }
-
-        //
-        // Invariant: $objectNode must be in $store
+        // Invariant: $object must be in $store
         //
         $stringHelper = new StringHelper();
-        if (!$stringHelper->startsWith($objectNode->getPath(), $storeNode->getPath())) {
+        if (!$stringHelper->startsWith($object->getNode()->getPath(), $storeNode->getPath())) {
             throw new \InvalidArgumentException(
                 sprintf(
                     'ObjectNode with identifier "%s" does not belong to store "%s"',
-                    $objectNode->getIdentifier(),
+                    $object->getIdentifier(),
                     $storeNode->getName()
                 ),
-                1525007202
+                1525003454
             );
         }
 
         $this->storeNode = $storeNode;
-        $this->objectNode = $objectNode;
+        $this->object = $object;
     }
 
     /**
-     * Get the node
+     * Get the object
      *
-     * @return NodeInterface
+     * @return ObjectHelper
      */
-    public function getNode()
+    public function getObject()
     {
-        return $this->objectNode;
-    }
-
-    /**
-     * Get the identifier
-     *
-     * @return string
-     */
-    public function getIdentifier()
-    {
-        return $this->objectNode->getIdentifier();
-    }
-
-    /**
-     * Get the icon
-     *
-     * @return string
-     */
-    public function getIcon()
-    {
-        return $this->objectNode->getNodeType()->getConfiguration('ui.icon');
-    }
-
-    /**
-     * Get the label
-     *
-     * @return string
-     */
-    public function getLabel()
-    {
-        return $this->objectNode->getLabel();
-    }
-
-    /**
-     * Get if the object node is hidden
-     *
-     * @return boolean
-     */
-    public function getIsHidden()
-    {
-        return $this->objectNode->isHidden();
-    }
-
-    /**
-     * Get if the object node has been removed
-     *
-     * @return boolean
-     */
-    public function getIsRemoved()
-    {
-        return $this->objectNode->isRemoved();
-    }
-
-    /**
-     * Get if the object node has unpublished changes
-     *
-     * @return boolean
-     */
-    public function getHasUnpublishedChanges()
-    {
-        return $this->nodeService->checkIfNodeHasUnpublishedChanges($this->getNode());
+        return $this->object;
     }
 
     /**
@@ -167,7 +98,7 @@ class TableRowHelper
         $sorter = new PositionalArraySorter($columnConfigurations);
 
         foreach($sorter->toArray() as $columnName => $columnConfiguration) {
-            yield new TableCellHelper($this->storeNode, $this->objectNode, $columnName);
+            yield new TableCellHelper($this->storeNode, $this->object, $columnName);
         }
     }
 }

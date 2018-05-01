@@ -112,6 +112,16 @@ class ObjectHelper
     }
 
     /**
+     * Get the node
+     *
+     * @return NodeInterface
+     */
+    public function getNode()
+    {
+        return $this->node;
+    }
+
+    /**
      * Get the icon
      *
      * @return string
@@ -133,6 +143,34 @@ class ObjectHelper
         }
 
         return $this->nodeType->getLabel();
+    }
+
+    /**
+     * Get if the object node is hidden
+     *
+     * @return boolean
+     */
+    public function getIsHidden()
+    {
+        if ($this->hasNode()) {
+            return $this->node->isHidden();
+        }
+
+        return false;
+    }
+
+    /**
+     * Get if the object node has been removed
+     *
+     * @return boolean
+     */
+    public function getIsRemoved()
+    {
+        if ($this->hasNode()) {
+            return $this->node->isRemoved();
+        }
+
+        return false;
     }
 
     /**

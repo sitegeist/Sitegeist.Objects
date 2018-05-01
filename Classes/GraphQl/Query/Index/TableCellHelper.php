@@ -20,6 +20,7 @@ use Neos\Eel\Utility as EelUtility;
 use Neos\Eel\Helper\StringHelper;
 use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\ContentRepository\Domain\Model\NodeType;
+use Sitegeist\Objects\GraphQl\Query\ObjectHelper;
 
 class TableCellHelper
 {
@@ -29,9 +30,9 @@ class TableCellHelper
     protected $storeNode;
 
     /**
-     * @var NodeInterface
+     * @var ObjectHelper
      */
-    protected $objectNode;
+    protected $object;
 
     /**
      * @var string
@@ -61,7 +62,7 @@ class TableCellHelper
      * @param string $columnName
      * @throws \InvalidArgumentException
      */
-    public function __construct(NodeInterface $storeNode, NodeInterface $objectNode, string $columnName)
+    public function __construct(NodeInterface $storeNode, ObjectHelper $object, string $columnName)
     {
         //
         // Invariant: $storeNode must be of type 'Sitegeist.Objects:Store'
@@ -74,24 +75,14 @@ class TableCellHelper
         }
 
         //
-        // Invariant: $objectNode must be of type 'Sitegeist.Objects:Object'
-        //
-        if (!$objectNode->getNodeType()->isOfType('Sitegeist.Objects:Object')) {
-            throw new \InvalidArgumentException(
-                'ObjectNode must be of type "Sitegeist.Objects:Object".',
-                1525003453
-            );
-        }
-
-        //
-        // Invariant: $objectNode must be in $store
+        // Invariant: $object must be in $store
         //
         $stringHelper = new StringHelper();
-        if (!$stringHelper->startsWith($objectNode->getPath(), $storeNode->getPath())) {
+        if (!$stringHelper->startsWith($object->getNode()->getPath(), $storeNode->getPath())) {
             throw new \InvalidArgumentException(
                 sprintf(
                     'ObjectNode with identifier "%s" does not belong to store "%s"',
-                    $objectNode->getIdentifier(),
+                    $object->getIdentifier(),
                     $storeNode->getName()
                 ),
                 1525003454
@@ -116,9 +107,19 @@ class TableCellHelper
         }
 
         $this->storeNode = $storeNode;
-        $this->objectNode = $objectNode;
+        $this->object = $object;
         $this->columnName = $columnName;
         $this->columnConfiguration = $columnConfiguration;
+    }
+
+    /**
+     * Get the object
+     *
+     * @return ObjectHelper
+     */
+    public function getObject()
+    {
+        return $this->object;
     }
 
     /**
@@ -164,12 +165,12 @@ class TableCellHelper
 
         if ($propertyName = ObjectAccess::getPropertyPath($this->columnConfiguration, 'propertyName')) {
             if (is_array($propertyName)) {
-                if (array_key_exists($this->objectNode->getNodeType()->getName(), $propertyName)) {
-                    return $propertyName[$this->objectNode->getNodeType()->getName()];
+                if (array_key_exists($this->object->getNodeType()->getName(), $propertyName)) {
+                    return $propertyName[$this->object->getNodeType()->getName()];
                 }
 
                 foreach($propertyName as $nodeTypeName => $propertyNameCandidate) {
-                    if ($nodeTypeName !== 'default' && $this->objectNode->getNodeType()->isOfType($nodeTypeName)) {
+                    if ($nodeTypeName !== 'default' && $this->object->getNodeType()->isOfType($nodeTypeName)) {
                         return $propertyNameCandidate;
                     }
                 }
@@ -181,10 +182,10 @@ class TableCellHelper
                             'store "%s" ("%s"). You need to specify a propertyName for "%s", one of it\'s ' .
                             'superTypes or a "default" value.',
                             $this->columnName,
-                            $this->objectNode->getNodeType()->getName(),
+                            $this->object->getNodeType()->getName(),
                             $this->storeNode->getName(),
                             $this->storeNode->getNodeType()->getName(),
-                            $this->objectNode->getNodeType()->getName()
+                            $this->object->getNodeType()->getName()
                         ),
                         1525005161
                     );
@@ -212,7 +213,7 @@ class TableCellHelper
                 $eelExpression,
                 $this->eelEvaluator,
                 [
-                    'node' => $this->objectNode,
+                    'node' => $this->object->getNode(),
                     'store' => $this->storeNode,
                     'columnName' => $this->columnName
                 ],
@@ -220,6 +221,6 @@ class TableCellHelper
             );
         }
 
-        return $this->objectNode->getProperty($this->getPropertyName());
+        return $this->object->getProperty($this->getPropertyName());
     }
 }

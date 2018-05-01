@@ -19,6 +19,7 @@ use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
 use Wwwision\GraphQL\TypeResolver;
 use Sitegeist\Objects\GraphQl\Scalar\JsonScalar;
+use Sitegeist\Objects\GraphQl\Query\ObjectQuery;
 
 class TableRowQuery extends ObjectType
 {
@@ -31,29 +32,9 @@ class TableRowQuery extends ObjectType
             'name' => 'TableRow',
             'description' => 'Configuration for a table row',
             'fields' => [
-                'identifier' => [
-                    'type' => Type::nonNull(Type::string()),
-                    'description' => 'Identifier of the row'
-                ],
-                'icon' => [
-                    'type' => Type::string(),
-                    'description' => 'Icon of the row'
-                ],
-                'label' => [
-                    'type' => Type::string(),
-                    'description' => 'Label of the row'
-                ],
-                'isHidden' => [
-                    'type' => Type::boolean(),
-                    'description' => 'Is the row hidden?'
-                ],
-                'isRemoved' => [
-                    'type' => Type::boolean(),
-                    'description' => 'Has the row been removed?'
-                ],
-                'hasUnpublishedChanges' => [
-                    'type' => Type::boolean(),
-                    'description' => 'Does the object have unpublished changes?'
+                'object' => [
+                    'type' => Type::nonNull($typeResolver->get(ObjectQuery::class)),
+                    'description' => 'Get the object represented by this row'
                 ],
                 'tableCells' => [
                     'type' => Type::listOf($typeResolver->get(TableCellQuery::class)),
