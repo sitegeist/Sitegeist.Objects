@@ -19,7 +19,7 @@ use Neos\Utility\PositionalArraySorter;
 use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\ContentRepository\Domain\Model\NodeType;
 
-class ObjectIndex
+class IndexHelper
 {
     /**
      * @var NodeInterface

@@ -23,8 +23,8 @@ use Wwwision\GraphQL\TypeResolver;
 use Neos\Eel\Helper\StringHelper;
 use Sitegeist\Objects\GraphQl\Query\Detail\DetailHelper;
 use Sitegeist\Objects\GraphQl\Query\Detail\DetailQuery;
-use Sitegeist\Objects\GraphQl\Query\Index\ObjectIndex;
-use Sitegeist\Objects\GraphQl\Query\Index\ObjectIndexQuery;
+use Sitegeist\Objects\GraphQl\Query\Index\IndexHelper;
+use Sitegeist\Objects\GraphQl\Query\Index\IndexQuery;
 
 class StoreQuery extends ObjectType
 {
@@ -100,7 +100,7 @@ class StoreQuery extends ObjectType
                     }
                 ],
                 'objectIndex' => [
-                    'type' => Type::nonNull($typeResolver->get(ObjectIndexQuery::class)),
+                    'type' => Type::nonNull($typeResolver->get(IndexQuery::class)),
                     'description' => 'Index of all objects in the store',
                     'args' => [
                         'from' => [
@@ -138,7 +138,7 @@ class StoreQuery extends ObjectType
 
                         $nodes = $flowQuery->get();
 
-                        return new ObjectIndex($storeNode, $nodes);
+                        return new IndexHelper($storeNode, $nodes);
                     }
                 ],
                 'objectDetail' => [

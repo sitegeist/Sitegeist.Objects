@@ -19,7 +19,7 @@ use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
 use Wwwision\GraphQL\TypeResolver;
 
-class ObjectIndexQuery extends ObjectType
+class IndexQuery extends ObjectType
 {
     /**
      * @param TypeResolver $typeResolver
@@ -27,8 +27,8 @@ class ObjectIndexQuery extends ObjectType
     public function __construct(TypeResolver $typeResolver)
     {
         return parent::__construct([
-            'name' => 'ObjectIndex',
-            'description' => 'A List of Object',
+            'name' => 'Index',
+            'description' => 'A List of objects',
             'fields' => [
                 'tableHeads' => [
                     'type' => Type::listOf($typeResolver->get(TableHeadQuery::class)),
@@ -39,7 +39,7 @@ class ObjectIndexQuery extends ObjectType
                     'description' => 'All table rows for this list'
                 ]
             ],
-            'resolveField'  => function(ObjectIndex $objectList, $arguments, $context, ResolveInfo $info) {
+            'resolveField'  => function(IndexHelper $objectList, $arguments, $context, ResolveInfo $info) {
                 return $objectList->{'get' . ucfirst($info->fieldName)}($arguments);
             }
         ]);
