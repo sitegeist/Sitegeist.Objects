@@ -16,6 +16,7 @@ namespace Sitegeist\Objects\GraphQl\Query\Index;
 use Neos\Flow\Annotations as Flow;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
+use GraphQL\Type\Definition\ResolveInfo;
 use Wwwision\GraphQL\TypeResolver;
 use Sitegeist\Objects\GraphQl\Scalar\JsonScalar;
 
@@ -32,33 +33,24 @@ class TableCellConfigurationQuery extends ObjectType
             'fields' => [
                 'view' => [
                     'type' => Type::string(),
-                    'description' => 'The View for this cell',
-                    'resolve' => function (TableCellConfiguration $tableCellConfiguration) {
-                        return $tableCellConfiguration->getView();
-                    }
+                    'description' => 'The View for this cell'
                 ],
                 'viewOptions' => [
                     'type' => JsonScalar::type(),
-                    'description' => 'The View options configuration of this cell',
-                    'resolve' => function (TableCellConfiguration $tableCellConfiguration) {
-                        return $tableCellConfiguration->getViewOptions();
-                    }
+                    'description' => 'The View options configuration of this cell'
                 ],
                 'propertyName' => [
                     'type' => Type::nonNull(Type::string()),
-                    'description' => 'The property name of this cell',
-                    'resolve' => function (TableCellConfiguration $tableCellConfiguration) {
-                        return $tableCellConfiguration->getPropertyName();
-                    }
+                    'description' => 'The property name of this cell'
                 ],
                 'value' => [
                     'type' => JsonScalar::type(),
-                    'description' => 'The property value of this cell',
-                    'resolve' => function (TableCellConfiguration $tableCellConfiguration) {
-                        return $tableCellConfiguration->getValue();
-                    }
+                    'description' => 'The property value of this cell'
                 ]
-            ]
+            ],
+            'resolveField'  => function(TableCellConfiguration $tableCellConfiguration, $arguments, $context, ResolveInfo $info) {
+                return $tableCellConfiguration->{'get' . ucfirst($info->fieldName)}($arguments);
+            }
         ]);
     }
 }
