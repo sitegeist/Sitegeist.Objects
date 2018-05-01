@@ -23,6 +23,7 @@ use Sitegeist\Objects\GraphQl\Input\ContentContextInput;
 use Sitegeist\Objects\GraphQl\Mutation\StoreMutation;
 use Sitegeist\Objects\GraphQl\Query\Detail\DetailQuery;
 use Sitegeist\Objects\Service\NodeService;
+use Sitegeist\Objects\GraphQl\Query\StoreHelper;
 
 class RootMutation extends ObjectType
 {
@@ -80,7 +81,7 @@ class RootMutation extends ObjectType
                             );
                         }
 
-                        return $storeNode;
+                        return new StoreHelper($storeNode);
                     }
                 ],
                 'publishAll' => [

@@ -20,10 +20,10 @@ use Neos\ContentRepository\Domain\Service\NodeTypeManager;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use Wwwision\GraphQL\TypeResolver;
-use Sitegeist\Objects\GraphQl\Query\Detail\DetailHelper;
-use Sitegeist\Objects\GraphQl\Query\Detail\DetailQuery;
 use Sitegeist\Objects\GraphQl\Scalar\JsonScalar;
 use Sitegeist\Objects\Service\NodeService;
+use Sitegeist\Objects\GraphQl\Query\ObjectHelper;
+use Sitegeist\Objects\GraphQl\Query\ObjectQuery;
 
 class ObjectMutation extends ObjectType
 {
@@ -42,7 +42,7 @@ class ObjectMutation extends ObjectType
             'name' => 'ObjectMutation',
             'fields' => [
                 'update' => [
-                    'type' => Type::nonNull($typeResolver->get(DetailQuery::class)),
+                    'type' => Type::nonNull($typeResolver->get(ObjectQuery::class)),
                     'description' => 'Update the object',
                     'args' => [
                         'properties' => [
@@ -50,59 +50,59 @@ class ObjectMutation extends ObjectType
                             'description' => 'Properties for the newly created node'
                         ]
                     ],
-                    'resolve' => function (NodeInterface $objectNode, $arguments) {
-                        $this->nodeService->applyPropertiesToNode($objectNode, $arguments['properties']);
+                    'resolve' => function (ObjectHelper $object, $arguments) {
+                        $this->nodeService->applyPropertiesToNode($object->getNode(), $arguments['properties']);
 
-                        return new DetailHelper($objectNode->getNodeType(), $objectNode);
+                        return ObjectHelper::createFromNode($object->getNode());
                     }
                 ],
                 'hide' => [
-                    'type' => Type::nonNull($typeResolver->get(DetailQuery::class)),
+                    'type' => Type::nonNull($typeResolver->get(ObjectQuery::class)),
                     'description' => 'Hide the object',
-                    'resolve' => function (NodeInterface $objectNode, $arguments) {
-                        $objectNode->setHidden(true);
+                    'resolve' => function (ObjectHelper $object, $arguments) {
+                        $object->getNode()->setHidden(true);
 
-                        return new DetailHelper($objectNode->getNodeType(), $objectNode);
+                        return ObjectHelper::createFromNode($object->getNode());
                     }
                 ],
                 'show' => [
-                    'type' => Type::nonNull($typeResolver->get(DetailQuery::class)),
+                    'type' => Type::nonNull($typeResolver->get(ObjectQuery::class)),
                     'description' => 'Show (unhide) the object',
-                    'resolve' => function (NodeInterface $objectNode, $arguments) {
-                        $objectNode->setHidden(false);
+                    'resolve' => function (ObjectHelper $object, $arguments) {
+                        $object->getNode()->setHidden(false);
 
-                        return new DetailHelper($objectNode->getNodeType(), $objectNode);
+                        return ObjectHelper::createFromNode($object->getNode());
                     }
                 ],
                 'publish' => [
-                    'type' => Type::listOf($typeResolver->get(DetailQuery::class)),
+                    'type' => Type::listOf($typeResolver->get(ObjectQuery::class)),
                     'description' => 'Publish the object',
-                    'resolve' => function (NodeInterface $objectNode, $arguments) {
-                        $publishedNodes = $this->nodeService->publishNode($objectNode);
+                    'resolve' => function (ObjectHelper $object, $arguments) {
+                        $publishedNodes = $this->nodeService->publishNode($object->getNode());
 
                         foreach ($publishedNodes as $publishedNode) {
-                            yield new DetailHelper($publishedNode->getNodeType(), $publishedNode);
+                            yield ObjectHelper::createFromNode($publishedNode);
                         }
                     }
                 ],
                 'discard' => [
-                    'type' => Type::listOf($typeResolver->get(DetailQuery::class)),
+                    'type' => Type::listOf($typeResolver->get(ObjectQuery::class)),
                     'description' => 'Publish the object',
-                    'resolve' => function (NodeInterface $objectNode, $arguments) {
-                        $discardedNodes = $this->nodeService->discardNode($objectNode);
+                    'resolve' => function (ObjectHelper $object, $arguments) {
+                        $discardedNodes = $this->nodeService->discardNode($object->getNode());
 
                         foreach ($discardedNodes as $discardedNode) {
-                            yield new DetailHelper($discardedNode->getNodeType(), $discardedNode);
+                            yield ObjectHelper::createFromNode($discardedNode);
                         }
                     }
                 ],
                 'remove' => [
-                    'type' => Type::nonNull($typeResolver->get(DetailQuery::class)),
+                    'type' => Type::nonNull($typeResolver->get(ObjectQuery::class)),
                     'description' => 'Remove the object',
-                    'resolve' => function (NodeInterface $objectNode, $arguments) {
-                        $objectNode->remove();
+                    'resolve' => function (ObjectHelper $object, $arguments) {
+                        $object->getNode()->remove();
 
-                        return new DetailHelper($objectNode->getNodeType(), $objectNode);
+                        return ObjectHelper::createFromNode($object->getNode());
                     }
                 ]
             ]

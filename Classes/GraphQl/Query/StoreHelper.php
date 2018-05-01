@@ -80,21 +80,52 @@ class StoreHelper
         $this->node = $node;
     }
 
+    /**
+     * Get the node
+     *
+     * @return NodeInterface
+     */
+    public function getNode()
+    {
+        return $this->node;
+    }
+
+    /**
+     * Get the title
+     *
+     * @return string
+     */
     public function getTitle()
     {
         return $this->node->getProperty('title');
     }
 
+    /**
+     * Get the icon
+     *
+     * @return string
+     */
     public function getIcon()
     {
         return $this->node->getProperty('icon');
     }
 
+    /**
+     * Get the description
+     *
+     * @return string
+     */
     public function getDescription()
     {
         return $this->node->getProperty('description');
     }
 
+    /**
+     * Get objects from the store
+     *
+     * @param array $arguments
+     * @return array<NodeInterface>
+     */
     public function getObjects(array $arguments)
     {
         $flowQuery = new FlowQuery([$this->node]);
@@ -108,11 +139,23 @@ class StoreHelper
         return $flowQuery->get();
     }
 
+    /**
+     * Get object index from the store
+     *
+     * @param array $arguments
+     * @return IndexHelper
+     */
     public function getObjectIndex(array $arguments)
     {
         return new IndexHelper($this->node, $this->getObjects($arguments));
     }
 
+    /**
+     * Get a single object from the store
+     *
+     * @param array $arguments
+     * @return ObjectHelper
+     */
     public function getObject(array $arguments)
     {
         if (array_key_exists('identifier', $arguments)) {
@@ -192,6 +235,12 @@ class StoreHelper
         );
     }
 
+    /**
+     * Get detailed information on an object from the store
+     *
+     * @param array $arguments
+     * @return DetailHelper
+     */
     public function getObjectDetail(array $arguments)
     {
         $object = $this->getObject($arguments);

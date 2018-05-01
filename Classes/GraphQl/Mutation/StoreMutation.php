@@ -21,11 +21,11 @@ use Neos\ContentRepository\Domain\Service\NodeTypeManager;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use Wwwision\GraphQL\TypeResolver;
-use Sitegeist\Objects\GraphQl\Query\Detail\DetailHelper;
-use Sitegeist\Objects\GraphQl\Query\Detail\DetailQuery;
-use Sitegeist\Objects\GraphQl\Query\StoreQuery;
 use Sitegeist\Objects\GraphQl\Scalar\JsonScalar;
 use Sitegeist\Objects\Service\NodeService;
+use Sitegeist\Objects\GraphQl\Query\StoreHelper;
+use Sitegeist\Objects\GraphQl\Query\ObjectHelper;
+use Sitegeist\Objects\GraphQl\Query\ObjectQuery;
 
 class StoreMutation extends ObjectType
 {
@@ -56,7 +56,7 @@ class StoreMutation extends ObjectType
             'name' => 'StoreMutation',
             'fields' => [
                 'createObject' => [
-                    'type' => Type::nonNull($typeResolver->get(DetailQuery::class)),
+                    'type' => Type::nonNull($typeResolver->get(ObjectQuery::class)),
                     'description' => 'Create a new object',
                     'args' => [
                         'nodeType' => [
@@ -68,18 +68,18 @@ class StoreMutation extends ObjectType
                             'description' => 'Properties for the newly created node'
                         ]
                     ],
-                    'resolve' => function (NodeInterface $storeNode, $arguments) {
+                    'resolve' => function (StoreHelper $store, $arguments) {
                         //
                         // @TODO: Invariant: nodeType must be of type Sitegeist.Objects:Object
                         //
-                        $objectNode = $storeNode->createNode(
-                            $this->nodeService->generateUniqueNodeName($storeNode),
+                        $objectNode = $store->getNode()->createNode(
+                            $this->nodeService->generateUniqueNodeName($store->getNode()),
                             $this->nodeTypeManager->getNodeType($arguments['nodeType'])
                         );
 
                         $this->nodeService->applyPropertiesToNode($objectNode, $arguments['properties']);
 
-                        return new DetailHelper($objectNode->getNodeType(), $objectNode);
+                        return ObjectHelper::createFromNode($objectNode);
                     }
                 ],
                 'object' => [
@@ -93,64 +93,28 @@ class StoreMutation extends ObjectType
                             'description' => 'Id of the object node to be edited'
                         ]
                     ],
-                    'resolve' => function(NodeInterface $storeNode, $arguments) {
-                        $objectNode = $storeNode->getContext()->getNodeByIdentifier($arguments['identifier']);
-
-                        //
-                        // Invariant: $objectNode must exist
-                        //
-                        if (!$objectNode) {
-                            throw new \InvalidArgumentException(
-                                sprintf('Node "%s" does not exist.', $arguments['identifier']),
-                                1525160323
-                            );
-                        }
-
-                        //
-                        // Invariant: $objectNode must be of type 'Sitegeist.Objects:Object'
-                        //
-                        if (!$objectNode->getNodeType()->isOfType('Sitegeist.Objects:Object')) {
-                            throw new \InvalidArgumentException(
-                                'Node must be of type "Sitegeist.Objects:Object".',
-                                1525160324
-                            );
-                        }
-
-                        //
-                        // Invariant: $objectNode must be in $store
-                        //
-                        if (!$this->stringHelper->startsWith($objectNode->getPath(), $storeNode->getPath())) {
-                            throw new \InvalidArgumentException(
-                                sprintf(
-                                    'Node identifier "%s" does not belong to store "%s"',
-                                    $objectNode->getIdentifier(),
-                                    $storeNode->getName()
-                                ),
-                                1525160325
-                            );
-                        }
-
-                        return $objectNode;
+                    'resolve' => function(StoreHelper $store, $arguments) {
+                        return $store->getObject($arguments);
                     }
                 ],
                 'publish' => [
-                    'type' => Type::listOf($typeResolver->get(DetailQuery::class)),
+                    'type' => Type::listOf($typeResolver->get(ObjectQuery::class)),
                     'description' => 'Publish all objects in the store',
-                    'resolve' => function (NodeInterface $storeNode) {
-                        foreach($this->nodeService->publishNode($storeNode) as $publishedNode) {
+                    'resolve' => function (StoreHelper $store) {
+                        foreach($this->nodeService->publishNode($store->getNode()) as $publishedNode) {
                             if ($publishedNode->getNodeType()->isOfType('Sitegeist.Objects:Object')) {
-                                yield new DetailHelper($publishedNode->getNodeType(), $publishedNode);
+                                yield ObjectHelper::createFromNode($publishedNode);
                             }
                         }
                     }
                 ],
                 'discard' => [
-                    'type' => Type::listOf($typeResolver->get(DetailQuery::class)),
+                    'type' => Type::listOf($typeResolver->get(ObjectQuery::class)),
                     'description' => 'Discard all objects in the store',
-                    'resolve' => function (NodeInterface $storeNode) {
-                        foreach($this->nodeService->discardNode($storeNode) as $discardedNode) {
+                    'resolve' => function (StoreHelper $store) {
+                        foreach($this->nodeService->discardNode($store->getNode()) as $discardedNode) {
                             if ($discardedNode->getNodeType()->isOfType('Sitegeist.Objects:Object')) {
-                                yield new DetailHelper($discardedNode->getNodeType(), $discardedNode);
+                                yield ObjectHelper::createFromNode($discardedNode);
                             }
                         }
                     }
