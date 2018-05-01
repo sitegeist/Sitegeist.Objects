@@ -17,7 +17,6 @@ use Neos\Flow\Annotations as Flow;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use Wwwision\GraphQL\TypeResolver;
-use Sitegeist\Objects\Domain\Model\Index\TableRowConfiguration;
 use Sitegeist\Objects\GraphQl\Scalar\JsonScalar;
 use Sitegeist\Objects\Service\NodeService;
 

@@ -1,5 +1,5 @@
 <?php
-namespace Sitegeist\Objects\Domain\Model\Index;
+namespace Sitegeist\Objects\GraphQl\Query\Index;
 
 /*
  * Copyright notice
@@ -19,6 +19,7 @@ use Neos\Utility\PositionalArraySorter;
 use Neos\Eel\Helper\StringHelper;
 use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\ContentRepository\Domain\Model\NodeType;
+use Sitegeist\Objects\Domain\Model\Index\TableCellConfiguration;
 
 class TableRowConfiguration
 {

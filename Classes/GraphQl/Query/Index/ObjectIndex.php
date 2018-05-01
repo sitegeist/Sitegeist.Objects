@@ -18,7 +18,6 @@ use Neos\Utility\ObjectAccess;
 use Neos\Utility\PositionalArraySorter;
 use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\ContentRepository\Domain\Model\NodeType;
-use Sitegeist\Objects\Domain\Model\Index\TableRowConfiguration;
 
 class ObjectIndex
 {
