@@ -20,7 +20,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 use Wwwision\GraphQL\TypeResolver;
 use Sitegeist\Objects\GraphQl\Scalar\JsonScalar;
 
-class TableCellConfigurationQuery extends ObjectType
+class TableCellQuery extends ObjectType
 {
     /**
      * @param TypeResolver $typeResolver
@@ -28,7 +28,7 @@ class TableCellConfigurationQuery extends ObjectType
     public function __construct(TypeResolver $typeResolver)
     {
         return parent::__construct([
-            'name' => 'TableCellConfiguration',
+            'name' => 'TableCell',
             'description' => 'Configuration for a table cell',
             'fields' => [
                 'view' => [
@@ -48,7 +48,7 @@ class TableCellConfigurationQuery extends ObjectType
                     'description' => 'The property value of this cell'
                 ]
             ],
-            'resolveField'  => function(TableCellConfiguration $tableCellConfiguration, $arguments, $context, ResolveInfo $info) {
+            'resolveField'  => function(TableCellHelper $tableCellConfiguration, $arguments, $context, ResolveInfo $info) {
                 return $tableCellConfiguration->{'get' . ucfirst($info->fieldName)}($arguments);
             }
         ]);

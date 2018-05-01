@@ -159,15 +159,15 @@ class TableRowConfiguration
     /**
      * Get the table cell configurations
      *
-     * @return \Generator<TableCellConfiguration>
+     * @return \Generator<TableCellHelper>
      */
-    public function getTableCellConfigurations()
+    public function getTableCells()
     {
         $columnConfigurations = $this->storeNode->getNodeType()->getConfiguration('ui.sitegeist/objects/list.columns');
         $sorter = new PositionalArraySorter($columnConfigurations);
 
         foreach($sorter->toArray() as $columnName => $columnConfiguration) {
-            yield new TableCellConfiguration($this->storeNode, $this->objectNode, $columnName);
+            yield new TableCellHelper($this->storeNode, $this->objectNode, $columnName);
         }
     }
 }

@@ -55,8 +55,8 @@ class TableRowConfigurationQuery extends ObjectType
                     'type' => Type::boolean(),
                     'description' => 'Does the object have unpublished changes?'
                 ],
-                'tableCellConfigurations' => [
-                    'type' => Type::listOf($typeResolver->get(TableCellConfigurationQuery::class)),
+                'tableCells' => [
+                    'type' => Type::listOf($typeResolver->get(TableCellQuery::class)),
                     'description' => 'All cells of this row'
                 ]
             ],

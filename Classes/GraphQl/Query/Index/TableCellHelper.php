@@ -21,7 +21,7 @@ use Neos\Eel\Helper\StringHelper;
 use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\ContentRepository\Domain\Model\NodeType;
 
-class TableCellConfiguration
+class TableCellHelper
 {
     /**
      * @var NodeInterface
