@@ -119,6 +119,18 @@ class ObjectDetail
     }
 
     /**
+     * Get if the object node has been removed
+     *
+     * @return boolean
+     */
+    public function getIsRemoved()
+    {
+        if ($this->hasNode()) {
+            return $this->node->isRemoved();
+        }
+    }
+
+    /**
      * @return \Generator<TabConfiguration>
      */
     public function getTabs()
