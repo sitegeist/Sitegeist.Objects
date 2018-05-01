@@ -17,7 +17,6 @@ use Neos\Flow\Annotations as Flow;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use Wwwision\GraphQL\TypeResolver;
-use Sitegeist\Objects\Domain\Model\Detail\GroupConfiguration;
 use Neos\Utility\PositionalArraySorter;
 
 class GroupConfigurationQuery extends ObjectType

@@ -1,5 +1,5 @@
 <?php
-namespace Sitegeist\Objects\Domain\Model\Detail;
+namespace Sitegeist\Objects\GraphQl\Query\Detail;
 
 /*
  * Copyright notice
@@ -15,7 +15,7 @@ namespace Sitegeist\Objects\Domain\Model\Detail;
 
 use Neos\Flow\Annotations as Flow;
 use Neos\Utility\ObjectAccess;
-use Sitegeist\Objects\GraphQl\Query\Detail\ObjectDetail;
+use Sitegeist\Objects\Domain\Model\Detail\PropertyConfiguration;
 
 class GroupConfiguration
 {
