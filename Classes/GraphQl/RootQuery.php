@@ -14,15 +14,23 @@ namespace Sitegeist\Objects\GraphQl;
  */
 
 use Neos\Flow\Annotations as Flow;
+use Neos\ContentRepository\Domain\Service\ContextFactoryInterface;
 use Neos\ContentRepository\Domain\Service\NodeTypeManager;
 use Neos\Neos\Domain\Service\UserService;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use Wwwision\GraphQL\TypeResolver;
+use Sitegeist\Objects\GraphQl\Input\ContentContextInput;
+use Sitegeist\Objects\GraphQl\Query\StoreQuery;
 use Sitegeist\Objects\GraphQl\Query\NodeTypeQuery;
 
 class RootQuery extends ObjectType
 {
+    /**
+     * @Flow\Inject
+     * @var ContextFactoryInterface
+     */
+    protected $contentContextFactory;
 
     /**
      * @Flow\Inject
@@ -35,6 +43,12 @@ class RootQuery extends ObjectType
      * @var UserService
      */
     protected $userService;
+
+    /**
+     * @Flow\InjectConfiguration(path="rootNodeName")
+     * @var string
+     */
+    protected $rootNodeName;
 
     /**
      * @param TypeResolver $typeResolver
@@ -51,6 +65,55 @@ class RootQuery extends ObjectType
                         $user = $this->userService->getCurrentUser();
 
                         return $this->userService->getUserName($user);
+                    }
+                ],
+                'stores' => [
+                    'type' => Type::listOf($typeResolver->get(StoreQuery::class)),
+                    'description' => 'All top-level stores available in the system',
+                    'args' => [
+                        'context' => [
+                            'type' => Type::nonNull($typeResolver->get(ContentContextInput::class)),
+                            'description' => 'The content context for this query'
+                        ]
+                    ],
+                    'resolve' => function($_, $arguments) {
+                        $contentContext = $this->contentContextFactory->create($arguments['context']);
+                        $rootNode = $contentContext->getRootNode()->getNode($this->rootNodeName);
+
+                        foreach($rootNode->getChildNodes('Sitegeist.Objects:Store') as $storeNode) {
+                            yield $storeNode;
+                        }
+                    }
+                ],
+                'store' => [
+                    'type' => Type::nonNull($typeResolver->get(StoreQuery::class)),
+                    'description' => 'Select a single store from the system',
+                    'args' => [
+                        'context' => [
+                            'type' => Type::nonNull($typeResolver->get(ContentContextInput::class)),
+                            'description' => 'The content context for this query'
+                        ],
+                        'name' => [
+                            'type' => Type::nonNull(Type::string()),
+                            'description' => 'The name of the store'
+                        ]
+                    ],
+                    'resolve' => function($_, $arguments) {
+                        $contentContext = $this->contentContextFactory->create($arguments['context']);
+                        $rootNode = $contentContext->getRootNode()->getNode($this->rootNodeName);
+                        $storeNode = $rootNode->getNode($arguments['name']);
+
+                        //
+                        // Invariant: Store must exist.
+                        //
+                        if (!$storeNode) {
+                            throw new \InvalidArgumentException(
+                                sprintf('Store with name "%s" does not exist', $arguments['name']),
+                                1525028262
+                            );
+                        }
+
+                        return $storeNode;
                     }
                 ],
                 'nodeType' => [
