@@ -21,6 +21,7 @@ use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use Wwwision\GraphQL\TypeResolver;
 use Sitegeist\Objects\GraphQl\Input\ContentContextInput;
+use Sitegeist\Objects\GraphQl\Query\StoreHelper;
 use Sitegeist\Objects\GraphQl\Query\StoreQuery;
 use Sitegeist\Objects\GraphQl\Query\NodeTypeQuery;
 
@@ -81,7 +82,7 @@ class RootQuery extends ObjectType
                         $rootNode = $contentContext->getRootNode()->getNode($this->rootNodeName);
 
                         foreach($rootNode->getChildNodes('Sitegeist.Objects:Store') as $storeNode) {
-                            yield $storeNode;
+                            yield new StoreHelper($storeNode);
                         }
                     }
                 ],
@@ -113,7 +114,7 @@ class RootQuery extends ObjectType
                             );
                         }
 
-                        return $storeNode;
+                        return new StoreHelper($storeNode);
                     }
                 ],
                 'nodeType' => [

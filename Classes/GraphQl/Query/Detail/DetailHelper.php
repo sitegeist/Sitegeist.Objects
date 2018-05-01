@@ -19,6 +19,7 @@ use Neos\Utility\PositionalArraySorter;
 use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\ContentRepository\Domain\Model\NodeType;
 use Sitegeist\Objects\Service\NodeService;
+use Sitegeist\Objects\GraphQl\Query\ObjectHelper;
 
 /**
  * Provides information about a (possibly empty) object node
@@ -26,14 +27,9 @@ use Sitegeist\Objects\Service\NodeService;
 class DetailHelper
 {
     /**
-     * @var NodeType
+     * @var ObjectHelper
      */
-    protected $nodeType;
-
-    /**
-     * @var NodeInterface
-     */
-    protected $node;
+    protected $object;
 
     /**
      * @Flow\Inject
@@ -43,129 +39,19 @@ class DetailHelper
 
     /**
      * @param NodeType $nodeType
-     * @param NodeInterface|null $node
      * @throws \InvalidArgumentException
      */
-    public function __construct(NodeType $nodeType, NodeInterface $node = null)
+    public function __construct(ObjectHelper $object)
     {
-        //
-        // Invariant: Type of $node must be equal to type $nodeType
-        //
-        if ($node !== null && $node->getNodeType() !== $nodeType) {
-            throw new \InvalidArgumentException(
-                sprintf('Node must be of type "%s"', $nodeType->getName()),
-                1524931043
-            );
-        }
-
-        $this->nodeType = $nodeType;
-        $this->node = $node;
+        $this->object = $object;
     }
 
     /**
-     * Get the node type
-     *
-     * @return NodeType
+     * @return ObjectHelper
      */
-    public function getNodeType() : NodeType
+    public function getObject()
     {
-        return $this->nodeType;
-    }
-
-    /**
-     * Check if node is set
-     *
-     * @return boolean
-     */
-    public function hasNode()
-    {
-        return $this->node !== null;
-    }
-
-    /**
-     * Get the node
-     *
-     * @return NodeInterface|null
-     */
-    public function getNode()
-    {
-        return $this->node;
-    }
-
-    /**
-     * Get the identifier
-     *
-     * @return string|null
-     */
-    public function getIdentifier()
-    {
-        if ($this->hasNode()) {
-            return $this->node->getIdentifier();
-        }
-    }
-
-    /**
-     * Get the icon
-     *
-     * @return string
-     */
-    public function getIcon()
-    {
-        return $this->nodeType->getConfiguration('ui.icon');
-    }
-
-    /**
-     * Get the label
-     *
-     * @return string|null
-     */
-    public function getLabel()
-    {
-        if ($this->hasNode()) {
-            return $this->node->getLabel();
-        }
-    }
-
-    /**
-     * Get if the object node is hidden
-     *
-     * @return boolean
-     */
-    public function getIsHidden()
-    {
-        if ($this->hasNode()) {
-            return $this->node->isHidden();
-        }
-
-        return false;
-    }
-
-    /**
-     * Get if the object node has been removed
-     *
-     * @return boolean
-     */
-    public function getIsRemoved()
-    {
-        if ($this->hasNode()) {
-            return $this->node->isRemoved();
-        }
-
-        return false;
-    }
-
-    /**
-     * Get if the object node has unpublished changes
-     *
-     * @return boolean
-     */
-    public function getHasUnpublishedChanges()
-    {
-        if ($this->hasNode()) {
-            return $this->nodeService->checkIfNodeHasUnpublishedChanges($this->getNode());
-        }
-
-        return false;
+        return $this->object;
     }
 
     /**
@@ -175,14 +61,14 @@ class DetailHelper
     {
         $tabConfigurations = [];
 
-        foreach($this->nodeType->getProperties() as $propertyConfiguration) {
+        foreach($this->object->getNodeType()->getProperties() as $propertyConfiguration) {
             $groupName = ObjectAccess::getPropertyPath($propertyConfiguration, 'ui.sitegeist/objects/detail.group');
             if ($groupName) {
-                $tabName = $this->nodeType
+                $tabName = $this->object->getNodeType()
                     ->getConfiguration('ui.sitegeist/objects/detail.groups.' . $groupName . '.tab');
 
                 if ($tabName && !array_key_exists($tabName, $tabConfigurations)) {
-                    $tabConfigurations[$tabName] = new TabHelper($this, $tabName);
+                    $tabConfigurations[$tabName] = new TabHelper($this->object, $tabName);
                 }
             }
         }

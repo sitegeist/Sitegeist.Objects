@@ -15,13 +15,14 @@ namespace Sitegeist\Objects\GraphQl\Query\Detail;
 
 use Neos\Flow\Annotations as Flow;
 use Neos\Utility\ObjectAccess;
+use Sitegeist\Objects\GraphQl\Query\ObjectHelper;
 
 class PropertyHelper
 {
     /**
-     * @var DetailHelper
+     * @var ObjectHelper
      */
-    protected $objectDetail;
+    protected $object;
 
     /**
      * @var string
@@ -33,11 +34,11 @@ class PropertyHelper
      */
     protected $propertyConfiguration;
 
-    public function __construct(DetailHelper $objectDetail, string $propertyName)
+    public function __construct(ObjectHelper $object, string $propertyName)
     {
-        $this->objectDetail = $objectDetail;
+        $this->object = $object;
         $this->propertyName = $propertyName;
-        $this->propertyConfiguration = $this->objectDetail->getNodeType()
+        $this->propertyConfiguration = $this->object->getNodeType()
             ->getConfiguration('properties.' . $propertyName . '.ui.sitegeist/objects/detail');
 
         //
@@ -49,7 +50,7 @@ class PropertyHelper
                 sprintf(
                     'Property "%s" does not seem to be configured in "%s"',
                     $propertyName,
-                    $this->objectDetail->getNodeType()->getName()
+                    $this->object->getNodeType()->getName()
                 ),
                 1524938252
             );
@@ -57,13 +58,13 @@ class PropertyHelper
     }
 
     /**
-     * Get the DetailHelper
+     * Get the ObjectHelper
      *
-     * @return DetailHelper
+     * @return ObjectHelper
      */
-    public function getDetailHelper() : DetailHelper
+    public function getObjectHelper() : ObjectHelper
     {
-        return $this->objectDetail;
+        return $this->object;
     }
 
     /**
@@ -83,7 +84,7 @@ class PropertyHelper
      */
     public function getLabel()
     {
-        return $this->objectDetail->getNodeType()
+        return $this->object->getNodeType()
             ->getConfiguration('properties.' . $this->propertyName . '.ui.label');
     }
 
@@ -124,8 +125,8 @@ class PropertyHelper
      */
     public function getValue()
     {
-        if ($this->objectDetail->hasNode()) {
-            return $this->objectDetail->getNode()->getProperty($this->propertyName);
+        if ($this->object->hasNode()) {
+            return $this->object->getProperty(['name' => $this->propertyName]);
         }
     }
 }

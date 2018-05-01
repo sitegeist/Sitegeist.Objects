@@ -18,6 +18,7 @@ use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
 use Wwwision\GraphQL\TypeResolver;
+use Sitegeist\Objects\GraphQl\Query\ObjectQuery;
 
 class GroupQuery extends ObjectType
 {
@@ -27,6 +28,10 @@ class GroupQuery extends ObjectType
             'name' => 'Group',
             'description' => 'A group configuration',
             'fields' => [
+                'object' => [
+                    'type' => $typeResolver->get(ObjectQuery::class),
+                    'description' => 'The object this group belongs to'
+                ],
                 'name' => [
                     'type' => Type::nonNull(Type::string()),
                     'description' => 'The name of the group'

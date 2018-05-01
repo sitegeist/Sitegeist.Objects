@@ -16,13 +16,14 @@ namespace Sitegeist\Objects\GraphQl\Query\Detail;
 use Neos\Flow\Annotations as Flow;
 use Neos\Utility\ObjectAccess;
 use Neos\Utility\PositionalArraySorter;
+use Sitegeist\Objects\GraphQl\Query\ObjectHelper;
 
 class TabHelper
 {
     /**
-     * @var DetailHelper
+     * @var ObjectHelper
      */
-    protected $objectDetail;
+    protected $object;
 
     /**
      * @var string
@@ -34,11 +35,11 @@ class TabHelper
      */
     protected $tabConfiguration;
 
-    public function __construct(DetailHelper $objectDetail, string $tabName)
+    public function __construct(ObjectHelper $object, string $tabName)
     {
-        $this->objectDetail = $objectDetail;
+        $this->object = $object;
         $this->tabName = $tabName;
-        $this->tabConfiguration = $this->objectDetail->getNodeType()
+        $this->tabConfiguration = $this->object->getNodeType()
             ->getConfiguration('ui.sitegeist/objects/detail.tabs.' . $tabName);
 
         //
@@ -50,7 +51,7 @@ class TabHelper
                 sprintf(
                     'Tab "%s" does not seem to be configured in "%s"',
                     $tabName,
-                    $this->objectDetail->getNodeType()->getName()
+                    $this->object->getNodeType()->getName()
                 ),
                 1524936025
             );
@@ -58,13 +59,13 @@ class TabHelper
     }
 
     /**
-     * Get the DetailHelper
+     * Get the object
      *
-     * @return DetailHelper
+     * @return ObjectHelper
      */
-    public function getDetailHelper() : DetailHelper
+    public function getObject() : ObjectHelper
     {
-        return $this->objectDetail;
+        return $this->object;
     }
 
     /**
@@ -114,10 +115,10 @@ class TabHelper
     {
         $groupConfigurations = [];
 
-        foreach($this->objectDetail->getNodeType()->getProperties() as $propertyConfiguration) {
+        foreach($this->object->getNodeType()->getProperties() as $propertyConfiguration) {
             $groupName = ObjectAccess::getPropertyPath($propertyConfiguration, 'ui.sitegeist/objects/detail.group');
             if ($groupName && !array_key_exists($groupName, $groupConfigurations)) {
-                $groupConfigurations[$groupName] = new GroupHelper($this->objectDetail, $groupName);
+                $groupConfigurations[$groupName] = new GroupHelper($this->object, $groupName);
             }
         }
 

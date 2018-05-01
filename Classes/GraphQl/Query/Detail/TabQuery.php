@@ -18,6 +18,7 @@ use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
 use Wwwision\GraphQL\TypeResolver;
+use Sitegeist\Objects\GraphQl\Query\ObjectQuery;
 
 class TabQuery extends ObjectType
 {
@@ -27,6 +28,10 @@ class TabQuery extends ObjectType
             'name' => 'Tab',
             'description' => 'A tab configuration',
             'fields' => [
+                'object' => [
+                    'type' => $typeResolver->get(ObjectQuery::class),
+                    'description' => 'The object this tab belongs to'
+                ],
                 'name' => [
                     'type' => Type::nonNull(Type::string()),
                     'description' => 'The name of the tab'

@@ -14,40 +14,16 @@ namespace Sitegeist\Objects\GraphQl\Query;
  */
 
 use Neos\Flow\Annotations as Flow;
-use Neos\Eel\FlowQuery\FlowQuery;
 use Neos\ContentRepository\Domain\Model\NodeInterface;
-use Neos\ContentRepository\Domain\Service\NodeTypeManager;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
+use GraphQL\Type\Definition\ResolveInfo;
 use Wwwision\GraphQL\TypeResolver;
-use Neos\Eel\Helper\StringHelper;
-use Sitegeist\Objects\GraphQl\Query\Detail\DetailHelper;
 use Sitegeist\Objects\GraphQl\Query\Detail\DetailQuery;
-use Sitegeist\Objects\GraphQl\Query\Index\IndexHelper;
 use Sitegeist\Objects\GraphQl\Query\Index\IndexQuery;
 
 class StoreQuery extends ObjectType
 {
-    /**
-     * @Flow\Inject
-     * @var StringHelper
-     */
-    protected $stringHelper;
-
-    /**
-     * @Flow\Inject
-     * @var NodeTypeManager
-     */
-    protected $nodeTypeManager;
-
-    /**
-     * For debugging purposes only!
-     *
-     * @Flow\Inject
-     * @var \Neos\Flow\Log\SystemLoggerInterface
-     */
-    protected $logger;
-
     /**
      * @param TypeResolver $typeResolver
      */
@@ -59,45 +35,27 @@ class StoreQuery extends ObjectType
             'fields' => [
                 'name' => [
                     'type' => Type::string(),
-                    'description' => 'The name of this store',
-                    'resolve' => function(NodeInterface $storeNode) {
-                        return $storeNode->getName();
-                    }
+                    'description' => 'The name of this store'
                 ],
                 'label' => [
                     'type' => Type::string(),
-                    'description' => 'The label of this store',
-                    'resolve' => function(NodeInterface $storeNode) {
-                        return $storeNode->getLabel();
-                    }
+                    'description' => 'The label of this store'
                 ],
                 'title' => [
                     'type' => Type::string(),
-                    'description' => 'The title of this store',
-                    'resolve' => function(NodeInterface $storeNode) {
-                        return $storeNode->getProperty('title');
-                    }
+                    'description' => 'The title of this store'
                 ],
                 'icon' => [
                     'type' => Type::string(),
-                    'description' => 'The icon of this store',
-                    'resolve' => function(NodeInterface $storeNode) {
-                        return $storeNode->getProperty('icon');
-                    }
+                    'description' => 'The icon of this store'
                 ],
                 'description' => [
                     'type' => Type::string(),
-                    'description' => 'The description of this store',
-                    'resolve' => function(NodeInterface $storeNode) {
-                        return $storeNode->getProperty('description');
-                    }
+                    'description' => 'The description of this store'
                 ],
                 'nodeType' => [
                     'type' => $typeResolver->get(NodeTypeQuery::class),
-                    'description' => 'The node type of this store',
-                    'resolve' => function(NodeInterface $storeNode) {
-                        return $storeNode->getNodeType();
-                    }
+                    'description' => 'The node type of this store'
                 ],
                 'objectIndex' => [
                     'type' => Type::nonNull($typeResolver->get(IndexQuery::class)),
@@ -126,20 +84,7 @@ class StoreQuery extends ObjectType
                             'description' => 'Direction to sort by',
                             'defaultValue' => 'ASC'
                         ]
-                    ],
-                    'resolve' => function (NodeInterface $storeNode, $arguments) {
-                        $flowQuery = new FlowQuery([$storeNode]);
-                        $flowQuery = $flowQuery->children('[instanceof Sitegeist.Objects:Object]');
-                        $flowQuery = $flowQuery->slice($arguments['from'], $arguments['length']);
-
-                        if (array_key_exists('sort', $arguments)) {
-                            $flowQuery = $flowQuery->sort($arguments['sort'], $arguments['order']);
-                        }
-
-                        $nodes = $flowQuery->get();
-
-                        return new IndexHelper($storeNode, $nodes);
-                    }
+                    ]
                 ],
                 'objectDetail' => [
                     'type' => Type::nonNull($typeResolver->get(DetailQuery::class)),
@@ -153,86 +98,12 @@ class StoreQuery extends ObjectType
                             'type' => Type::id(),
                             'description' => 'Id of the object node to be edited'
                         ]
-                    ],
-                    'resolve' => function(NodeInterface $storeNode, $arguments) {
-                        if (array_key_exists('identifier', $arguments)) {
-                            $objectNode = $storeNode->getContext()->getNodeByIdentifier($arguments['identifier']);
-
-                            //
-                            // Invariant: $objectNode must exist
-                            //
-                            if (!$objectNode) {
-                                throw new \InvalidArgumentException(
-                                    sprintf('Node "%s" does not exist.', $arguments['identifier']),
-                                    1524932459
-                                );
-                            }
-
-                            //
-                            // Invariant: $objectNode must be of type 'Sitegeist.Objects:Object'
-                            //
-                            if (!$objectNode->getNodeType()->isOfType('Sitegeist.Objects:Object')) {
-                                throw new \InvalidArgumentException(
-                                    'Node must be of type "Sitegeist.Objects:Object".',
-                                    1524932467
-                                );
-                            }
-
-                            //
-                            // Invariant: $objectNode must be in $store
-                            //
-                            if (!$this->stringHelper->startsWith($objectNode->getPath(), $storeNode->getPath())) {
-                                throw new \InvalidArgumentException(
-                                    sprintf(
-                                        'Node identifier "%s" does not belong to store "%s"',
-                                        $objectNode->getIdentifier(),
-                                        $storeNode->getName()
-                                    ),
-                                    1522671880
-                                );
-                            }
-
-                            return new DetailHelper($objectNode->getNodeType(), $objectNode);
-                        } else if (array_key_exists('nodeType', $arguments)) {
-                            $nodeType = $this->nodeTypeManager->getNodeType($arguments['nodeType']);
-
-                            //
-                            // Invariant: $nodeType must be of type 'Sitegeist.Objects:Object'
-                            //
-                            if (!$nodeType->isOfType('Sitegeist.Objects:Object')) {
-                                throw new \InvalidArgumentException(
-                                    'NodeType must inherit from "Sitegeist.Objects:Object".',
-                                    1524932499
-                                );
-                            }
-
-                            //
-                            // Invariant: $storeNode must allow $nodeType as child node type
-                            //
-                            if (!$storeNode->getNodeType()->allowsChildNodeType($nodeType)) {
-                                throw new \InvalidArgumentException(
-                                    sprintf(
-                                        'NodeType "%s" is not allowed in Store "%s".',
-                                        $nodeType->getName(),
-                                        $storeNode->getName()
-                                    ),
-                                    1524932459
-                                );
-                            }
-
-                            return new DetailHelper($nodeType);
-                        }
-
-                        //
-                        // Invariant: Either nodeType or identifier must be given
-                        //
-                        throw new \InvalidArgumentException(
-                            'Either nodeType or identifier must be given',
-                            1524932452
-                        );
-                    }
+                    ]
                 ]
-            ]
+            ],
+            'resolveField'  => function(StoreHelper $store, $arguments, $context, ResolveInfo $info) {
+                return $store->{'get' . ucfirst($info->fieldName)}($arguments);
+            }
         ]);
     }
 }

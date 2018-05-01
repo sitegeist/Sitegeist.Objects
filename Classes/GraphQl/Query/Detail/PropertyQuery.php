@@ -19,6 +19,7 @@ use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
 use Wwwision\GraphQL\TypeResolver;
 use Sitegeist\Objects\GraphQl\Scalar\JsonScalar;
+use Sitegeist\Objects\GraphQl\Query\ObjectQuery;
 
 class PropertyQuery extends ObjectType
 {
@@ -28,6 +29,10 @@ class PropertyQuery extends ObjectType
             'name' => 'Property',
             'description' => 'A property configuration',
             'fields' => [
+                'object' => [
+                    'type' => $typeResolver->get(ObjectQuery::class),
+                    'description' => 'The object this property belongs to'
+                ],
                 'name' => [
                     'type' => Type::nonNull(Type::string()),
                     'description' => 'The name of the property'

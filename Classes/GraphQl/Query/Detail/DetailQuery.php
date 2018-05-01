@@ -20,7 +20,7 @@ use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
 use Wwwision\GraphQL\TypeResolver;
 use Sitegeist\Objects\GraphQl\Query\Detail\DetailHelper;
-use Sitegeist\Objects\GraphQl\Query\NodeTypeQuery;
+use Sitegeist\Objects\GraphQl\Query\ObjectQuery;
 
 class DetailQuery extends ObjectType
 {
@@ -33,33 +33,9 @@ class DetailQuery extends ObjectType
             'name' => 'Detail',
             'description' => 'Detailed information about an object',
             'fields' => [
-                'identifier' => [
-                    'type' => Type::id(),
+                'object' => [
+                    'type' => $typeResolver->get(ObjectQuery::class),
                     'description' => 'The id of the object node or null if empty'
-                ],
-                'icon' => [
-                    'type' => Type::string(),
-                    'description' => 'The icon of the object node'
-                ],
-                'label' => [
-                    'type' => Type::string(),
-                    'description' => 'The label of the object node or null if empty'
-                ],
-                'isHidden' => [
-                    'type' => Type::boolean(),
-                    'description' => 'Is the object hidden?'
-                ],
-                'isRemoved' => [
-                    'type' => Type::boolean(),
-                    'description' => 'Has the object been removed?'
-                ],
-                'hasUnpublishedChanges' => [
-                    'type' => Type::boolean(),
-                    'description' => 'Does the object have unpublished changes?'
-                ],
-                'nodeType' => [
-                    'type' => $typeResolver->get(NodeTypeQuery::class),
-                    'description' => 'The node type of the object node'
                 ],
                 'tabs' => [
                     'type' => Type::listOf($typeResolver->get(TabQuery::class)),

@@ -16,13 +16,14 @@ namespace Sitegeist\Objects\GraphQl\Query\Detail;
 use Neos\Flow\Annotations as Flow;
 use Neos\Utility\ObjectAccess;
 use Neos\Utility\PositionalArraySorter;
+use Sitegeist\Objects\GraphQl\Query\ObjectHelper;
 
 class GroupHelper
 {
     /**
-     * @var DetailHelper
+     * @var ObjectHelper
      */
-    protected $objectDetail;
+    protected $object;
 
     /**
      * @var string
@@ -34,11 +35,11 @@ class GroupHelper
      */
     protected $groupConfiguration;
 
-    public function __construct(DetailHelper $objectDetail, string $groupName)
+    public function __construct(ObjectHelper $object, string $groupName)
     {
-        $this->objectDetail = $objectDetail;
+        $this->object = $object;
         $this->groupName = $groupName;
-        $this->groupConfiguration = $this->objectDetail->getNodeType()
+        $this->groupConfiguration = $this->object->getNodeType()
             ->getConfiguration('ui.sitegeist/objects/detail.groups.' . $groupName);
 
         //
@@ -50,7 +51,7 @@ class GroupHelper
                 sprintf(
                     'Group "%s" does not seem to be configured in "%s"',
                     $groupName,
-                    $this->objectDetail->getNodeType()->getName()
+                    $this->object->getNodeType()->getName()
                 ),
                 1524937588
             );
@@ -58,13 +59,13 @@ class GroupHelper
     }
 
     /**
-     * Get the DetailHelper
+     * Get the object
      *
-     * @return DetailHelper
+     * @return ObjectHelper
      */
-    public function getDetailHelper() : DetailHelper
+    public function getObject() : ObjectHelper
     {
-        return $this->objectDetail;
+        return $this->object;
     }
 
     /**
@@ -114,10 +115,10 @@ class GroupHelper
     {
         $properties = [];
 
-        foreach($this->objectDetail->getNodeType()->getProperties() as $propertyName => $propertyConfiguration) {
+        foreach($this->object->getNodeType()->getProperties() as $propertyName => $propertyConfiguration) {
             $groupName = ObjectAccess::getPropertyPath($propertyConfiguration, 'ui.sitegeist/objects/detail.group');
             if ($groupName === $this->groupName) {
-                $properties[$propertyName] = new PropertyHelper($this->objectDetail, $propertyName);
+                $properties[$propertyName] = new PropertyHelper($this->object, $propertyName);
             }
         }
 
