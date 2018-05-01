@@ -9,8 +9,7 @@
  * For the full copyright and license information, please read the
  * LICENSE.md file that was distributed with this source code.
  */
-window.Sitegeist = window.Sitegeist || {};
-window.Sitegeist.Objects = {};
+import {BehaviorSubject} from 'rxjs';
 
 //
 // Expose app container
@@ -18,7 +17,6 @@ window.Sitegeist.Objects = {};
 window.Sitegeist.Objects.appContainer = document.getElementById('app');
 
 //
-// Expose csrfToken
+// Expose csrfToken as a stream
 //
-window.Sitegeist.Objects.csrfToken = window.Sitegeist.Objects.appContainer
-	.querySelector('[itemprop="csrfToken"]').getAttribute('content');
+window.Sitegeist.Objects.csrfToken$ = new BehaviorSubject(window.Sitegeist.Objects.csrfToken);

@@ -1,5 +1,9 @@
-<div id="app">
-    <meta itemprop="csrfToken" content="{f:security.csrfToken()}">
-</div>
+<script>
+    window.Sitegeist = window.Sitegeist || {};
+    window.Sitegeist.Objects = {};
+    window.Sitegeist.Objects.csrfToken = '{f:security.csrfToken()}';
+    window.Sitegeist.Objects.apiEndpoint = '{apiEndpoint}';
+</script>
+<div id="app"></div>
 <script src="{f:uri.resource(path: 'resource://Sitegeist.Objects/Public/JavaScript/env.js')}"></script>
 <script src="{f:uri.resource(path: 'resource://Sitegeist.Objects/Public/JavaScript/app.js')}"></script>

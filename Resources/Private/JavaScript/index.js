@@ -12,6 +12,13 @@
 import React from 'react';
 import {render} from 'react-dom';
 
+import Application from './core/application';
+
 const {appContainer} = window.Sitegeist.Objects;
 
-render(<h1>Hello World!</h1>, appContainer);
+render(
+	<Application>
+		<h1>Hello World!</h1>
+	</Application>,
+	appContainer
+);

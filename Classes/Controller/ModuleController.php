@@ -22,9 +22,21 @@ use Neos\Neos\Controller\Module\AbstractModuleController;
 class ModuleController extends AbstractModuleController
 {
     /**
+     * @Flow\InjectConfiguration(path="endpoints")
+     * @var array
+     */
+    protected $endpointConfigurations;
+
+    /**
      * @return void
      */
     public function indexAction()
     {
+        //
+        // @TODO: Find a better way to determine the endpoint
+        //
+        list($apiEndpoint) = array_keys($this->endpointConfigurations);
+
+        $this->view->assign('apiEndpoint', $apiEndpoint);
     }
 }
