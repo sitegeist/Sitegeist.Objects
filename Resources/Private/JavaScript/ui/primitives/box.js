@@ -9,18 +9,11 @@
  * For the full copyright and license information, please read the
  * LICENSE.md file that was distributed with this source code.
  */
-import React from 'react';
-import {render} from 'react-dom';
+import styled from 'styled-components';
 
-import Application from './core/application';
+const Box = styled.div`
+	background-color: #333;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, .12), 0 1px 2px rgba(0, 0, 0, .24);
+`;
 
-import StoresView from './view/stores';
-
-const {appContainer} = window.Sitegeist.Objects;
-
-render(
-	<Application>
-		<StoresView/>
-	</Application>,
-	appContainer
-);
+export default Box;

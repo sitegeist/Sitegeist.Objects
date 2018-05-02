@@ -9,18 +9,22 @@
  * For the full copyright and license information, please read the
  * LICENSE.md file that was distributed with this source code.
  */
-import React from 'react';
-import {render} from 'react-dom';
+import styled from 'styled-components';
 
-import Application from './core/application';
+import Box from './box';
 
-import StoresView from './view/stores';
+const Message = styled(Box)`
+	padding: 1em!important;
+`;
 
-const {appContainer} = window.Sitegeist.Objects;
+Message.Text = styled.div`
+	font-style: italic;
+	margin-bottom: 1em!important;
+`;
 
-render(
-	<Application>
-		<StoresView/>
-	</Application>,
-	appContainer
-);
+Message.Code = styled.pre`
+	background-color: #444;
+	padding: .6em!important;
+`;
+
+export default Message;

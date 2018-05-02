@@ -15,6 +15,7 @@ namespace Sitegeist\Objects\Controller;
 
 use Neos\Flow\Annotations as Flow;
 use Neos\Neos\Controller\Module\AbstractModuleController;
+use Neos\Neos\Service\UserService;
 
 /**
  * @Flow\Scope("singleton")
@@ -28,6 +29,12 @@ class ModuleController extends AbstractModuleController
     protected $endpointConfigurations;
 
     /**
+     * @Flow\Inject
+     * @var UserService
+     */
+    protected $userService;
+
+    /**
      * @return void
      */
     public function indexAction()
@@ -37,6 +44,7 @@ class ModuleController extends AbstractModuleController
         //
         list($apiEndpoint) = array_keys($this->endpointConfigurations);
 
-        $this->view->assign('apiEndpoint', $apiEndpoint);
+        $this->view->assign('apiEndpoint', '/' . $apiEndpoint);
+        $this->view->assign('workspaceName', $this->userService->getPersonalWorkspaceName());
     }
 }
