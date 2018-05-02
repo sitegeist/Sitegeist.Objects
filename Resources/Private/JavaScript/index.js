@@ -11,6 +11,7 @@
  */
 import React from 'react';
 import {render} from 'react-dom';
+import {HashRouter, Route, Switch} from 'react-router-dom';
 
 import Application from './core/application';
 
@@ -20,7 +21,15 @@ const {appContainer} = window.Sitegeist.Objects;
 
 render(
 	<Application>
-		<StoresView/>
+		<HashRouter>
+			<Switch>
+				<Route
+					exact
+					path="/"
+					render={() => <StoresView/>}
+				/>
+			</Switch>
+		</HashRouter>
 	</Application>,
 	appContainer
 );
