@@ -61,22 +61,21 @@ class RootMutation extends ObjectType
                             'type' => Type::nonNull($typeResolver->get(ContentContextInput::class)),
                             'description' => 'The content context for this query'
                         ],
-                        'name' => [
-                            'type' => Type::nonNull(Type::string()),
-                            'description' => 'The name of the store'
+                        'identifier' => [
+                            'type' => Type::nonNull(Type::id()),
+                            'description' => 'The identifier of the store'
                         ]
                     ],
                     'resolve' => function($_, $arguments) {
                         $contentContext = $this->contentContextFactory->create($arguments['context']);
-                        $rootNode = $contentContext->getRootNode()->getNode($this->rootNodeName);
-                        $storeNode = $rootNode->getNode($arguments['name']);
+                        $storeNode = $contentContext->getNodeByIdentifier($arguments['identifier']);
 
                         //
                         // Invariant: Store must exist.
                         //
                         if (!$storeNode) {
                             throw new \InvalidArgumentException(
-                                sprintf('Store with name "%s" does not exist', $arguments['name']),
+                                sprintf('Store with identifier "%s" does not exist', $arguments['identifier']),
                                 1525028262
                             );
                         }

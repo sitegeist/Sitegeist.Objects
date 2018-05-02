@@ -16,6 +16,7 @@ import {HashRouter, Route, Switch} from 'react-router-dom';
 import Application from './core/application';
 
 import StoresView from './view/stores';
+import StoreView from './view/store';
 
 const {appContainer} = window.Sitegeist.Objects;
 
@@ -27,6 +28,10 @@ render(
 					exact
 					path="/"
 					render={() => <StoresView/>}
+				/>
+				<Route
+					path="/store/:identifier"
+					render={({match}) => (<StoreView {...match.params}/>)}
 				/>
 			</Switch>
 		</Application>

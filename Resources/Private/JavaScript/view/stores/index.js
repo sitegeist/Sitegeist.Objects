@@ -10,12 +10,15 @@
  * LICENSE.md file that was distributed with this source code.
  */
 import React, {Component} from 'react';
+import {Link} from 'react-router-dom';
 
 import StoresQuery from '../../query/stores';
 
 import IconCard from '../../ui/structures/iconCard';
 import Grid from '../../ui/primitives/grid';
 import Message from '../../ui/primitives/message';
+
+import Breadcrumb from '../../ui/structures/breadcrumb';
 
 export default class StoresView extends Component {
 	render() {
@@ -24,30 +27,37 @@ export default class StoresView extends Component {
 				{({stores}) => {
 					if (stores.length > 0) {
 						return (
-							<Grid>
-								{stores.map(store => (
-									<IconCard
-										key={store.identifier}
-										icon={store.icon}
-										title={store.title}
-									>
-										{store.description}
-									</IconCard>
-								))}
-							</Grid>
+							<React.Fragment>
+								<Breadcrumb/>
+								<Grid>
+									{stores.map(store => (
+										<Link key={store.identifier} to={`/store/${store.identifier}`}>
+											<IconCard
+												icon={store.icon}
+												title={store.title}
+											>
+												{store.description}
+											</IconCard>
+										</Link>
+									))}
+								</Grid>
+							</React.Fragment>
 						);
 					}
 
 					return (
-						<Message>
-							<Message.Text>
-								There appears to be no store present in your Content Repository. You can create one
-								using the Command Line:
-							</Message.Text>
-							<Message.Code>
-								{'./flow objects:createstore'}
-							</Message.Code>
-						</Message>
+						<React.Fragment>
+							<Breadcrumb/>
+							<Message>
+								<Message.Text>
+									There appears to be no store present in your Content Repository. You can create one
+									using the Command Line:
+								</Message.Text>
+								<Message.Code>
+									{'./flow objects:createstore'}
+								</Message.Code>
+							</Message>
+						</React.Fragment>
 					);
 				}}
 			</StoresQuery>

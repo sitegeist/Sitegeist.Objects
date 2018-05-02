@@ -449,7 +449,6 @@ exports.default = CoreApolloProvider;
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.default = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -567,25 +566,31 @@ var _stores = __webpack_require__(/*! ./view/stores */ "./Resources/Private/Java
 
 var _stores2 = _interopRequireDefault(_stores);
 
+var _store = __webpack_require__(/*! ./view/store */ "./Resources/Private/JavaScript/view/store/index.js");
+
+var _store2 = _interopRequireDefault(_store);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var appContainer = window.Sitegeist.Objects.appContainer; /*
-                                                           * Copyright notice
-                                                           *
-                                                           * (c) 2018 Wilhelm Behncke <behncke@sitegeist.de>
-                                                           * All rights reserved
-                                                           *
-                                                           * This file is part of the Sitegeist/Objects project under GPL-3.0.
-                                                           *
-                                                           * For the full copyright and license information, please read the
-                                                           * LICENSE.md file that was distributed with this source code.
-                                                           */
+/*
+ * Copyright notice
+ *
+ * (c) 2018 Wilhelm Behncke <behncke@sitegeist.de>
+ * All rights reserved
+ *
+ * This file is part of the Sitegeist/Objects project under GPL-3.0.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.md file that was distributed with this source code.
+ */
+var appContainer = window.Sitegeist.Objects.appContainer;
+
 
 (0, _reactDom.render)(_react2.default.createElement(
-	_application2.default,
+	_reactRouterDom.HashRouter,
 	null,
 	_react2.default.createElement(
-		_reactRouterDom.HashRouter,
+		_application2.default,
 		null,
 		_react2.default.createElement(
 			_reactRouterDom.Switch,
@@ -596,10 +601,114 @@ var appContainer = window.Sitegeist.Objects.appContainer; /*
 				render: function render() {
 					return _react2.default.createElement(_stores2.default, null);
 				}
+			}),
+			_react2.default.createElement(_reactRouterDom.Route, {
+				path: '/store/:identifier',
+				render: function render(_ref) {
+					var match = _ref.match;
+					return _react2.default.createElement(_store2.default, match.params);
+				}
 			})
 		)
 	)
 ), appContainer);
+
+/***/ }),
+
+/***/ "./Resources/Private/JavaScript/query/store/index.js":
+/*!***********************************************************!*\
+  !*** ./Resources/Private/JavaScript/query/store/index.js ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.GET_STORE = undefined;
+
+var _templateObject = _taggedTemplateLiteral(['\n\tquery getStore($context: ContentContextInput!, $identifier: ID!) {\n\t\tstore(context: $context, identifier: $identifier) {\n\t\t\tidentifier\n\t\t\ticon\n\t\t\tlabel\n\t\t\ttitle\n\t\t\tdescription\n\t\t\tparents {\n\t\t\t\tidentifier\n\t\t\t\ticon\n\t\t\t\tlabel\n\t\t\t}\n\t\t}\n\t}\n'], ['\n\tquery getStore($context: ContentContextInput!, $identifier: ID!) {\n\t\tstore(context: $context, identifier: $identifier) {\n\t\t\tidentifier\n\t\t\ticon\n\t\t\tlabel\n\t\t\ttitle\n\t\t\tdescription\n\t\t\tparents {\n\t\t\t\tidentifier\n\t\t\t\ticon\n\t\t\t\tlabel\n\t\t\t}\n\t\t}\n\t}\n']);
+
+var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactApollo = __webpack_require__(/*! react-apollo */ "./node_modules/react-apollo/react-apollo.browser.umd.js");
+
+var _graphqlTag = __webpack_require__(/*! graphql-tag */ "./node_modules/graphql-tag/src/index.js");
+
+var _graphqlTag2 = _interopRequireDefault(_graphqlTag);
+
+var _propTypes = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); } /*
+                                                                                                                                                   * Copyright notice
+                                                                                                                                                   *
+                                                                                                                                                   * (c) 2018 Wilhelm Behncke <behncke@sitegeist.de>
+                                                                                                                                                   * All rights reserved
+                                                                                                                                                   *
+                                                                                                                                                   * This file is part of the Sitegeist/Objects project under GPL-3.0.
+                                                                                                                                                   *
+                                                                                                                                                   * For the full copyright and license information, please read the
+                                                                                                                                                   * LICENSE.md file that was distributed with this source code.
+                                                                                                                                                   */
+
+
+var GET_STORE = exports.GET_STORE = (0, _graphqlTag2.default)(_templateObject);
+
+var GetStoreQuery = function GetStoreQuery(_ref) {
+	var children = _ref.children,
+	    context = _ref.context,
+	    identifier = _ref.identifier;
+	return _react2.default.createElement(
+		_reactApollo.Query,
+		{
+			query: GET_STORE,
+			variables: { context: context, identifier: identifier }
+		},
+		function (_ref2) {
+			var loading = _ref2.loading,
+			    error = _ref2.error,
+			    data = _ref2.data;
+
+			//
+			// @TODO: Better load handling
+			//
+			if (loading) {
+				return 'Loading...';
+			}
+			if (error) {
+				return 'Error: ' + error;
+			}
+
+			return children(data);
+		}
+	);
+};
+
+GetStoreQuery.propTypes = {
+	context: _propTypes2.default.shape({
+		workspaceName: _propTypes2.default.string.isRequired,
+		invisibleContentShown: _propTypes2.default.bool.isRequired,
+		removedContentShown: _propTypes2.default.bool.isRequired,
+		inaccessibleContentShown: _propTypes2.default.bool.isRequired
+	}),
+	identifier: _propTypes2.default.string.isRequired,
+	children: _propTypes2.default.func.isRequired
+};
+
+GetStoreQuery.defaultProps = {
+	context: window.Sitegeist.Objects.contentContext
+};
+
+exports.default = GetStoreQuery;
 
 /***/ }),
 
@@ -910,6 +1019,149 @@ exports.default = Message;
 
 /***/ }),
 
+/***/ "./Resources/Private/JavaScript/ui/structures/breadcrumb.js":
+/*!******************************************************************!*\
+  !*** ./Resources/Private/JavaScript/ui/structures/breadcrumb.js ***!
+  \******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _propTypes = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _reactRouterDom = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/es/index.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; } /*
+                                                                                                                                                                                                                              * Copyright notice
+                                                                                                                                                                                                                              *
+                                                                                                                                                                                                                              * (c) 2018 Wilhelm Behncke <behncke@sitegeist.de>
+                                                                                                                                                                                                                              * All rights reserved
+                                                                                                                                                                                                                              *
+                                                                                                                                                                                                                              * This file is part of the Sitegeist/Objects project under GPL-3.0.
+                                                                                                                                                                                                                              *
+                                                                                                                                                                                                                              * For the full copyright and license information, please read the
+                                                                                                                                                                                                                              * LICENSE.md file that was distributed with this source code.
+                                                                                                                                                                                                                              */
+
+//
+// @TODO: This is a breach of responsibility
+//
+
+
+//
+// @TODO: All of this is hacky, but it provides us with the ability to override the default
+//        backend module breadcrumb. Still, besides that, this breadcrumb is a global concern
+//        and now needs to be repeated for every view. This should be ficed in the future.
+//
+
+var breadcrumbContainer = document.querySelector('.neos-breadcrumb');
+
+var originalElements = Array.from(breadcrumbContainer.querySelectorAll('li a')).map(function (link) {
+	return {
+		link: link.getAttribute('href'),
+		label: link.textContent,
+		icon: link.querySelector('i').getAttribute('class'),
+		isInitiallyActive: link.classList.contains('active')
+	};
+});
+
+breadcrumbContainer.innerHTML = '';
+
+var UniversalLink = function UniversalLink(_ref) {
+	var to = _ref.to,
+	    props = _objectWithoutProperties(_ref, ['to']);
+
+	var _window$location$href = window.location.href.split('#'),
+	    _window$location$href2 = _slicedToArray(_window$location$href, 1),
+	    currentLocation = _window$location$href2[0];
+
+	if (to === currentLocation) {
+		return _react2.default.createElement(_reactRouterDom.Link, _extends({ to: '/' }, props));
+	}
+
+	if (to.startsWith('http')) {
+		return _react2.default.createElement('a', _extends({ href: to }, props));
+	}
+
+	return _react2.default.createElement(_reactRouterDom.Link, _extends({ to: to }, props));
+};
+
+UniversalLink.propTypes = {
+	to: _propTypes2.default.string.isRequired
+};
+
+var Breadcrumb = function Breadcrumb(_ref2) {
+	var items = _ref2.items;
+	return _reactDom2.default.createPortal(_react2.default.createElement(
+		_react2.default.Fragment,
+		null,
+		[].concat(_toConsumableArray(originalElements.map(function (item) {
+			return _extends({}, item, {
+				isActive: item.isInitiallyActive && !items.some(function (item) {
+					return item.isActive;
+				})
+			});
+		})), _toConsumableArray(items)).map(function (item, index, list) {
+			return _react2.default.createElement(
+				'li',
+				{ key: item.link },
+				_react2.default.createElement(
+					UniversalLink,
+					{ to: item.link, className: item.isActive ? 'active' : '' },
+					_react2.default.createElement('i', { className: item.icon }),
+					item.label
+				),
+				index === list.length - 1 ? '' : _react2.default.createElement(
+					'span',
+					{ className: 'neos-divider' },
+					'/'
+				)
+			);
+		})
+	), breadcrumbContainer);
+};
+
+Breadcrumb.propTypes = {
+	items: _propTypes2.default.arrayOf(_propTypes2.default.shape({
+		link: _propTypes2.default.string.isRequired,
+		icon: _propTypes2.default.string.isRequired,
+		label: _propTypes2.default.string.isRequired,
+		isActive: _propTypes2.default.bool
+	}))
+};
+
+Breadcrumb.defaultProps = {
+	items: []
+};
+
+exports.default = Breadcrumb;
+
+/***/ }),
+
 /***/ "./Resources/Private/JavaScript/ui/structures/iconCard.js":
 /*!****************************************************************!*\
   !*** ./Resources/Private/JavaScript/ui/structures/iconCard.js ***!
@@ -1001,6 +1253,102 @@ exports.default = IconCard;
 
 /***/ }),
 
+/***/ "./Resources/Private/JavaScript/view/store/index.js":
+/*!**********************************************************!*\
+  !*** ./Resources/Private/JavaScript/view/store/index.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _store = __webpack_require__(/*! ../../query/store */ "./Resources/Private/JavaScript/query/store/index.js");
+
+var _store2 = _interopRequireDefault(_store);
+
+var _breadcrumb = __webpack_require__(/*! ../../ui/structures/breadcrumb */ "./Resources/Private/JavaScript/ui/structures/breadcrumb.js");
+
+var _breadcrumb2 = _interopRequireDefault(_breadcrumb);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /*
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Copyright notice
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                *
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * (c) 2018 Wilhelm Behncke <behncke@sitegeist.de>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * All rights reserved
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                *
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * This file is part of the Sitegeist/Objects project under GPL-3.0.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                *
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * For the full copyright and license information, please read the
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * LICENSE.md file that was distributed with this source code.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+
+var StoreView = function (_Component) {
+	_inherits(StoreView, _Component);
+
+	function StoreView() {
+		_classCallCheck(this, StoreView);
+
+		return _possibleConstructorReturn(this, (StoreView.__proto__ || Object.getPrototypeOf(StoreView)).apply(this, arguments));
+	}
+
+	_createClass(StoreView, [{
+		key: 'render',
+		value: function render() {
+			var identifier = this.props.identifier;
+
+
+			return _react2.default.createElement(
+				_store2.default,
+				{ identifier: identifier },
+				function (_ref) {
+					var store = _ref.store;
+					return _react2.default.createElement(_breadcrumb2.default, {
+						items: [].concat(_toConsumableArray(store.parents.map(function (parent) {
+							return {
+								icon: parent.icon,
+								label: parent.label,
+								link: '/store/' + parent.identifier
+							};
+						})), [{
+							icon: store.icon,
+							label: store.label,
+							link: '/store/' + store.identifier,
+							isActive: true
+						}])
+					});
+				}
+			);
+		}
+	}]);
+
+	return StoreView;
+}(_react.Component);
+
+exports.default = StoreView;
+
+/***/ }),
+
 /***/ "./Resources/Private/JavaScript/view/stores/index.js":
 /*!***********************************************************!*\
   !*** ./Resources/Private/JavaScript/view/stores/index.js ***!
@@ -1022,6 +1370,8 @@ var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactRouterDom = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/es/index.js");
+
 var _stores = __webpack_require__(/*! ../../query/stores */ "./Resources/Private/JavaScript/query/stores/index.js");
 
 var _stores2 = _interopRequireDefault(_stores);
@@ -1037,6 +1387,10 @@ var _grid2 = _interopRequireDefault(_grid);
 var _message = __webpack_require__(/*! ../../ui/primitives/message */ "./Resources/Private/JavaScript/ui/primitives/message.js");
 
 var _message2 = _interopRequireDefault(_message);
+
+var _breadcrumb = __webpack_require__(/*! ../../ui/structures/breadcrumb */ "./Resources/Private/JavaScript/ui/structures/breadcrumb.js");
+
+var _breadcrumb2 = _interopRequireDefault(_breadcrumb);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1077,34 +1431,47 @@ var StoresView = function (_Component) {
 
 					if (stores.length > 0) {
 						return _react2.default.createElement(
-							_grid2.default,
+							_react2.default.Fragment,
 							null,
-							stores.map(function (store) {
-								return _react2.default.createElement(
-									_iconCard2.default,
-									{
-										key: store.identifier,
-										icon: store.icon,
-										title: store.title
-									},
-									store.description
-								);
-							})
+							_react2.default.createElement(_breadcrumb2.default, null),
+							_react2.default.createElement(
+								_grid2.default,
+								null,
+								stores.map(function (store) {
+									return _react2.default.createElement(
+										_reactRouterDom.Link,
+										{ key: store.identifier, to: '/store/' + store.identifier },
+										_react2.default.createElement(
+											_iconCard2.default,
+											{
+												icon: store.icon,
+												title: store.title
+											},
+											store.description
+										)
+									);
+								})
+							)
 						);
 					}
 
 					return _react2.default.createElement(
-						_message2.default,
+						_react2.default.Fragment,
 						null,
+						_react2.default.createElement(_breadcrumb2.default, null),
 						_react2.default.createElement(
-							_message2.default.Text,
+							_message2.default,
 							null,
-							'There appears to be no store present in your Content Repository. You can create one using the Command Line:'
-						),
-						_react2.default.createElement(
-							_message2.default.Code,
-							null,
-							'./flow objects:createstore'
+							_react2.default.createElement(
+								_message2.default.Text,
+								null,
+								'There appears to be no store present in your Content Repository. You can create one using the Command Line:'
+							),
+							_react2.default.createElement(
+								_message2.default.Code,
+								null,
+								'./flow objects:createstore'
+							)
 						)
 					);
 				}
