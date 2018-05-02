@@ -20,8 +20,8 @@ import StoresView from './view/stores';
 const {appContainer} = window.Sitegeist.Objects;
 
 render(
-	<Application>
-		<HashRouter>
+	<HashRouter>
+		<Application>
 			<Switch>
 				<Route
 					exact
@@ -29,7 +29,7 @@ render(
 					render={() => <StoresView/>}
 				/>
 			</Switch>
-		</HashRouter>
-	</Application>,
+		</Application>
+	</HashRouter>,
 	appContainer
 );

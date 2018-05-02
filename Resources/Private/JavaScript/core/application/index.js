@@ -11,14 +11,16 @@
  */
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {withRouter} from 'react-router';
 
 import ApolloProvider from '../apollo';
 
 const {csrfToken$, apiEndpoint} = window.Sitegeist.Objects;
 
-export default class Application extends Component {
+class Application extends Component {
 	static propTypes = {
-		children: PropTypes.node.isRequired
+		children: PropTypes.node.isRequired,
+		history: PropTypes.object.isRequired
 	};
 
 	state = {
@@ -28,6 +30,14 @@ export default class Application extends Component {
 	componentDidMount() {
 		csrfToken$.subscribe({
 			next: csrfToken => this.setState({csrfToken})
+		});
+
+		//
+		// Workaround to get the backend module breadcrumb to succumb my will
+		//
+		document.querySelector('.neos-breadcrumb a.active').addEventListener('click', e => {
+			e.preventDefault();
+			this.props.history.push('/');
 		});
 	}
 
@@ -41,3 +51,5 @@ export default class Application extends Component {
 		);
 	}
 }
+
+export default withRouter(Application);
