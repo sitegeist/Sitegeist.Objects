@@ -169,7 +169,7 @@ class StoreHelper
      */
     public function getObject(array $arguments)
     {
-        if (array_key_exists('identifier', $arguments)) {
+        if (array_key_exists('identifier', $arguments) && $arguments['identifier']) {
             $objectNode = $this->node->getContext()->getNodeByIdentifier($arguments['identifier']);
 
             //
@@ -207,7 +207,7 @@ class StoreHelper
             }
 
             return ObjectHelper::createFromNode($objectNode);
-        } else if (array_key_exists('nodeType', $arguments)) {
+        } else if (array_key_exists('nodeType', $arguments) && $arguments['nodeType']) {
             $nodeType = $this->nodeTypeManager->getNodeType($arguments['nodeType']);
 
             //
