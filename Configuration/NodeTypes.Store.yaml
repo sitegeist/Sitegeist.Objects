@@ -13,3 +13,14 @@
       type: string
     description:
       type: string
+  ui:
+    sitegeist/objects/list:
+      columns:
+        __modififactionDateTime:
+          label: 'Letzte Änderung' # @TODO: I18n
+          computed: ${Date.format(node.lastModificationDateTime, 'd.m.Y H:i:s')} # @TODO: I18n
+          position: before __creationDateTime
+        __creationDateTime:
+          label: 'Datum der Erstellung' # @TODO: I18n
+          computed: ${Date.format(node.creationDateTime, 'd.m.Y H:i:s')} # @TODO: I18n
+          position: end 99999999
