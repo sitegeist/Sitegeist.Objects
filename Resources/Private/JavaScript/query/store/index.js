@@ -27,6 +27,22 @@ export const GET_STORE = gql`
 				icon
 				label
 			}
+			objectIndex {
+				tableHeads {
+					name
+					label
+				}
+				tableRows {
+					object {
+						identifier
+						icon
+						label
+					}
+					tableCells {
+						value
+					}
+				}
+			}
 		}
 	}
 `;
