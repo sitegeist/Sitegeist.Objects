@@ -117,7 +117,10 @@ class TabHelper
 
         foreach($this->object->getNodeType()->getProperties() as $propertyConfiguration) {
             $groupName = ObjectAccess::getPropertyPath($propertyConfiguration, 'ui.sitegeist/objects/detail.group');
-            if ($groupName && !array_key_exists($groupName, $groupConfigurations)) {
+            $tabName = $this->object->getNodeType()
+                ->getConfiguration('ui.sitegeist/objects/detail.groups.' . $groupName . '.tab');
+
+            if ($tabName === $this->tabName && $groupName && !array_key_exists($groupName, $groupConfigurations)) {
                 $groupConfigurations[$groupName] = new GroupHelper($this->object, $groupName);
             }
         }
