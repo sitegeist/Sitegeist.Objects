@@ -38,7 +38,24 @@ export default class CoreApolloProvider extends Component {
 				},
 				credentials: 'include'
 			}),
-			cache: apolloCache
+			cache: apolloCache,
+			/**
+			 * @TODO: These options will disable the Apollo cache. The reason for this is the following issue:
+			 *        https://github.com/apollographql/apollo-client/issues/1618
+			 *        The current status of th issue (as of May 2018) looks pretty bad. Momentarily it appears to be
+			 *        unlikely to be solved.
+			 *        This might very well be a reason to replace Apollo entirely.
+			 */
+			defaultOptions: {
+				watchQuery: {
+					fetchPolicy: 'network-only',
+					errorPolicy: 'ignore'
+				},
+				query: {
+					fetchPolicy: 'network-only',
+					errorPolicy: 'all'
+				}
+			}
 		});
 
 		return (
