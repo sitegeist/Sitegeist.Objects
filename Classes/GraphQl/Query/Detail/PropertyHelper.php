@@ -128,5 +128,8 @@ class PropertyHelper
         if ($this->object->hasNode()) {
             return $this->object->getProperty(['name' => $this->propertyName]);
         }
+
+        return $this->object->getNodeType()
+            ->getConfiguration('properties.' . $this->propertyName . '.defaultValue');
     }
 }
