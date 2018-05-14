@@ -38,10 +38,13 @@ export default class Select extends Component {
 
 	handleChange = () => {
 		const {onChange, allItems} = this.props;
+		const {selected} = this.state;
+		const [selectedItem] = allItems.filter(item => item.name === selected);
 
 		onChange({
-			selected: this.state.selected,
-			allItems
+			allItems,
+			selected,
+			selectedItem
 		});
 	}
 
