@@ -61,8 +61,15 @@ export default class EditorManager extends Component {
 			id: `property-${property.name}`,
 			label: property.label,
 			value: transient.has(property.name) ? transient.get(property.name) : property.value,
-			isDirty: transient.has(property.name) && transient.get(property.name) !== property.value,
-			commit: value => transient.add(property.name, value)
+			isDirty: transient.has(property.name) && transient.get(property.name) !== property.value
+		};
+
+		editorProps.commit = value => {
+			if (value === property.value) {
+				transient.remove(property.name);
+			} else {
+				transient.add(property.name, value);
+			}
 		};
 
 		return (
