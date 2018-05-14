@@ -12,6 +12,9 @@
 import {Component} from 'react';
 import PropTypes from 'prop-types';
 
+/**
+ * @TODO Better documentation
+ */
 export default class Toggle extends Component {
 	static propTypes = {
 		initial: PropTypes.bool.isRequired,

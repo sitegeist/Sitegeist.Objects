@@ -12,6 +12,9 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
+/**
+ * @TODO Better documentation
+ */
 export default class Condition extends Component {
 	static propTypes = {
 		condition: PropTypes.bool.isRequired,

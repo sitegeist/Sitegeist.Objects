@@ -12,6 +12,9 @@
 import {Component} from 'react';
 import PropTypes from 'prop-types';
 
+/**
+ * @TODO Better documentation
+ */
 export default class Transient extends Component {
 	static propTypes = {
 		onChange: PropTypes.func,

@@ -20,6 +20,10 @@ import Separator from '../../ui/primitives/separator';
 import Toggle from './toggle';
 import Condition from './condition';
 
+/**
+ * @TODO Better documentation
+ * @TODO This should better live in /ui
+ */
 export default class Confirm extends Component {
 	static propTypes = {
 		question: PropTypes.string.isRequired,
