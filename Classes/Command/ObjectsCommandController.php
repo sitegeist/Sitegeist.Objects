@@ -69,6 +69,7 @@ class ObjectsCommandController extends CommandController
 
         foreach ($rootNode->getChildNodes('Sitegeist.Objects:Store') as $storeNode) {
             $availableStores[] = [
+                'identifier' => $storeNode->getIdentifier(),
                 'title' => $storeNode->getProperty('title'),
                 'name' => $storeNode->getName(),
                 'nodeType' => $storeNode->getNodeType()->getName()
@@ -76,7 +77,7 @@ class ObjectsCommandController extends CommandController
         }
 
         if (count($availableStores)) {
-            $this->output->outputTable($availableStores, ['Title', 'NodeName', 'NodeType']);
+            $this->output->outputTable($availableStores, ['Identifier', 'Title', 'NodeName', 'NodeType']);
         } else {
             $this->outputLine('There are no stores available.');
         }
