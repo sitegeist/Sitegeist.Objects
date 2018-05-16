@@ -18,16 +18,18 @@ import PropTypes from 'prop-types';
 export default class Transient extends Component {
 	static propTypes = {
 		onChange: PropTypes.func,
-		children: PropTypes.func
+		children: PropTypes.func,
+		initial: PropTypes.object
 	};
 
 	static defaultProps = {
 		onChange: () => {},
-		children: () => null
+		children: () => null,
+		initial: {}
 	};
 
 	state = {
-		values: {}
+		values: this.props.initial
 	};
 
 	handleChange = () => {
