@@ -76,4 +76,21 @@ class DetailHelper
         $sorter = new PositionalArraySorter($tabConfigurations);
         return $sorter->toArray();
     }
+
+    /**
+     * @return \Generator<PropertyHelper>
+     */
+    public function getProperties()
+    {
+        $properties = [];
+
+        foreach($this->object->getNodeType()->getProperties() as $propertyName => $propertyConfiguration) {
+            if (ObjectAccess::getPropertyPath($propertyConfiguration, 'ui.sitegeist/objects/detail')) {
+                $properties[$propertyName] = new PropertyHelper($this->object, $propertyName);
+            }
+        }
+
+        $sorter = new PositionalArraySorter($properties);
+        return $sorter->toArray();
+    }
 }

@@ -40,6 +40,10 @@ class DetailQuery extends ObjectType
                 'tabs' => [
                     'type' => Type::listOf($typeResolver->get(TabQuery::class)),
                     'description' => 'The tab configuration of the object node'
+                ],
+                'properties' => [
+                    'type' => Type::listOf($typeResolver->get(PropertyQuery::class)),
+                    'description' => 'All properties configured for this object'
                 ]
             ],
             'resolveField'  => function(DetailHelper $objectDetail, $arguments, $context, ResolveInfo $info) {
