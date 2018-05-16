@@ -128,4 +128,25 @@ class TabHelper
         $sorter = new PositionalArraySorter($groupConfigurations);
         return $sorter->toArray();
     }
+
+    /**
+     * @return \Generator<PropertyHelper>
+     */
+    public function getProperties()
+    {
+        $properties = [];
+
+        foreach($this->object->getNodeType()->getProperties() as $propertyName => $propertyConfiguration) {
+            $groupName = ObjectAccess::getPropertyPath($propertyConfiguration, 'ui.sitegeist/objects/detail.group');
+            $tabName = $this->object->getNodeType()
+                ->getConfiguration('ui.sitegeist/objects/detail.groups.' . $groupName . '.tab');
+
+            if ($tabName === $this->tabName) {
+                $properties[$propertyName] = new PropertyHelper($this->object, $propertyName);
+            }
+        }
+
+        $sorter = new PositionalArraySorter($properties);
+        return $sorter->toArray();
+    }
 }

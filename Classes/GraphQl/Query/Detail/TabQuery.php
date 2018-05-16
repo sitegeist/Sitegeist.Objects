@@ -51,6 +51,10 @@ class TabQuery extends ObjectType
                 'groups' => [
                     'type' => Type::listOf($typeResolver->get(GroupQuery::class)),
                     'description' => 'All groups belonging to this tab'
+                ],
+                'properties' => [
+                    'type' => Type::listOf($typeResolver->get(PropertyQuery::class)),
+                    'description' => 'All properties belonging to this tab'
                 ]
             ],
             'resolveField'  => function(TabHelper $tabConfiguration, $arguments, $context, ResolveInfo $info) {
