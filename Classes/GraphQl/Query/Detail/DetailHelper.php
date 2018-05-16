@@ -93,4 +93,17 @@ class DetailHelper
         $sorter = new PositionalArraySorter($properties);
         return $sorter->toArray();
     }
+
+    /**
+     * @param array $arguments
+     * @return PropertyHelper|null
+     */
+    public function getProperty($arguments)
+    {
+        $propertyName = $arguments['name'];
+        $propertyConfiguration = $this->object->getNodeType()->getConfiguration('properties.' . $propertyName);
+        if (ObjectAccess::getPropertyPath($propertyConfiguration, 'ui.sitegeist/objects/detail')) {
+            return new PropertyHelper($this->object, $propertyName);
+        }
+    }
 }
