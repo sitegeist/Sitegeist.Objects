@@ -37,6 +37,10 @@ class IndexQuery extends ObjectType
                 'tableRows' => [
                     'type' => Type::listOf($typeResolver->get(TableRowQuery::class)),
                     'description' => 'All table rows for this list'
+                ],
+                'totalNumberOfRows' => [
+                    'type' => Type::int(),
+                    'description' => 'Total number of rows for this list'
                 ]
             ],
             'resolveField'  => function(IndexHelper $objectList, $arguments, $context, ResolveInfo $info) {

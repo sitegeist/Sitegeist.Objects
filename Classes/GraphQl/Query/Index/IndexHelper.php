@@ -32,12 +32,17 @@ class IndexHelper
      */
     protected $nodes;
 
+    /**
+     * @var integer
+     */
+    protected $total;
 
     /**
      * @param NodeInterface $storeNode
      * @param iterable $nodes
+     * @param integer $total
      */
-    public function __construct(NodeInterface $storeNode, iterable $nodes)
+    public function __construct(NodeInterface $storeNode, iterable $nodes, int $total)
     {
         //
         // Invariant: $storeNode must be of type 'Sitegeist.Objects:Store'
@@ -51,6 +56,7 @@ class IndexHelper
 
         $this->storeNode = $storeNode;
         $this->nodes = $nodes;
+        $this->total = $total;
     }
 
     /**
@@ -78,5 +84,15 @@ class IndexHelper
         foreach($this->nodes as $objectNode) {
             yield new TableRowHelper($this->storeNode, ObjectHelper::createFromNode($objectNode));
         }
+    }
+
+    /**
+     * Get the total number of rows
+     *
+     * @return integer
+     */
+    public function getTotalNumberOfRows()
+    {
+        return $this->total;
     }
 }

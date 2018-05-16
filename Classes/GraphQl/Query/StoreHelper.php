@@ -135,19 +135,22 @@ class StoreHelper
      * Get objects from the store
      *
      * @param array $arguments
-     * @return array<NodeInterface>
+     * @return array
      */
     public function getObjects(array $arguments)
     {
         $flowQuery = new FlowQuery([$this->node]);
         $flowQuery = $flowQuery->children('[instanceof Sitegeist.Objects:Object]');
-        $flowQuery = $flowQuery->slice($arguments['from'], $arguments['length']);
+
+        $total = $flowQuery->count();
+
+        $flowQuery = $flowQuery->slice($arguments['from'], $arguments['from'] + $arguments['length']);
 
         if (array_key_exists('sort', $arguments)) {
             $flowQuery = $flowQuery->sort($arguments['sort'], $arguments['order']);
         }
 
-        return $flowQuery->get();
+        return [$flowQuery->get(), $total];
     }
 
     /**
@@ -158,7 +161,9 @@ class StoreHelper
      */
     public function getObjectIndex(array $arguments)
     {
-        return new IndexHelper($this->node, $this->getObjects($arguments));
+        list($objects, $total) = $this->getObjects($arguments);
+
+        return new IndexHelper($this->node, $objects, $total);
     }
 
     /**
@@ -257,6 +262,19 @@ class StoreHelper
         $object = $this->getObject($arguments);
 
         return new DetailHelper($object);
+    }
+
+    /**
+     * Get detailed information on several objects from the store
+     *
+     * @param array $arguments
+     * @return \Generator<DetailHelper>
+     */
+    public function getObjectBulk(array $arguments)
+    {
+        foreach($arguments['identifiers'] as $identifier) {
+            yield $this->getObjectDetail(['identifier' => $identifier]);
+        }
     }
 
     /**
