@@ -16,6 +16,8 @@ import styled from 'styled-components';
 const Container = styled.div`
 	margin-bottom: 1em!important;
 	flex: 1;
+	width: 100%;
+	max-width: 906px;
 `;
 
 const Label = styled.label`
