@@ -60,6 +60,21 @@ class IndexHelper
     }
 
     /**
+     * Get the filter configurations
+     *
+     * @return \Generator<FilterConfigurationHelper>
+     */
+    public function getFilterConfiguration()
+    {
+        $filterConfigurations = $this->storeNode->getNodeType()->getConfiguration('ui.sitegeist/objects/list.filters');
+        $sorter = new PositionalArraySorter($filterConfigurations);
+
+        foreach($sorter->toArray() as $filterName => $filterConfiguration) {
+            yield new FilterConfigurationHelper($this->storeNode, $filterName);
+        }
+    }
+
+    /**
      * Get the table head configurations
      *
      * @return \Generator<TableHeadHelper>

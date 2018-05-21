@@ -30,6 +30,10 @@ class IndexQuery extends ObjectType
             'name' => 'Index',
             'description' => 'A List of objects',
             'fields' => [
+                'filterConfiguration' => [
+                    'type' => Type::listOf($typeResolver->get(FilterConfigurationQuery::class)),
+                    'description' => 'Filter configuration for this list'
+                ],
                 'tableHeads' => [
                     'type' => Type::listOf($typeResolver->get(TableHeadQuery::class)),
                     'description' => 'All table heads for this list'
