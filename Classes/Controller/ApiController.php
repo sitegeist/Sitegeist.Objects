@@ -62,4 +62,18 @@ class ApiController extends GraphQlController
             '__identity' => $this->persistenceManager->getIdentifierByObject($asset)
         ]);
     }
+
+    /**
+     * @param Asset $asset
+     */
+    public function assetAction(Asset $asset)
+    {
+        return json_encode([
+            '__identity' => $this->persistenceManager->getIdentifierByObject($asset),
+            '__type' => get_class($asset),
+            'fileName' => $asset->getResource()->getFilename(),
+            'fileSize' => $asset->getResource()->getFileSize(),
+            'mediaType' => $asset->getResource()->getMediaType()
+        ]);
+    }
 }
