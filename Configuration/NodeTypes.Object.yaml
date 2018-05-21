@@ -1,6 +1,6 @@
 'Sitegeist.Objects:Object':
   superTypes:
-    'Neos.Neos:Node': true
+    'Neos.Neos:Document': true
   constraints:
     nodeTypes:
       '*': false
