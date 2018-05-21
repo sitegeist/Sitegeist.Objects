@@ -97,7 +97,13 @@ DefaultSelectHead.propTypes = {
 const DefaultSelectBody = ({select}) => (
 	<React.Fragment>
 		{select.allItems.map(({name, data}) => (
-			<Button key={name} onClick={() => select.select(name)}>
+			<Button
+				key={name}
+				onMouseDown={event => {
+					event.preventDefault();
+					select.select(name);
+				}}
+			>
 				<Condition condition={Boolean(data.icon)}>
 					<Icon className={data.icon}/>
 				</Condition>
