@@ -1,0 +1,6 @@
+'Sitegeist.Objects:Collection.Item':
+  superTypes:
+    'Neos.Neos:Node': true
+  constraints:
+    nodeTypes:
+      '*': false
