@@ -15,6 +15,7 @@ import ReactDOM from 'react';
 import PropTypes from 'prop-types';
 
 import {registerEditor} from './core/plugin/editorManager';
+import {registerConverter} from './core/plugin/converterManager';
 
 //
 // Expose app container
@@ -41,5 +42,7 @@ window.Sitegeist.Objects.runtime = {
 //
 window.Sitegeist.Objects.plugin = {
 	editors: {},
-	registerEditor
+	registerEditor,
+	converters: {},
+	registerConverter,
 };

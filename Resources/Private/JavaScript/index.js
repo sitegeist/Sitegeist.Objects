@@ -25,7 +25,13 @@ import './plugins/editors/singleLineText';
 import './plugins/editors/multiLineText';
 import './plugins/editors/richText';
 import './plugins/editors/boolean';
+import './plugins/editors/asset';
 import './plugins/editors/date';
+//
+// Core converters
+//
+import './plugins/converters/asset';
+
 
 const {appContainer} = window.Sitegeist.Objects;
 
