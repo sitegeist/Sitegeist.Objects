@@ -26,6 +26,8 @@ import './plugins/editors/multiLineText';
 import './plugins/editors/richText';
 import './plugins/editors/boolean';
 import './plugins/editors/asset';
+import './plugins/editors/assets';
+import './plugins/editors/collection';
 import './plugins/editors/date';
 import './plugins/editors/reference';
 import './plugins/editors/references';
