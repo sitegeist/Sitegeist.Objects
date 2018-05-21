@@ -57,11 +57,11 @@ const Head = styled.div`
 const Body = styled.div`
 	position: absolute;
 	left: 0;
-	top: 100%;
+	${({shouldOpenTop}) => shouldOpenTop ? 'bottom: 100%;' : 'top: 100%;'}
 	display: ${props => props.isOpen ? 'block' : 'none'};
 	width: 100%;
 	min-width: 300px;
-	height: 300px;
+	max-height: 300px;
 	overflow-y: scroll;
 	background-color: #3f3f3f;
 
@@ -130,14 +130,20 @@ export default class SelectBox extends Component {
 	static propTypes = {
 		renderHead: PropTypes.func,
 		children: PropTypes.func,
-		onChange: PropTypes.func
+		onChange: PropTypes.func,
+		className: PropTypes.string
 	};
 
 	static defaultProps = {
 		renderHead: DefaultSelectHead,
 		children: DefaultSelectBody,
+		className: '',
 		onChange: () => {}
 	};
+
+	handleRef = ref => {
+		this.ref = ref;
+	}
 
 	render() {
 		const {renderHead, children, onChange, ...rest} = this.props;
@@ -156,12 +162,33 @@ export default class SelectBox extends Component {
 							<Select {...rest}>
 								{focus => (
 									<React.Fragment>
-										<Overlay isOpen={open.is} onClick={open.toggle}/>
-										<Container isOpen={open.is}>
-											<Head onClick={open.toggle}>
+										<Overlay
+											isOpen={open.is}
+											onMouseDown={event => {
+												event.preventDefault();
+												open.setFalse();
+											}}
+										/>
+										<Container
+											innerRef={this.handleRef}
+											className={this.props.className}
+											isOpen={open.is}
+										>
+											<Head
+												onMouseDown={event => {
+													event.preventDefault();
+													open.toggle();
+												}}
+											>
 												{renderHead({open, select, focus})}
 											</Head>
-											<Body isOpen={open.is}>
+											<Body
+												isOpen={open.is}
+												shouldOpenTop={(
+													this.ref &&
+													(window.innerHeight - this.ref.getBoundingClientRect().bottom) < 320
+												)}
+											>
 												{children({open, select, focus})}
 											</Body>
 										</Container>
