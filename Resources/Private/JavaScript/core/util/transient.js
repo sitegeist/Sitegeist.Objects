@@ -13,23 +13,28 @@ import {Component} from 'react';
 import PropTypes from 'prop-types';
 
 /**
- * @TODO Better documentation
+ * @TODO: Better documentation
+ * @TODO: The code looks fairly complex, simply because making this Component controllable
+ *        introduces a lot of conditions. It's probably better to go the way via React's
+ *        `getDerivedStateFromProps` lifecycle method to sync both state and props.
  */
 export default class Transient extends Component {
 	static propTypes = {
 		onChange: PropTypes.func,
 		children: PropTypes.func,
+		value: PropTypes.object,
 		initial: PropTypes.object
 	};
 
 	static defaultProps = {
 		onChange: () => {},
 		children: () => null,
+		value: null,
 		initial: {}
 	};
 
 	state = {
-		values: this.props.initial
+		values: this.props.value || this.props.initial
 	};
 
 	handleChange = () => {
@@ -40,16 +45,20 @@ export default class Transient extends Component {
 	};
 
 	has = key => {
-		return (
-			(key in this.state.values) &&
-			(this.state.values[key] !== undefined)
-		);
+		const values = this.props.value || this.state.values;
+
+		return ((key in values) && (values[key] !== undefined));
 	};
 
 	get = key => {
-		return this.state.values[key];
+		const values = this.props.value || this.state.values;
+
+		return values[key];
 	};
 
+	/**
+	 * @TODO: Should be named `set`
+	 */
 	add = (key, value) => {
 		this.setState(state => ({
 			values: {
@@ -68,12 +77,9 @@ export default class Transient extends Component {
 		}), this.handleChange);
 	};
 
-	reduce = (key, reducer) => {
+	reduce = reducer => {
 		this.setState(state => ({
-			values: {
-				...state.values,
-				[key]: reducer(state.values[key])
-			}
+			values: reducer(state.values)
 		}), this.handleChange);
 	};
 
@@ -85,7 +91,7 @@ export default class Transient extends Component {
 
 	render() {
 		const {has, get, add, remove, reduce, reset} = this;
-		const {values} = this.state;
+		const values = this.props.value || this.state.values;
 		const hasValues = Object.keys(values).filter(key => values[key] !== undefined).length > 0;
 
 		return this.props.children({
