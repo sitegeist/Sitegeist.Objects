@@ -40,3 +40,13 @@
     '@action':     'asset'
     '@format':     'json'
   httpMethods: [GET]
+
+-
+  name: 'Sitegeist.Objects - Thumbnail generator'
+  uriPattern: 'neos/sitegeist/objects/thumbnail'
+  defaults:
+    '@package':    'Sitegeist.Objects'
+    '@controller': 'Api'
+    '@action':     'thumbnail'
+    '@format':     'json'
+  httpMethods: [GET]
