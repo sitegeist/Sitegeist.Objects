@@ -14,10 +14,13 @@ namespace Sitegeist\Objects\Service;
  */
 
 use Neos\Flow\Annotations as Flow;
+use Neos\Utility\ObjectAccess;
 use Neos\Eel\Helper\StringHelper;
 use Neos\ContentRepository\Domain\Model\NodeInterface;
+use Neos\ContentRepository\Domain\Service\NodeTypeManager;
 use Neos\ContentRepository\Domain\Service\NodeServiceInterface;
 use Neos\ContentRepository\Domain\Service\PublishingServiceInterface;
+use Sitegeist\Objects\Collection;
 
 /**
  * @Flow\Scope("singleton")
@@ -29,6 +32,12 @@ class NodeService
      * @var StringHelper
      */
     protected $stringHelper;
+
+    /**
+     * @Flow\Inject
+     * @var NodeTypeManager
+     */
+    protected $nodeTypeManager;
 
     /**
      * @Flow\Inject
@@ -76,6 +85,83 @@ class NodeService
             // @TODO: Find a better solution for this
             //
             switch ($node->getNodeType()->getConfiguration('properties.' . $propertyName . '.type')) {
+                case Collection::class:
+                    $addedNodes = [];
+                    if (array_key_exists('add', $propertyValue)) {
+                        foreach($propertyValue['add'] as $arguments) {
+                            //
+                            // @TODO: Invariant: nodeType must be of type Sitegeist.Objects:Object
+                            //
+                            $objectNode = $node->getNode($propertyName)->createNode(
+                                $this->generateUniqueNodeName($node, $propertyName),
+                                $this->nodeTypeManager->getNodeType($arguments['nodeType'])
+                            );
+
+                            $this->applyPropertiesToNode($objectNode, $arguments['properties']);
+                            $addedNodes[$arguments['id']] = $objectNode;
+                        }
+                    }
+
+                    //
+                    // @TODO: Validate Arguments
+                    // @TODO: Rename id argument to identifier
+                    //
+                    if (array_key_exists('update', $propertyValue)) {
+                        foreach($propertyValue['update'] as $arguments) {
+                            //
+                            // @TODO: Exception, if node doesn't exist
+                            //
+                            $objectNode = $node->getContext()->getNodeByIdentifier($arguments['id']);
+                            $this->applyPropertiesToNode($objectNode, $arguments['properties']);
+                        }
+                    }
+
+                    if (array_key_exists('remove', $propertyValue)) {
+                        foreach($propertyValue['remove'] as $identifier) {
+                            //
+                            // @TODO: Exception, if node doesn't exist
+                            //
+                            if (array_key_exists($identifier, $addedNodes)) {
+                                $objectNode = $addedNodes[$identifier];
+                            } else {
+                                $objectNode = $node->getContext()->getNodeByIdentifier($identifier);
+                            }
+
+                            $objectNode->remove();
+                        }
+                    }
+
+                    if (array_key_exists('hide', $propertyValue)) {
+                        foreach($propertyValue['hide'] as $identifier) {
+                            //
+                            // @TODO: Exception, if node doesn't exist
+                            //
+                            if (array_key_exists($identifier, $addedNodes)) {
+                                $objectNode = $addedNodes[$identifier];
+                            } else {
+                                $objectNode = $node->getContext()->getNodeByIdentifier($identifier);
+                            }
+
+                            $objectNode->setHidden(true);
+                        }
+                    }
+
+                    if (array_key_exists('show', $propertyValue)) {
+                        foreach($propertyValue['show'] as $identifier) {
+                            //
+                            // @TODO: Exception, if node doesn't exist
+                            //
+                            if (array_key_exists($identifier, $addedNodes)) {
+                                $objectNode = $addedNodes[$identifier];
+                            } else {
+                                $objectNode = $node->getContext()->getNodeByIdentifier($identifier);
+                            }
+                            $objectNode->setHidden(false);
+                        }
+                    }
+
+                    break;
+
                 case \DateTime::class:
                     //
                     // @TODO: There has to be a better way
