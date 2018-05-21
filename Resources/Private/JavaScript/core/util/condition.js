@@ -13,15 +13,26 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
 /**
- * @TODO Better documentation
+ * @TODO: Better documentation
+ * @TODO: Children should always be a function!
+ * @TODO: In fact: This was a bad idea to begin with. Condition should be
+ *        removed entirely.
  */
 export default class Condition extends Component {
 	static propTypes = {
 		condition: PropTypes.bool.isRequired,
-		children: PropTypes.node.isRequired
+		children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired
 	};
 
 	render() {
-		return this.props.condition && React.Children.only(this.props.children);
+		if (this.props.condition === true) {
+			if (typeof this.props.children === 'function') {
+				return this.props.children();
+			}
+
+			return React.Children.only(this.props.children);
+		}
+
+		return null;
 	}
 }
