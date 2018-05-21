@@ -18,6 +18,11 @@ import Application from './core/application';
 import StoresView from './view/stores';
 import StoreView from './view/store';
 
+//
+// Core Editors
+//
+import './plugins/editors/date';
+
 const {appContainer} = window.Sitegeist.Objects;
 
 render(
