@@ -11,7 +11,8 @@
     ],
     "require": {
         "neos/neos": "*",
-        "wwwision/graphql": "^2.1"
+        "wwwision/graphql": "^2.1",
+        "flowpack/elasticsearch-contentrepositoryadaptor": "*"
     },
     "name": "sitegeist/objects",
     "autoload": {
