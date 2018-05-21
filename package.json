@@ -13,6 +13,7 @@
     "@aeaton/react-prosemirror": "^0.11.0",
     "apollo-client-preset": "^1.0.8",
     "babel-polyfill": "^6.26.0",
+    "classnames": "^2.2.5",
     "file-size": "^1.0.0",
     "graphql": "^0.13.2",
     "graphql-tag": "^2.8.0",

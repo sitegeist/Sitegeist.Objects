@@ -65,6 +65,8 @@ export const GET_STORE = gql`
 						icon
 						label
 						isRemoved
+						isHidden
+						hasUnpublishedChanges
 					}
 					tableCells {
 						value

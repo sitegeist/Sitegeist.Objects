@@ -14,6 +14,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import ReactTable, {ReactTableDefaults} from 'react-table';
 import checkboxHOC from 'react-table/lib/hoc/selectTable';
+import mergeClassNames from 'classnames';
 
 import MultiSelect from '../../core/util/multiselect';
 
@@ -45,12 +46,35 @@ const AdjustedStyles = styled.div`
 			}
 		}
 
+		.rt-tr {
+			position: relative;
+		}
+
 		.rt-tr.isSelected {
 			background-color: lightgreen!important;
 			color: black;
 
 			a {
 				color: black;
+			}
+		}
+
+		.rt-tr.isHidden {
+			opacity: .5;
+		}
+
+		.rt-tr.hasUnpublishedChanges::before {
+			content: '';
+			position: absolute;
+			left: -5px;
+			top: 1px;
+			border-left: 2px solid #ff8700;
+			height: 32px;
+		}
+
+		.rt-td {
+			label {
+				margin: 0;
 			}
 		}
 	}
@@ -68,7 +92,11 @@ const Table = ({onSelect, data, ...props}) => (
 						}
 					}}
 					getTrProps={(_, row) => ({
-						className: row && selection.has(row.original._id) ? 'isSelected' : ''
+						className: mergeClassNames({
+							isSelected: row && selection.has(row.original._id),
+							isHidden: row && row.original.isHidden,
+							hasUnpublishedChanges: row && row.original.hasUnpublishedChanges
+						})
 					})}
 					getTdProps={() => ({
 						style: {
@@ -87,7 +115,7 @@ const Table = ({onSelect, data, ...props}) => (
 							onChange={() => onClick()}
 						/>
 					)}
-					SelectInputComponent={({id, checked, onClick}) => (
+					SelectInputComponent={({id, checked, onClick, row}) => (
 						<Checkbox
 							id={`tr-${id}`}
 							isChecked={Boolean(checked)}

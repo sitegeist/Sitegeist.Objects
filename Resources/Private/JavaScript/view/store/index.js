@@ -30,6 +30,7 @@ import Table from '../../ui/structures/table';
 import Layout from '../../ui/layout';
 
 import Filter from './filter';
+import Operations from './operations';
 
 const HeaderPanel = styled.div`
 	display: flex;
@@ -97,19 +98,6 @@ export default class StoreView extends Component {
 	handleSelection = ({items}) => {
 		this.setState({selection: items});
 	};
-
-	handleFetchData = ({page, pageSize, sorted}) => {
-		const from = page * pageSize;
-		const length = pageSize;
-		const sort = sorted[0] ? sorted[0].id : undefined;
-		const order = sorted[0] ? (
-			sorted[0].desc ? 'DESC' : 'ASC'
-		) : undefined;
-
-		this.setState(({query}) => ({
-			query: {...query, from, length, sort, order}
-		}));
-	}
 
 	handlePageChange = pageIndex => {
 		const {length} = this.state.query;
@@ -216,14 +204,20 @@ export default class StoreView extends Component {
 					/>
 				</ButtonList>
 
-				<ButtonList>
-					<Condition condition={this.state.selection.length > 1}>
-						<Button>
-							{/* @TODO. I18n */}
-							{this.state.selection.length} Objekte
-						</Button>
-					</Condition>
-				</ButtonList>
+				<Operations
+					storeIdentifier={this.props.identifier}
+					selection={this.state.selection.map(identifier => {
+						const [item] = store.objectIndex.tableRows.filter(
+							({object}) => object.identifier === identifier
+						);
+
+						if (item) {
+							return item.object;
+						}
+
+						return null;
+					}).filter(i => i)}
+				/>
 			</HeaderPanel>
 		</React.Fragment>
 	)
@@ -249,8 +243,9 @@ export default class StoreView extends Component {
 									resizable: false,
 									filterable: false,
 									accessor: row => row.object.icon,
+									/* @TODO: Table Cell styles */
 									Cell: ({value}) => (
-										<div style={{textAlign: 'center'}}>
+										<div style={{textAlign: 'center', width: '100%'}}>
 											<Icon className={value}/>
 										</div>
 									)
@@ -273,6 +268,8 @@ export default class StoreView extends Component {
 								}))]}
 								data={store.objectIndex.tableRows.map(row => ({
 									_id: row.object.identifier,
+									isHidden: row.object.isHidden,
+									hasUnpublishedChanges: row.object.hasUnpublishedChanges,
 									...row
 								}))}
 								sorted={query.sort ? [{

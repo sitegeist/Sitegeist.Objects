@@ -97,6 +97,23 @@ class StoreMutation extends ObjectType
                         return $store->getObject($arguments);
                     }
                 ],
+                'objects' => [
+                    //
+                    // @TODO: description
+                    //
+                    'type' => Type::listOf($typeResolver->get(ObjectMutation::class)),
+                    'args' => [
+                        'identifiers' => [
+                            'type' => Type::listOf(Type::id()),
+                            'description' => 'Ids of the object nodes to be edited'
+                        ]
+                    ],
+                    'resolve' => function(StoreHelper $store, $arguments) {
+                        foreach ($arguments['identifiers'] as $identifier) {
+                            yield $store->getObject(['identifier' => $identifier]);
+                        }
+                    }
+                ],
                 'publish' => [
                     'type' => Type::listOf($typeResolver->get(ObjectQuery::class)),
                     'description' => 'Publish all objects in the store',
