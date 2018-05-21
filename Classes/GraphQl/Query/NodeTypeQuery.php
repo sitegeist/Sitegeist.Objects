@@ -137,7 +137,7 @@ class NodeTypeQuery extends ObjectType
                     'resolve' => function(NodeType $nodeType, $arguments) {
                         foreach($this->nodeTypeManager->getNodeTypes() as $grandChildNodeType) {
                             if ($nodeType->allowsGrandChildNodeType($arguments['name'], $grandChildNodeType)) {
-                                yield $childNodeType;
+                                yield $grandChildNodeType;
                             }
                         }
                     }
