@@ -21,6 +21,8 @@ import StoreView from './view/store';
 //
 // Core Editors
 //
+import './plugins/editors/singleLineText';
+import './plugins/editors/multiLineText';
 import './plugins/editors/date';
 
 const {appContainer} = window.Sitegeist.Objects;
