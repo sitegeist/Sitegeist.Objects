@@ -21,8 +21,9 @@ import Button from '../../ui/primitives/button';
 import Icon from '../../ui/primitives/icon';
 
 const Overlay = styled.div`
+	position: fixed;
+
 	${props => props.isOpen && `
-		position: fixed;
 		top: 0;
 		left: 0;
 		right: 0;
