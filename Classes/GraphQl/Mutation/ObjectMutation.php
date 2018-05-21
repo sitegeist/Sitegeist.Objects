@@ -34,6 +34,12 @@ class ObjectMutation extends ObjectType
     protected $nodeService;
 
     /**
+     * @Flow\Inject
+     * @var NodeTypeManager
+     */
+    protected $nodeTypeManager;
+
+    /**
      * @param TypeResolver $typeResolver
      */
     public function __construct(TypeResolver $typeResolver)
@@ -103,6 +109,31 @@ class ObjectMutation extends ObjectType
                         $object->getNode()->remove();
 
                         return ObjectHelper::createFromNode($object->getNode());
+                    }
+                ],
+                'copy' => [
+                    'type' => Type::nonNull($typeResolver->get(ObjectQuery::class)),
+                    'description' => 'Copy the object',
+                    'resolve' => function (ObjectHelper $object, $arguments) {
+                        $original = $object->getNode();
+                        $storeNode = $original->getParent();
+
+                        $copy = $storeNode->createNode(
+                            $this->nodeService->generateUniqueNodeName($storeNode),
+                            $original->getNodeType()
+                        );
+
+                        foreach ($original->getProperties() as $propertyName => $propertyValue) {
+                            $copy->setProperty($propertyName, $propertyValue);
+                        }
+
+                        $copy->setProperty('object__copyOf', $original);
+                        //
+                        // @TODO: I18n
+                        //
+                        $copy->setProperty('title', sprintf('Kopie von %s', $original->getProperty('title')));
+
+                        return ObjectHelper::createFromNode($copy);
                     }
                 ]
             ]

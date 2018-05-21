@@ -88,3 +88,10 @@
           include_in_all: false
           index: 'not_analyzed'
         indexing: '${node.parent.identifier}'
+    object__copyOf:
+      type: reference
+      search:
+        elasticSearchMapping:
+          type: string
+          include_in_all: false
+          index: 'not_analyzed'

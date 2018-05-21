@@ -21,6 +21,7 @@ import HideObjectsMutation from '../../mutation/hideObjects';
 import ShowObjectsMutation from '../../mutation/showObjects';
 import DiscardObjectsMutation from '../../mutation/discardObjects';
 import PublishObjectsMutation from '../../mutation/publishObjects';
+import CopyObjectMutation from '../../mutation/copyObject';
 import History from '../../core/history';
 
 export default class Operations extends Component {
@@ -89,11 +90,32 @@ export default class Operations extends Component {
 	}
 
 	renderCopy(item) {
+		const {storeIdentifier} = this.props;
+
 		return (
-			<Button>
-				<Icon className="icon-copy"/>
-				Kopieren
-			</Button>
+			<History>
+				{history => (
+					<CopyObjectMutation
+						storeIdentifier={storeIdentifier}
+						objectIdentifier={item.identifier}
+						onCompleted={({store}) => {
+							const {copy} = store.object;
+							history.push(`/store/${storeIdentifier}/edit/${copy.identifier}`);
+						}}
+					>
+						{({result, copyObject}) => (
+							<Button
+								onClick={copyObject}
+								disable={result.loading}
+							>
+								<Icon className="icon-copy"/>
+								Kopieren
+							</Button>
+						)}
+					</CopyObjectMutation>
+				)}
+			</History>
+
 		);
 	}
 

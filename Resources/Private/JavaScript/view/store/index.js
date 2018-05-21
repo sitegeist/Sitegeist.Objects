@@ -90,10 +90,13 @@ export default class StoreView extends Component {
 	getInitialState = () => {
 		const savedState = window.sessionStorage.getItem(`storeView-${this.props.identifier}`);
 
-		console.log({savedState: JSON.parse(savedState)});
-
 		if (savedState) {
-			return JSON.parse(savedState);
+			const {query} = JSON.parse(savedState);
+
+			return {
+				selection: [],
+				query
+			};
 		}
 
 		return {
@@ -241,7 +244,7 @@ export default class StoreView extends Component {
 		const {identifier} = this.props;
 		const {query} = this.state;
 
-		window.sessionStorage.setItem(`storeView-${identifier}`, JSON.stringify(this.state));
+		window.sessionStorage.setItem(`storeView-${identifier}`, JSON.stringify({query}));
 
 		return (
 			<StoreQuery identifier={identifier} {...query}>
