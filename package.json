@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "apollo-client-preset": "^1.0.8",
+    "babel-polyfill": "^6.26.0",
     "graphql": "^0.13.2",
     "graphql-tag": "^2.8.0",
     "node": "^10.0.0",
