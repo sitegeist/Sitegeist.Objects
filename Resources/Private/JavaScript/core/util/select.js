@@ -13,11 +13,15 @@ import {Component} from 'react';
 import PropTypes from 'prop-types';
 
 /**
- * @TODO Better documentation
+ * @TODO: Better documentation
+ * @TODO: The code looks fairly complex, simply because making this Component controllable
+ *        introduces a lot of conditions. It's probably better to go the way via React's
+ *        `getDerivedStateFromProps` lifecycle method to sync both state and props.
  */
 export default class Select extends Component {
 	static propTypes = {
 		initial: PropTypes.string,
+		value: PropTypes.string,
 		allItems: PropTypes.arrayOf(PropTypes.shape({
 			name: PropTypes.string.isRequired,
 			data: PropTypes.object
@@ -30,19 +34,39 @@ export default class Select extends Component {
 	static defaultProps = {
 		allowEmpty: false,
 		initial: null,
+		value: null,
 		onChange: () => {},
 		children: () => {}
 	};
 
 	state = {
-		selected: this.props.allowEmpty === true ?
-			this.props.initial : (this.props.initial || this.props.allItems[0].name)
+		selected: this.getInitialValue()
 	};
 
-	handleChange = () => {
-		const {onChange, allItems} = this.props;
-		const {selected} = this.state;
+	getInitialValue() {
+		if (this.props.value) {
+			return null;
+		}
+
+		return this.props.allowEmpty === true ?
+			this.props.initial : (this.props.initial || this.props.allItems[0].name);
+	}
+
+	getValue() {
+		return this.props.value || this.state.selected || this.getInitialValue();
+	}
+
+	getSelectedItem(value = null) {
+		const selected = value || this.getValue();
+		const {allItems} = this.props;
 		const [selectedItem] = allItems.filter(item => item.name === selected);
+
+		return selectedItem;
+	}
+
+	handleChange = selected => {
+		const {onChange, allItems} = this.props;
+		const selectedItem = this.getSelectedItem(selected);
 
 		onChange({
 			allItems,
@@ -56,32 +80,37 @@ export default class Select extends Component {
 			throw new Error(`${value} cannot be selected!`);
 		}
 
-		this.setState({selected: value}, this.handleChange);
+		if (!this.props.value) {
+			this.setState({selected: value});
+		}
+
+		this.handleChange(value);
 	}
 
 	clear = () => {
-		if (this.props.allowEmpty) {
+		if (!this.props.value && this.props.allowEmpty) {
 			this.setState({selected: null}, this.handleChange);
 		}
 	};
 
 	isSelected = value => {
+		if (this.props.value) {
+			return this.props.value === value;
+		}
+
 		return this.state.selected === value;
 	}
 
 	reset = () => {
-		this.setState({
-			selected: this.props.allowEmpty === true ?
-				this.props.initial : (this.props.initial || this.props.allItems[0].name)
-		}, this.handleChange);
+		this.select(this.getInitialValue());
 	};
 
 	render() {
 		const {allItems} = this.props;
 		const {select, clear, isSelected, reset} = this;
-		const {selected} = this.state;
-		const hasSelection = selected !== null;
-		const [selectedItem] = allItems.filter(item => item.name === selected);
+		const value = this.getValue();
+		const selectedItem = this.getSelectedItem();
+		const hasSelection = selectedItem !== null;
 
 		return this.props.children({
 			select,
@@ -90,7 +119,8 @@ export default class Select extends Component {
 			reset,
 			hasSelection,
 			allItems,
-			selectedItem
+			selectedItem,
+			value
 		});
 	}
 }
