@@ -36,7 +36,7 @@ const AdjustedStyles = styled.div`
 		}
 
 		.rt-tbody {
-			height: calc(100vh - 308px);
+			height: calc(100vh - 324px);
 			overflow-y: auto;
 			padding: 0 54px!important;
 

@@ -13,9 +13,15 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
+import Icon from '../primitives/icon';
+
 const GroupContainer = styled.section`
 	&:not(:last-child) {
 		margin-bottom: 4em!important;
+	}
+
+	${Icon} {
+		margin-right: 8px;
 	}
 `;
 

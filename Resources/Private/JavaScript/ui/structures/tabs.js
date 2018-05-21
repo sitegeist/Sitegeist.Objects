@@ -23,21 +23,26 @@ const Tabs = ({tabs, children}) => (
 	<Select allItems={tabs.map(({name, ...data}) => ({name, data}))}>
 		{({isSelected, selectedItem, select}) => (
 			<React.Fragment>
-				<ButtonList>
-					{tabs.map(tab => (
-						<Button
-							key={tab.name}
-							className={isSelected(tab.name) ? 'neos-active' : ''}
-							onClick={() => select(tab.name)}
-						>
-							<Condition condition={Boolean(tab.icon)}>
-								<Icon className={tab.icon}/>
-							</Condition>
-							{tab.label}
-						</Button>
-					))}
-				</ButtonList>
-				{children({name: selectedItem.name, ...selectedItem.data})}
+				{children({
+					...selectedItem.data,
+					name: selectedItem.name,
+					renderTabsHeader: () => (
+						<ButtonList>
+							{tabs.map(tab => (
+								<Button
+									key={tab.name}
+									className={isSelected(tab.name) ? 'neos-active' : ''}
+									onClick={() => select(tab.name)}
+								>
+									<Condition condition={Boolean(tab.icon)}>
+										<Icon className={tab.icon}/>
+									</Condition>
+									{tab.label}
+								</Button>
+							))}
+						</ButtonList>
+					)
+				})}
 			</React.Fragment>
 		)}
 	</Select>

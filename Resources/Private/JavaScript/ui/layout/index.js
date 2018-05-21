@@ -13,12 +13,15 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
+import ButtonList from '../primitives/buttonList';
+
 const Container = styled.div`
 	display: flex;
 	position: relative;
 	top: 40px;
 	flex-direction: column;
-	height: calc(100vh - 141px);
+	height: calc(100vh - 149px);
+	max-height: calc(100vh - 149px);
 	margin-left: -54px!important;
 	margin-top: -40px!important;
 	width: calc(100% + 108px);
@@ -42,10 +45,14 @@ const Body = styled.main`
 `;
 
 const Footer = styled.footer`
-	height: 60px;
+	max-height: 100px;
 	flex-grow: 0;
 	flex-shrink: 0;
-	padding: 0 54px!important;
+	padding: 1em 54px!important;
+
+	${ButtonList} {
+		margin-bottom: 0!important;
+	}
 `;
 
 export default class Layout extends Component {

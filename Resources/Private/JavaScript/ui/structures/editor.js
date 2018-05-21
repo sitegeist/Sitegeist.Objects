@@ -14,7 +14,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const Container = styled.div`
-	margin-bottom: 1em!important;
+	margin-bottom: 2em!important;
 	flex: 1;
 	width: 100%;
 	max-width: 906px;
