@@ -46,11 +46,20 @@ export default class EditorManager extends Component {
 	static propTypes = {
 		name: PropTypes.string.isRequired,
 		transient: PropTypes.object.isRequired,
-		property: PropTypes.object.isRequired
+		property: PropTypes.object.isRequired,
+		storeIdentifier: PropTypes.string,
+		objectIdentifier: PropTypes.string,
+		nodeType: PropTypes.string
+	};
+
+	static defaultProps = {
+		storeIdentifier: null,
+		objectIdentifier: null,
+		nodeType: null
 	};
 
 	render() {
-		const {name, transient, property} = this.props;
+		const {name, transient, property, storeIdentifier, objectIdentifier, nodeType} = this.props;
 
 		if (!(name in window.Sitegeist.Objects.plugin.editors)) {
 			throw new Error(`Could not find Editor "${name}"`);
@@ -58,6 +67,10 @@ export default class EditorManager extends Component {
 
 		const Editor = window.Sitegeist.Objects.plugin.editors[name];
 		const editorProps = {
+			storeIdentifier,
+			objectIdentifier,
+			nodeType,
+			name: property.name,
 			id: `property-${property.name}`,
 			label: property.label,
 			value: transient.has(property.name) ? transient.get(property.name) : property.value,
