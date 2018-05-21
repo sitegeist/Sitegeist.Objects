@@ -14,10 +14,14 @@ namespace Sitegeist\Objects\GraphQl\Query;
  */
 
 use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Persistence\PersistenceManagerInterface;
 use Neos\Eel\FlowQuery\FlowQuery;
 use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\ContentRepository\Domain\Model\NodeType;
+use Neos\Neos\Service\Mapping\NodePropertyConverterService;
 use Sitegeist\Objects\Service\NodeService;
+use Sitegeist\Objects\Store;
+use Sitegeist\Objects\Collection;
 
 class ObjectHelper
 {
@@ -36,6 +40,18 @@ class ObjectHelper
      * @var NodeService
      */
     protected $nodeService;
+
+    /**
+     * @Flow\Inject
+     * @var NodePropertyConverterService
+     */
+    protected $nodePropertyConverterService;
+
+    /**
+     * @Flow\Inject
+     * @var PersistenceManagerInterface
+     */
+    protected $persistenceManager;
 
     /**
      * Protected Constructor: Use factory methods below!
@@ -219,7 +235,44 @@ class ObjectHelper
     public function getProperty(array $arguments)
     {
         if ($this->hasNode()) {
-            return $this->node->getProperty($arguments['name']);
+            //
+            // @TODO: There has to be a better way...
+            //
+            switch ($this->nodeType->getConfiguration('properties.' . $arguments['name'] . '.type')) {
+                case Store::class:
+                    return $this->node->getNode($arguments['name'])->getIdentifier();
+
+                case 'Neos\\Media\\Domain\\Model\\Image':
+                case 'Neos\\Media\\Domain\\Model\\Document':
+                case 'Neos\\Media\\Domain\\Model\\Asset':
+                    if ($asset = $this->node->getProperty($arguments['name'])) {
+                        return [
+                            '__identity' => $this->persistenceManager->getIdentifierByObject($asset),
+                            'fileName' => $asset->getResource()->getFilename(),
+                            'fileSize' => $asset->getResource()->getFileSize(),
+                            'mediaType' => $asset->getResource()->getMediaType()
+                        ];
+                    }
+
+                    return null;
+                    break;
+
+                case 'array<Neos\\Media\\Domain\\Model\\Image>':
+                case 'array<Neos\\Media\\Domain\\Model\\Document>':
+                case 'array<Neos\\Media\\Domain\\Model\\Asset>':
+                    return array_map(function($asset) {
+                        return [
+                            '__identity' => $this->persistenceManager->getIdentifierByObject($asset),
+                            'fileName' => $asset->getResource()->getFilename(),
+                            'fileSize' => $asset->getResource()->getFileSize(),
+                            'mediaType' => $asset->getResource()->getMediaType()
+                        ];
+                    }, $this->node->getProperty($arguments['name']) ?: []);
+
+                default:
+                    return $this->nodePropertyConverterService->getProperty($this->node, $arguments['name']);
+
+            }
         }
 
         $defaultValues = $this->nodeType->getDefaultValuesForProperties();
