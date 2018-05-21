@@ -4,3 +4,23 @@
   constraints:
     nodeTypes:
       '*': false
+  properties:
+    title:
+      search:
+        elasticSearchMapping:
+          type: string
+          include_in_all: true
+    __title:
+      search:
+        elasticSearchMapping:
+          type: string
+          include_in_all: false
+          index: 'not_analyzed'
+        indexing: ${node.properties.title}
+    __parentNode:
+      search:
+        elasticSearchMapping:
+          type: string
+          include_in_all: false
+          index: 'not_analyzed'
+        indexing: '${node.parent.identifier}'

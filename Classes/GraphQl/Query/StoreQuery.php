@@ -21,6 +21,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 use Wwwision\GraphQL\TypeResolver;
 use Sitegeist\Objects\GraphQl\Query\Detail\DetailQuery;
 use Sitegeist\Objects\GraphQl\Query\Index\IndexQuery;
+use Sitegeist\Objects\GraphQl\Scalar\JsonScalar;
 
 class StoreQuery extends ObjectType
 {
@@ -92,6 +93,19 @@ class StoreQuery extends ObjectType
                             'type' => Type::string(),
                             'description' => 'Direction to sort by',
                             'defaultValue' => 'DESC'
+                        ],
+                        'search' => [
+                            'type' => Type::string(),
+                            'description' => 'A search term to filter by'
+                        ],
+
+                        //
+                        // @TODO: Create custom type for filters
+                        //
+                        'filters' => [
+                            'type' => Type::listOf(JsonScalar::type()),
+                            'description' => 'An array of filters to apply to the query',
+                            'defaultValue' => []
                         ]
                     ]
                 ],

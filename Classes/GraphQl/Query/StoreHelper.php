@@ -22,6 +22,7 @@ use Sitegeist\Objects\Service\NodeService;
 use Sitegeist\Objects\GraphQl\Query\Detail\DetailHelper;
 use Sitegeist\Objects\GraphQl\Query\Index\IndexHelper;
 use Neos\Eel\Helper\StringHelper;
+use Flowpack\ElasticSearch\ContentRepositoryAdaptor\Eel\ElasticSearchQueryBuilder;
 
 class StoreHelper
 {
@@ -52,6 +53,12 @@ class StoreHelper
      * @var NodeService
      */
     protected $nodeService;
+
+    /**
+     * @Flow\Inject
+     * @var ElasticSearchQueryBuilder
+     */
+    protected $queryBuilder;
 
     /**
      * For debugging purposes only!
@@ -139,18 +146,57 @@ class StoreHelper
      */
     public function getObjects(array $arguments)
     {
-        $flowQuery = new FlowQuery([$this->node]);
-        $flowQuery = $flowQuery->children('[instanceof Sitegeist.Objects:Object]');
+        $query = $this->queryBuilder->query($this->node)
+            ->nodeType('Sitegeist.Objects:Object')->exactMatch('__parentNode', $this->node->getIdentifier());
 
-        $total = $flowQuery->count();
-
-        $flowQuery = $flowQuery->slice($arguments['from'], $arguments['from'] + $arguments['length']);
-
-        if (array_key_exists('sort', $arguments)) {
-            $flowQuery = $flowQuery->sort($arguments['sort'], $arguments['order']);
+        if (array_key_exists('search', $arguments) && $arguments['search']) {
+            $query = $query->fullText($arguments['search']);
         }
 
-        return [$flowQuery->get(), $total];
+        if (array_key_exists('filters', $arguments)) {
+            foreach($arguments['filters'] as $filter) {
+                switch ($filter['operation']) {
+                    case 'equals':
+                        $query = $query->exactMatch($filter['property'], $filter['value']);
+                        break;
+
+                    case 'contains':
+                        $query = $query->exactMatch($filter['property'], $filter['value']);
+                        break;
+
+                    case 'greaterThan':
+                        $query = $query->greaterThan($filter['property'], $filter['value']);
+                        break;
+
+                    case 'lessThan':
+                        $query = $query->lessThan($filter['property'], $filter['value']);
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        }
+
+        if (array_key_exists('from', $arguments)) {
+            $query = $query->from($arguments['from']);
+        }
+
+        if (array_key_exists('length', $arguments)) {
+            $query = $query->limit($arguments['length']);
+        }
+
+        if (array_key_exists('sort', $arguments)) {
+            if ($arguments['order'] === 'ASC') {
+                $query = $query->sortAsc($arguments['sort']);
+            } else if ($arguments['order'] === 'DESC') {
+                $query = $query->sortDesc($arguments['sort']);
+            }
+        }
+
+        $query->log();
+
+        return [$query->execute(), $query->count()];
     }
 
     /**

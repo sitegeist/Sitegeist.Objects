@@ -16,11 +16,38 @@
   ui:
     sitegeist/objects/list:
       columns:
-        __modififactionDateTime:
+        __modificationDateTime:
           label: 'Letzte Änderung' # @TODO: I18n
           computed: ${Date.format(node.lastModificationDateTime, 'd.m.Y H:i:s')} # @TODO: I18n
           position: before __creationDateTime
+          sortProperty: _lastModificationDateTime
         __creationDateTime:
           label: 'Datum der Erstellung' # @TODO: I18n
           computed: ${Date.format(node.creationDateTime, 'd.m.Y H:i:s')} # @TODO: I18n
           position: end 99999999
+          sortProperty: _creationDateTime
+      filters:
+        __modificationDateTime:
+          label: 'Letzte Änderung' # @TODO: I18n
+          property: _lastModificationDateTime
+          operations:
+            -
+              type: 'lessThan'
+              label: 'war bevor' # @TODO: I18n
+              editor: Date
+            -
+              type: 'greaterThan'
+              label: 'war nach' # @TODO: I18n
+              editor: Date
+        __creationDateTime:
+          label: 'Datum der Erstellung' # @TODO: I18n
+          property: _creationDateTime
+          operations:
+            -
+              type: 'lessThan'
+              label: 'war bevor' # @TODO: I18n
+              editor: Date
+            -
+              type: 'greaterThan'
+              label: 'war nach' # @TODO: I18n
+              editor: Date
