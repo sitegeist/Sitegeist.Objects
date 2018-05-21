@@ -112,10 +112,16 @@ class ObjectHelper
      */
     public function getParents()
     {
-        yield $this->parentNode;
+        if ($this->parentNode !== null) {
+            yield $this->parentNode;
 
-        $flowQuery = new FlowQuery([$this->parentNode]);
-        return $flowQuery->parentsUntil('[instanceof Sitegeist.Objects:Root]')->get();
+            $flowQuery = new FlowQuery([$this->parentNode]);
+            foreach($flowQuery->parentsUntil('[instanceof Sitegeist.Objects:Root]')->get() as $parentNode) {
+                yield $parentNode;
+            }
+        }
+
+        return [];
     }
 
     /**
