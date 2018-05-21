@@ -5,6 +5,9 @@
     window.Sitegeist.Objects = {};
     window.Sitegeist.Objects.csrfToken = '{f:security.csrfToken()}';
     window.Sitegeist.Objects.apiEndpoint = '{apiEndpoint}';
+    window.Sitegeist.Objects.uploadEndpoint = '{f:uri.action(package: "Sitegeist.Objects", controller: "Api", action: "upload", format: "json", useParentRequest: true)}?__csrfToken=' + window.Sitegeist.Objects.csrfToken;
+    window.Sitegeist.Objects.assetEndpoint = '{f:uri.action(package: "Sitegeist.Objects", controller: "Api", action: "asset", format: "json", useParentRequest: true)}?__csrfToken=' + window.Sitegeist.Objects.csrfToken;
+    window.Sitegeist.Objects.thumbnailUrl = '{f:uri.action(package: "Sitegeist.Objects", controller: "Api", action: "thumbnail", format: "json", useParentRequest: true)}';
 
     window.Sitegeist.Objects.contentContext = {};
     window.Sitegeist.Objects.contentContext.workspaceName = '{workspaceName}';
