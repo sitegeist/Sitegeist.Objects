@@ -122,6 +122,16 @@ class StoreQuery extends ObjectType
                             'description' => 'Id of the object node to be edited'
                         ]
                     ]
+                ],
+                'objectBulk' => [
+                    'type' => Type::listOf($typeResolver->get(DetailQuery::class)),
+                    'description' => 'Information to edit several object nodes',
+                    'args' => [
+                        'identifiers' => [
+                            'type' => Type::listOf(Type::id()),
+                            'description' => 'Ids of the object nodes to be edited'
+                        ]
+                    ]
                 ]
             ],
             'resolveField'  => function(StoreHelper $store, $arguments, $context, ResolveInfo $info) {
