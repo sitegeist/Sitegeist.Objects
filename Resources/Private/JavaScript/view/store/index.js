@@ -87,13 +87,25 @@ export default class StoreView extends Component {
 		identifier: PropTypes.string.isRequired
 	};
 
-	state = {
-		selection: [],
-		query: {
-			from: 0,
-			length: defaultPageSize
+	getInitialState = () => {
+		const savedState = window.sessionStorage.getItem(`storeView-${this.props.identifier}`);
+
+		console.log({savedState: JSON.parse(savedState)});
+
+		if (savedState) {
+			return JSON.parse(savedState);
 		}
-	};
+
+		return {
+			selection: [],
+			query: {
+				from: 0,
+				length: defaultPageSize
+			}
+		};
+	}
+
+	state = this.getInitialState();
 
 	handleSelection = ({items}) => {
 		this.setState({selection: items});
@@ -128,7 +140,8 @@ export default class StoreView extends Component {
 			selection: [],
 			query: {
 				...query,
-				filters
+				filters,
+				from: 0
 			}
 		}));
 	};
@@ -142,7 +155,8 @@ export default class StoreView extends Component {
 			query: {
 				...query,
 				sort,
-				order
+				order,
+				from: 0
 			}
 		}));
 	};
@@ -152,7 +166,8 @@ export default class StoreView extends Component {
 			selection: [],
 			query: {
 				...query,
-				search: searchTerm
+				search: searchTerm,
+				from: 0
 			}
 		}));
 	}
@@ -225,6 +240,8 @@ export default class StoreView extends Component {
 	render() {
 		const {identifier} = this.props;
 		const {query} = this.state;
+
+		window.sessionStorage.setItem(`storeView-${identifier}`, JSON.stringify(this.state));
 
 		return (
 			<StoreQuery identifier={identifier} {...query}>
@@ -300,7 +317,7 @@ export default class StoreView extends Component {
 		const {query} = this.state;
 		const pageSize = query.length;
 		const page = Math.ceil(query.from / query.length);
-		const pages = Math.ceil(store.objectIndex.totalNumberOfRows / this.state.query.length);
+		const pages = Math.ceil(store.objectIndex.totalNumberOfRows / query.length);
 		const pageSizeOptions = [5, 10, 20, 50, 100];
 
 		return (

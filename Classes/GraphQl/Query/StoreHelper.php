@@ -194,7 +194,15 @@ class StoreHelper
             }
         }
 
-        return [$query->execute(), $query->count()];
+
+        //
+        // @TODO: Workaround for invalid queries
+        //
+        try {
+            return [$query->execute(), $query->count()];
+        } catch (\Exception $e) {
+            return [[], 0];
+        }
     }
 
     /**
