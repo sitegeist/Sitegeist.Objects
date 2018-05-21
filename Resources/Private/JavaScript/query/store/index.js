@@ -14,29 +14,57 @@ import {Query} from 'react-apollo';
 import gql from 'graphql-tag';
 import PropTypes from 'prop-types';
 
+import Layout from '../../ui/layout';
+
 export const GET_STORE = gql`
-	query getStore($context: ContentContextInput!, $identifier: ID!) {
+	query getStore(
+		$context: ContentContextInput!,
+		$identifier: ID!,
+		$from: Int!,
+		$length: Int!,
+		$search: String,
+		$sort: String,
+		$order: String,
+		$filters: [JSON]
+	) {
 		store(context: $context, identifier: $identifier) {
 			identifier
 			icon
 			label
 			title
 			description
+			nodeType {
+				allowedChildNodeTypes {
+					name
+					label
+					icon
+				}
+			}
 			parents {
+				type
 				identifier
 				icon
 				label
 			}
-			objectIndex {
+			objectIndex(from: $from, length: $length, sort: $sort, order: $order, search: $search, filters: $filters) {
+				totalNumberOfRows
+				filterConfiguration {
+					name
+					property
+					label
+					operations
+				}
 				tableHeads {
 					name
 					label
+					sortProperty
 				}
 				tableRows {
 					object {
 						identifier
 						icon
 						label
+						isRemoved
 					}
 					tableCells {
 						value
@@ -47,17 +75,25 @@ export const GET_STORE = gql`
 	}
 `;
 
-const GetStoreQuery = ({children, context, identifier}) => (
+/* @TODO: PropTypes */
+const GetStoreQuery = ({children, context, identifier, from, length, sort, order, search, filters}) => (
 	<Query
 		query={GET_STORE}
-		variables={{context, identifier}}
+		variables={{context, identifier, from, length, sort, order, search, filters}}
 	>
 		{({loading, error, data}) => {
 			//
 			// @TODO: Better load handling
 			//
 			if (loading) {
-				return 'Loading...';
+				return (
+					<Layout
+						renderHeader={() => null}
+						renderFooter={() => null}
+					>
+						{() => 'Loading...'}
+					</Layout>
+				);
 			}
 			if (error) {
 				return `Error: ${error}`;
@@ -80,6 +116,7 @@ GetStoreQuery.propTypes = {
 };
 
 GetStoreQuery.defaultProps = {
+	/* @TODO: Better context handling */
 	context: window.Sitegeist.Objects.contentContext
 };
 

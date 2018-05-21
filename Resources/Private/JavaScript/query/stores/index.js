@@ -58,6 +58,7 @@ GetStoresQuery.propTypes = {
 };
 
 GetStoresQuery.defaultProps = {
+	/* @TODO: Better context handling */
 	context: window.Sitegeist.Objects.contentContext
 };
 

@@ -18,8 +18,14 @@ const Button = styled.button`
 	align-items: center!important;
 
 	${Icon} {
-		margin-right: 10px;
+		${props => props.children.filter && props.children.filter(i => i).length > 1 && `
+			margin-right: 10px;
+		`}
 	}
 `;
+
+Button.defaultProps = {
+	type: 'button'
+};
 
 export default Button;

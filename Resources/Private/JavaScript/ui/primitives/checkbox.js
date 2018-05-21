@@ -12,7 +12,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Checkbox = ({id, isChecked, onChange}) => (
+const Checkbox = ({id, isChecked, onChange, children}) => (
 	<label
 		htmlFor={id}
 		className="neos-checkbox"
@@ -24,13 +24,19 @@ const Checkbox = ({id, isChecked, onChange}) => (
 			onChange={onChange}
 		/>
 		<span/>
+		{children}
 	</label>
 );
 
 Checkbox.propTypes = {
 	id: PropTypes.string.isRequired,
 	isChecked: PropTypes.bool.isRequired,
-	onChange: PropTypes.func.isRequired
+	onChange: PropTypes.func.isRequired,
+	children: PropTypes.node
+};
+
+Checkbox.defaultProps = {
+	children: null
 };
 
 export default Checkbox;

@@ -60,6 +60,7 @@ const Table = ({onSelect, data, ...props}) => (
 						onChange={() => onClick(id)}
 					/>
 				)}
+				PaginationComponent={() => null}
 				data={data}
 				{...props}
 			/>
