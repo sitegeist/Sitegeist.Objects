@@ -28,6 +28,7 @@ import './plugins/editors/boolean';
 import './plugins/editors/asset';
 import './plugins/editors/date';
 import './plugins/editors/reference';
+import './plugins/editors/references';
 
 //
 // Core converters
