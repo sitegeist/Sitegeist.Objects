@@ -39,11 +39,9 @@ class TableHeadQuery extends ObjectType
                     'type' => Type::nonNull(Type::string()),
                     'description' => 'Label of the column'
                 ],
-                'sorting' => [
-                    'type' => JsonScalar::type(),
-                    'description' => 'Sorting configuration of the column'
-                ],
+                'sortProperty' => [
                     'type' => Type::string(),
+                    'description' => 'Sorting configuration of the column'
                 ]
             ],
             'resolveField'  => function(TableHeadHelper $tableHeadConfiguration, $arguments, $context, ResolveInfo $info) {

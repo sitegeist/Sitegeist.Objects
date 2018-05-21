@@ -93,8 +93,8 @@ class TableHeadHelper
      *
      * @return array|null
      */
-    public function getSorting()
+    public function getSortProperty()
     {
-        return ObjectAccess::getPropertyPath($this->columnConfiguration, 'sorting');
+        return ObjectAccess::getPropertyPath($this->columnConfiguration, 'sortProperty');
     }
 }
