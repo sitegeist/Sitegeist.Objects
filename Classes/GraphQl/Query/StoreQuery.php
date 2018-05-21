@@ -81,7 +81,8 @@ class StoreQuery extends ObjectType
                         ],
                         'sort' => [
                             'type' => Type::string(),
-                            'description' => 'Name of a property to sort by'
+                            'description' => 'Name of a property to sort by',
+                            'defaultValue' => '_lastModificationDateTime'
                         ],
 
                         //
