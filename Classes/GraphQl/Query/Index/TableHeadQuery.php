@@ -43,17 +43,7 @@ class TableHeadQuery extends ObjectType
                     'type' => JsonScalar::type(),
                     'description' => 'Sorting configuration of the column'
                 ],
-                'filter' => [
                     'type' => Type::string(),
-                    'description' => 'Filter-View for the column'
-                ],
-                'filterOptions' => [
-                    'type' => JsonScalar::type(),
-                    'description' => 'Filter options configuration of the column'
-                ],
-                'filterOperations' => [
-                    'type' => JsonScalar::type(),
-                    'description' => 'Filter operations configuration of the column'
                 ]
             ],
             'resolveField'  => function(TableHeadHelper $tableHeadConfiguration, $arguments, $context, ResolveInfo $info) {

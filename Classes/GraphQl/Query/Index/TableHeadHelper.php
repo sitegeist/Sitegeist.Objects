@@ -97,34 +97,4 @@ class TableHeadHelper
     {
         return ObjectAccess::getPropertyPath($this->columnConfiguration, 'sorting');
     }
-
-    /**
-     * Get the filter
-     *
-     * @return string|null
-     */
-    public function getFilter()
-    {
-        return ObjectAccess::getPropertyPath($this->columnConfiguration, 'filter');
-    }
-
-    /**
-     * Get the filter options configuration
-     *
-     * @return array|null
-     */
-    public function getFilterOptions()
-    {
-        return ObjectAccess::getPropertyPath($this->columnConfiguration, 'filterOptions');
-    }
-
-    /**
-     * Get the filter operation configuration
-     *
-     * @return array|null
-     */
-    public function getFilterOperations()
-    {
-        return ObjectAccess::getPropertyPath($this->columnConfiguration, 'filterOperations');
-    }
 }
