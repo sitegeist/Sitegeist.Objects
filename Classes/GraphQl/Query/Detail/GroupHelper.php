@@ -118,11 +118,17 @@ class GroupHelper
         foreach($this->object->getNodeType()->getProperties() as $propertyName => $propertyConfiguration) {
             $groupName = ObjectAccess::getPropertyPath($propertyConfiguration, 'ui.sitegeist/objects/detail.group');
             if ($groupName === $this->groupName) {
-                $properties[$propertyName] = new PropertyHelper($this->object, $propertyName);
+                $properties[$propertyName] = [
+                    'name' => $propertyName,
+                    'configuration' => $propertyConfiguration
+                ];
             }
         }
 
-        $sorter = new PositionalArraySorter($properties);
-        return $sorter->toArray();
+        $sorter = new PositionalArraySorter($properties, 'configuration.position');
+
+        foreach ($sorter->toArray() as $item) {
+            yield new PropertyHelper($this->object, $item['name']);
+        }
     }
 }
