@@ -73,9 +73,22 @@ class NodeService
     {
         foreach ($properties as $propertyName => $propertyValue) {
             //
-            // @TODO: Apply type converter first
+            // @TODO: Find a better solution for this
             //
-            $node->setProperty($propertyName, $propertyValue);
+            switch ($node->getNodeType()->getConfiguration('properties.' . $propertyName . '.type')) {
+                case \DateTime::class:
+                    //
+                    // @TODO: There has to be a better way
+                    //
+                    $propertyValue = \DateTime::createFromFormat(\DateTime::W3C, $propertyValue);
+
+                default:
+                    if ($propertyName{0} === '_') {
+                        ObjectAccess::setProperty($node, substr($propertyName, 1), $propertyValue);
+                    } else {
+                        $node->setProperty($propertyName, $propertyValue);
+                    }
+            }
         }
     }
 
