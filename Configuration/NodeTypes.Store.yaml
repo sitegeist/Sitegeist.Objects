@@ -16,6 +16,11 @@
   ui:
     sitegeist/objects/list:
       columns:
+        __label:
+          label: 'Bezeichnung' # @TODO: I18n
+          computed: ${node.label} # @TODO: I18n
+          position: start
+          sortProperty: __label
         __modificationDateTime:
           label: 'Letzte Änderung' # @TODO: I18n
           computed: ${Date.format(node.lastModificationDateTime, 'd.m.Y H:i:s')} # @TODO: I18n

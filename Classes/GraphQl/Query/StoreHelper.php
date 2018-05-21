@@ -194,8 +194,6 @@ class StoreHelper
             }
         }
 
-        $query->log();
-
         return [$query->execute(), $query->count()];
     }
 

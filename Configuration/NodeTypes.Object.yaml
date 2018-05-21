@@ -74,6 +74,13 @@
           include_in_all: false
           index: 'not_analyzed'
         indexing: ${node.properties.title}
+    __label:
+      search:
+        elasticSearchMapping:
+          type: string
+          include_in_all: false
+          index: 'not_analyzed'
+        indexing: ${node.label}
     __parentNode:
       search:
         elasticSearchMapping:

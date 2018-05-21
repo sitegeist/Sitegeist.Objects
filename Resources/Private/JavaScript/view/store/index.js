@@ -198,30 +198,33 @@ export default class StoreView extends Component {
 						</form>
 					)}
 				</Transient>
-				{/* @TODO: NodeType Selector */}
-				<Link to={`/store/${this.props.identifier}/create/${store.nodeType.allowedChildNodeTypes[0].name}`}>
-					<Button>
-						{/* @TODO. I18n */}
-						<Icon className="icon-plus"/>
-						Neu erstellen
-					</Button>
-				</Link>
 
-				<Filter
-					filterConfiguration={store.objectIndex.filterConfiguration}
-					filters={this.state.query.filters || []}
-					onChange={this.handleFilterChange}
-				/>
+				<ButtonList>
+					{/* @TODO: NodeType Selector */}
+					<Link to={`/store/${this.props.identifier}/create/${store.nodeType.allowedChildNodeTypes[0].name}`}>
+						<Button>
+							{/* @TODO. I18n */}
+							<Icon className="icon-plus"/>
+							Neu erstellen
+						</Button>
+					</Link>
+
+					<Filter
+						filterConfiguration={store.objectIndex.filterConfiguration}
+						filters={this.state.query.filters || []}
+						onChange={this.handleFilterChange}
+					/>
+				</ButtonList>
+
+				<ButtonList>
+					<Condition condition={this.state.selection.length > 1}>
+						<Button>
+							{/* @TODO. I18n */}
+							{this.state.selection.length} Objekte
+						</Button>
+					</Condition>
+				</ButtonList>
 			</HeaderPanel>
-
-			<ButtonList>
-				<Condition condition={this.state.selection.length > 1}>
-					<Button>
-						{/* @TODO. I18n */}
-						{this.state.selection.length} Objekte
-					</Button>
-				</Condition>
-			</ButtonList>
 		</React.Fragment>
 	)
 
@@ -251,28 +254,33 @@ export default class StoreView extends Component {
 											<Icon className={value}/>
 										</div>
 									)
-								}, {
-									id: '__label',
-									Header: 'Title', /* @TODO: I18n */
-									__sortProperty: 'title',
-									accessor: row => row.object.label,
-									Cell: ({value, original}) => (
-										<Link to={`/store/${identifier}/edit/${original._id}`}>
-											{original.object.isRemoved ? <s>{value}</s> : value}
-										</Link>
-									)
 								},
 								...store.objectIndex.tableHeads.map((tableHead, index) => ({
 									id: tableHead.name,
 									Header: tableHead.label,
 									sortable: Boolean(tableHead.sortProperty),
 									__sortProperty: tableHead.sortProperty,
-									Cell: ({original}) => original.tableCells[index].value
+									Cell: tableHead.name === '__label' ?
+										({original}) => (
+											<Link to={`/store/${identifier}/edit/${original._id}`}>
+												{original.object.isRemoved ?
+													<s>{original.tableCells[index].value}</s> :
+													original.tableCells[index].value
+												}
+											</Link>
+										) :
+										({original}) => original.tableCells[index].value
 								}))]}
 								data={store.objectIndex.tableRows.map(row => ({
 									_id: row.object.identifier,
 									...row
 								}))}
+								sorted={query.sort ? [{
+									id: store.objectIndex.tableHeads.filter(
+										tableHead => tableHead.sortProperty === query.sort
+									)[0].name,
+									desc: query.order !== 'ASC'
+								}] : []}
 								manual
 								onPageChange={this.handlePageChange}
 								onPageSizeChange={this.handlePageSizeChange}
@@ -282,7 +290,7 @@ export default class StoreView extends Component {
 								page={Math.ceil(query.from / query.length)}
 								pages={Math.ceil(store.objectIndex.totalNumberOfRows / this.state.query.length)}
 								multiSort={false}
-								className="-striped -highlight"
+								className="-highlight"
 							/>
 						)}
 					</Layout>

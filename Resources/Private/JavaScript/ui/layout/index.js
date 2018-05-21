@@ -37,9 +37,8 @@ const Header = styled.header`
 `;
 
 const Body = styled.main`
-	overflow-y: scroll;
+	overflow-y: auto;
 	flex-grow: 1;
-	padding: 0 54px!important;
 `;
 
 const Footer = styled.footer`
