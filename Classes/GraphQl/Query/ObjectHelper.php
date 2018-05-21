@@ -41,11 +41,11 @@ class ObjectHelper
      * Protected Constructor: Use factory methods below!
      *
      * @param NodeType $nodeType
-     * @param NodeInterface $parentNode
+     * @param NodeInterface|null $parentNode
      * @param NodeInterface|null $node
      * @throws \InvalidArgumentException
      */
-    protected function __construct(NodeType $nodeType, NodeInterface $parentNode, NodeInterface $node = null)
+    protected function __construct(NodeType $nodeType, NodeInterface $parentNode = null, NodeInterface $node = null)
     {
         //
         // Invariant: Type of $node must be equal to type $nodeType
