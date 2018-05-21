@@ -4,12 +4,69 @@
   constraints:
     nodeTypes:
       '*': false
+  ui:
+    sitegeist/objects/detail:
+      tabs:
+        common:
+          icon: icon-info
+          # @TODO: I18n
+          label: 'Allgemein'
+      groups:
+        document:
+          position: start
+          tab: common
+          icon: icon-file
+          # @TODO: I18n
+          label: 'Dokument'
+        visibility:
+          position: after document
+          tab: common
+          icon: icon-eye
+          # @TODO: I18n
+          label: 'Sichtbarkeit'
   properties:
     title:
+      ui:
+        sitegeist/objects/detail:
+          group: document
+          editable: true
+          editor: SingleLineText
       search:
         elasticSearchMapping:
           type: string
           include_in_all: true
+    uriPathSegment:
+      type: string
+      ui:
+        sitegeist/objects/detail:
+          group: document
+          editable: true
+          editor: SingleLineText
+    _hidden:
+      ui:
+        sitegeist/objects/detail:
+          group: visibility
+          editable: true
+          editor: Boolean
+    _hiddenInIndex:
+      position: after _hidden
+      ui:
+        sitegeist/objects/detail:
+          group: visibility
+          editable: true
+          editor: Boolean
+    _hiddenBeforeDateTime:
+      ui:
+        sitegeist/objects/detail:
+          group: visibility
+          editable: true
+          editor: Date
+    _hiddenAfterDateTime:
+      ui:
+        sitegeist/objects/detail:
+          group: visibility
+          editable: true
+          editor: Date
     __title:
       search:
         elasticSearchMapping:
