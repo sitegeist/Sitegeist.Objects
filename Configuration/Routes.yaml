@@ -20,3 +20,13 @@
     '@format':     'json'
     'endpoint':    '<endpoint>'
   httpMethods: [POST]
+
+-
+  name: 'Sitegeist.Objects - Upload endpoint'
+  uriPattern: 'neos/sitegeist/objects/upload'
+  defaults:
+    '@package':    'Sitegeist.Objects'
+    '@controller': 'Api'
+    '@action':     'upload'
+    '@format':     'json'
+  httpMethods: [POST]
