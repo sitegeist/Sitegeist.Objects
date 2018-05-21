@@ -17,6 +17,7 @@ import Application from './core/application';
 
 import StoresView from './view/stores';
 import StoreView from './view/store';
+import DetailView from './view/detail';
 
 //
 // Core Editors
@@ -56,8 +57,19 @@ render(
 					render={() => <StoresView/>}
 				/>
 				<Route
+					exact
 					path="/store/:identifier"
 					render={({match}) => (<StoreView {...match.params}/>)}
+				/>
+				<Route
+					exact
+					path="/store/:storeIdentifier/create/:nodeType"
+					render={({match}) => (<DetailView {...match.params}/>)}
+				/>
+				<Route
+					exact
+					path="/store/:storeIdentifier/edit/:objectIdentifier"
+					render={({match}) => (<DetailView {...match.params}/>)}
 				/>
 			</Switch>
 		</Application>
