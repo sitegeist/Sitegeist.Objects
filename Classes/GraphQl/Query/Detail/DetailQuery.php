@@ -54,6 +54,16 @@ class DetailQuery extends ObjectType
                         ]
                     ],
                     'description' => 'Configuration for the specified property of this object'
+                ],
+                'collection' => [
+                    'type' => $typeResolver->get(CollectionQuery::class),
+                    'args' => [
+                        'name' => [
+                            'type' => Type::nonNull(Type::string()),
+                            'description' => 'Name of the property'
+                        ]
+                    ],
+                    'description' => 'Configuration for the specified collection in this object'
                 ]
             ],
             'resolveField'  => function(DetailHelper $objectDetail, $arguments, $context, ResolveInfo $info) {

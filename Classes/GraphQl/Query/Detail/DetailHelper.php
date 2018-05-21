@@ -20,6 +20,7 @@ use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\ContentRepository\Domain\Model\NodeType;
 use Sitegeist\Objects\Service\NodeService;
 use Sitegeist\Objects\GraphQl\Query\ObjectHelper;
+use Sitegeist\Objects\Collection;
 
 /**
  * Provides information about a (possibly empty) object node
@@ -104,6 +105,19 @@ class DetailHelper
         $propertyConfiguration = $this->object->getNodeType()->getConfiguration('properties.' . $propertyName);
         if (ObjectAccess::getPropertyPath($propertyConfiguration, 'ui.sitegeist/objects/detail')) {
             return new PropertyHelper($this->object, $propertyName);
+        }
+    }
+
+    /**
+     * @param array $arguments
+     * @return CollectionHelper|null
+     */
+    public function getCollection($arguments)
+    {
+        $propertyName = $arguments['name'];
+        $propertyConfiguration = $this->object->getNodeType()->getConfiguration('properties.' . $propertyName);
+        if (ObjectAccess::getPropertyPath($propertyConfiguration, 'type') === Collection::class) {
+            return new CollectionHelper($this->object, $propertyName);
         }
     }
 }
