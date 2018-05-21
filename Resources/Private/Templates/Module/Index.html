@@ -1,3 +1,4 @@
+{namespace neos=Neos\Neos\ViewHelpers}
 <link rel="stylesheet" href="{f:uri.resource(path: 'resource://Sitegeist.Objects/Public/Styles/react-table.css')}">
 <link rel="stylesheet" href="{f:uri.resource(path: 'resource://Sitegeist.Objects/Public/Styles/react-datepicker.min.css')}">
 <script>
@@ -8,6 +9,8 @@
     window.Sitegeist.Objects.uploadEndpoint = '{f:uri.action(package: "Sitegeist.Objects", controller: "Api", action: "upload", format: "json", useParentRequest: true)}?__csrfToken=' + window.Sitegeist.Objects.csrfToken;
     window.Sitegeist.Objects.assetEndpoint = '{f:uri.action(package: "Sitegeist.Objects", controller: "Api", action: "asset", format: "json", useParentRequest: true)}?__csrfToken=' + window.Sitegeist.Objects.csrfToken;
     window.Sitegeist.Objects.thumbnailUrl = '{f:uri.action(package: "Sitegeist.Objects", controller: "Api", action: "thumbnail", format: "json", useParentRequest: true)}';
+    window.Sitegeist.Objects.mediaEditUrl = '{neos:uri.module(path: "management/media/edit")}';
+    window.Sitegeist.Objects.mediaBrowserUrl = '{f:uri.action(package: "Neos.Neos", controller: "Backend\\Module", action: "index", arguments: { module: "media/browser" }, format: "html", useParentRequest: true)}/assets.html';
 
     window.Sitegeist.Objects.contentContext = {};
     window.Sitegeist.Objects.contentContext.workspaceName = '{workspaceName}';
