@@ -91,7 +91,7 @@ class StoreQuery extends ObjectType
                         'order' => [
                             'type' => Type::string(),
                             'description' => 'Direction to sort by',
-                            'defaultValue' => 'ASC'
+                            'defaultValue' => 'DESC'
                         ]
                     ]
                 ],
