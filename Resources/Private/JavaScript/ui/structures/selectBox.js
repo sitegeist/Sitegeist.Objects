@@ -168,27 +168,3 @@ export default class SelectBox extends Component {
 		);
 	}
 }
-
-/*
-<SelectBox
-	allItems={[
-		{name: 'a', data: {icon: 'icon-link', value: 'a', label: 'AAA'}},
-		{name: 'b', data: {icon: 'icon-link', value: 'b', label: 'BBB'}},
-		{name: 'c', data: {icon: 'icon-link', value: 'c', label: 'CCC'}},
-		{name: 'd', data: {icon: 'icon-home', value: 'd', label: 'DDD'}},
-		{name: 'e', data: {icon: 'icon-car', value: 'e', label: 'EEE'}},
-		{name: 'f', data: {icon: 'icon-train', value: 'f', label: 'FFF'}},
-		{name: 'g', data: {icon: 'icon-ship', value: 'g', label: 'GGG'}},
-		{name: 'h', data: {icon: 'icon-link', value: 'h', label: 'HHH'}},
-		{name: 'i', data: {icon: 'icon-link', value: 'i', label: 'III'}},
-		{name: 'j', data: {icon: 'icon-link', value: 'j', label: 'JJJ'}},
-		{name: 'l', data: {icon: 'icon-link', value: 'l', label: 'LLL'}},
-		{name: 'm', data: {icon: 'icon-link', value: 'm', label: 'MMM'}}
-	]}
-	onChange={selectedItem => this.handleChange({
-		target: {
-			value: selectedItem.data.label
-		}
-	})}
-/>
- */
