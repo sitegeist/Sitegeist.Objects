@@ -16,6 +16,7 @@ namespace Sitegeist\Objects\GraphQl\Query\Detail;
 use Neos\Flow\Annotations as Flow;
 use Neos\Utility\ObjectAccess;
 use Sitegeist\Objects\GraphQl\Query\ObjectHelper;
+use Neos\Flow\I18n\EelHelper\TranslationHelper;
 
 class PropertyHelper
 {
@@ -84,8 +85,11 @@ class PropertyHelper
      */
     public function getLabel()
     {
-        return $this->object->getNodeType()
+        $label = $this->object->getNodeType()
             ->getConfiguration('properties.' . $this->propertyName . '.ui.label');
+        $translationHelper = new TranslationHelper();
+
+        return $translationHelper->translate($label);
     }
 
     /**
