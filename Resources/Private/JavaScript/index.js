@@ -23,6 +23,7 @@ import StoreView from './view/store';
 //
 import './plugins/editors/singleLineText';
 import './plugins/editors/multiLineText';
+import './plugins/editors/boolean';
 import './plugins/editors/date';
 
 const {appContainer} = window.Sitegeist.Objects;
