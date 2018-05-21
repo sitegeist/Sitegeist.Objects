@@ -16,6 +16,7 @@ import PropTypes from 'prop-types';
 
 import {registerEditor} from './core/plugin/editorManager';
 import {registerConverter} from './core/plugin/converterManager';
+import {registerFilterEditor} from './core/plugin/filterManager';
 
 //
 // Expose app container
@@ -45,4 +46,6 @@ window.Sitegeist.Objects.plugin = {
 	registerEditor,
 	converters: {},
 	registerConverter,
+	filterEditors: {},
+	registerFilterEditor
 };

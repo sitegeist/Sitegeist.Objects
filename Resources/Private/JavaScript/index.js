@@ -38,6 +38,11 @@ import './plugins/editors/references';
 //
 import './plugins/converters/asset';
 
+//
+// Core filter editors
+//
+import './plugins/filterEditors/singleLineText';
+import './plugins/filterEditors/date';
 
 const {appContainer} = window.Sitegeist.Objects;
 
