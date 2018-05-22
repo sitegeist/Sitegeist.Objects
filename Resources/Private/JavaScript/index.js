@@ -38,6 +38,7 @@ import './plugins/editors/references';
 // Core converters
 //
 import './plugins/converters/asset';
+import './plugins/converters/collection';
 
 //
 // Core filter editors
