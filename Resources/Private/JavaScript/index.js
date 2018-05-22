@@ -46,6 +46,11 @@ import './plugins/converters/collection';
 import './plugins/filterEditors/singleLineText';
 import './plugins/filterEditors/date';
 
+//
+// Core Short Views
+//
+import './plugins/shortViews/dateRange';
+
 const {appContainer} = window.Sitegeist.Objects;
 
 render(
