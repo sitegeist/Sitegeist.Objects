@@ -9,8 +9,8 @@
  * For the full copyright and license information, please read the
  * LICENSE.md file that was distributed with this source code.
  */
-import React from 'react';
-import styled from 'styled-components';
+import React from 'shim/react';
+import styled from 'shim/styled-components';
 
 const Input = styled.input`
 	width: 100%!important;

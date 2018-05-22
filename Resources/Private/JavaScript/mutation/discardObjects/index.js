@@ -9,10 +9,10 @@
  * For the full copyright and license information, please read the
  * LICENSE.md file that was distributed with this source code.
  */
-import React from 'react';
+import React from 'shim/react';
 import {Mutation} from 'react-apollo';
 import gql from 'graphql-tag';
-import PropTypes from 'prop-types';
+import PropTypes from 'shim/prop-types';
 
 export const DISCARD_OBJECTS = gql`
 	mutation discardObjects(

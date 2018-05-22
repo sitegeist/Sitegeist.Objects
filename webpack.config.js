@@ -1,3 +1,5 @@
+const path = require('path');
+
 module.exports = {
 	mode: process.env.NODE_ENV || 'development',
 	devtool: 'source-map',
@@ -15,7 +17,10 @@ module.exports = {
 		]
 	},
 	resolve: {
-		extensions: ['*', '.js', '.jsx']
+		extensions: ['*', '.js', '.jsx'],
+		alias: {
+			shim: path.resolve(__dirname, 'Resources/Private/JavaScript/shim')
+		}
 	},
 	output: {
 		path: `${__dirname}/Resources/Public/JavaScript`,

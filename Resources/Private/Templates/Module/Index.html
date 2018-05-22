@@ -20,7 +20,16 @@
 </script>
 <div id="app"></div>
 <div id="modals"></div>
+
+<!-- Plugin Environment -->
 <script src="{f:uri.resource(path: 'resource://Sitegeist.Objects/Public/JavaScript/env.js')}"></script>
+
+<!-- Plugins -->
+<f:for each="{additionalJavaScriptFiles}" as="javaScriptFile">
+    <script src="{f:uri.resource(path: '{javaScriptFile}')}"></script>
+</f:for>
+
+<!-- Main Application -->
 <script src="{f:uri.resource(path: 'resource://Sitegeist.Objects/Public/JavaScript/app.js')}"></script>
 
 <style>

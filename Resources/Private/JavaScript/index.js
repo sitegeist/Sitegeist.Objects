@@ -9,8 +9,8 @@
  * For the full copyright and license information, please read the
  * LICENSE.md file that was distributed with this source code.
  */
-import React from 'react';
-import {render} from 'react-dom';
+import React from 'shim/react';
+import {render} from 'shim/react-dom';
 import {HashRouter, Route, Switch} from 'react-router-dom';
 
 import Application from './core/application';

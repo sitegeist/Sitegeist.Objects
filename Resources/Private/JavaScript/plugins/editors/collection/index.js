@@ -11,7 +11,7 @@
  */
 import uuid from 'uuid';
 import {Container, Draggable} from 'react-smooth-dnd';
-import styled from 'styled-components';
+import styled from 'shim/styled-components';
 
 import Button from '../../../ui/primitives/button';
 import Icon from '../../../ui/primitives/icon';

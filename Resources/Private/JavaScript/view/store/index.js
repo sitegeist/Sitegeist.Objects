@@ -9,10 +9,10 @@
  * For the full copyright and license information, please read the
  * LICENSE.md file that was distributed with this source code.
  */
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
+import React, {Component} from 'shim/react';
+import PropTypes from 'shim/prop-types';
 import {Link} from 'react-router-dom';
-import styled from 'styled-components';
+import styled from 'shim/styled-components';
 
 import Condition from '../../core/util/condition';
 import Transient from '../../core/util/transient';

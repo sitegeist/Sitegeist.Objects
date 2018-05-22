@@ -11,7 +11,7 @@
  */
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
-import styled from 'styled-components';
+import styled from 'shim/styled-components';
 
 const {React, PropTypes} = window.Sitegeist.Objects.runtime;
 const {Component} = window.Sitegeist.Objects.runtime.React;

@@ -11,12 +11,23 @@
  */
 import {BehaviorSubject} from 'rxjs';
 import React from 'react';
-import ReactDOM from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
-import {registerEditor} from './core/plugin/editorManager';
-import {registerConverter} from './core/plugin/converterManager';
-import {registerFilterEditor} from './core/plugin/filterManager';
+//
+// Expose Runtime dependencies
+//
+window.Sitegeist.Objects.runtime = {
+	React,
+	ReactDOM,
+	PropTypes,
+	styled
+};
+
+const {registerEditor} = require('./core/plugin/editorManager');
+const {registerConverter} = require('./core/plugin/converterManager');
+const {registerFilterEditor} = require('./core/plugin/filterManager');
 
 //
 // Expose app container
@@ -29,16 +40,6 @@ window.Sitegeist.Objects.appContainer = document.getElementById('app');
 window.Sitegeist.Objects.csrfToken$ = new BehaviorSubject(window.Sitegeist.Objects.csrfToken);
 
 //
-// Expose Runtime dependencies
-// @TODO: This is pointless without proper code splitting
-//
-window.Sitegeist.Objects.runtime = {
-	React,
-	ReactDOM,
-	PropTypes
-};
-
-//
 // Expose Plugin API
 //
 window.Sitegeist.Objects.plugin = {
@@ -49,3 +50,5 @@ window.Sitegeist.Objects.plugin = {
 	filterEditors: {},
 	registerFilterEditor
 };
+
+console.log(window.Sitegeist.Objects);

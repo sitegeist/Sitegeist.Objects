@@ -9,7 +9,7 @@
  * For the full copyright and license information, please read the
  * LICENSE.md file that was distributed with this source code.
  */
-import React, {Component} from 'react';
+import React, {Component} from 'shim/react';
 import {Link} from 'react-router-dom';
 
 import StoresQuery from '../../query/stores';

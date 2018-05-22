@@ -9,9 +9,9 @@
  * For the full copyright and license information, please read the
  * LICENSE.md file that was distributed with this source code.
  */
-import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import React from 'shim/react';
+import PropTypes from 'shim/prop-types';
+import styled from 'shim/styled-components';
 
 const Container = styled.div`
 	margin-bottom: 2em!important;

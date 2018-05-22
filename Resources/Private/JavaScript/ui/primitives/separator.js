@@ -9,7 +9,7 @@
  * For the full copyright and license information, please read the
  * LICENSE.md file that was distributed with this source code.
  */
-import styled from 'styled-components';
+import styled from 'shim/styled-components';
 
 const Separator = styled.hr`
 	border: none;

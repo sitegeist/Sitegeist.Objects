@@ -10,7 +10,7 @@
  * LICENSE.md file that was distributed with this source code.
  */
 import {Container, Draggable} from 'react-smooth-dnd';
-import styled from 'styled-components';
+import styled from 'shim/styled-components';
 
 import Icon from '../../../ui/primitives/icon';
 import Button from '../../../ui/primitives/button';
