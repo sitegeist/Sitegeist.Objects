@@ -1,6 +1,8 @@
 'Sitegeist.Objects:Collection':
+  abstract: true
   superTypes:
     'Neos.Neos:Node': true
+    'Sitegeist.Objects:AbstractObject': true
   constraints:
     nodeTypes:
       '*': false

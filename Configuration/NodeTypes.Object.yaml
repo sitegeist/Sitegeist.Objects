@@ -1,5 +1,7 @@
 'Sitegeist.Objects:Object':
+  abstract: true
   superTypes:
+    'Sitegeist.Objects:AbstractObject': true
     'Neos.Neos:Document': true
   constraints:
     nodeTypes:

@@ -52,6 +52,12 @@ class NodeService
     protected $nativeNodeService;
 
     /**
+     * @Flow\Inject
+     * @var CollectionService
+     */
+    protected $collectionService;
+
+    /**
      * For debugging purposes only!
      *
      * @Flow\Inject
@@ -86,80 +92,11 @@ class NodeService
             //
             switch ($node->getNodeType()->getConfiguration('properties.' . $propertyName . '.type')) {
                 case Collection::class:
-                    $addedNodes = [];
-                    if (array_key_exists('add', $propertyValue)) {
-                        foreach($propertyValue['add'] as $arguments) {
-                            //
-                            // @TODO: Invariant: nodeType must be of type Sitegeist.Objects:Object
-                            //
-                            $objectNode = $node->getNode($propertyName)->createNode(
-                                $this->generateUniqueNodeName($node, $propertyName),
-                                $this->nodeTypeManager->getNodeType($arguments['nodeType'])
-                            );
-
-                            $this->applyPropertiesToNode($objectNode, $arguments['properties']);
-                            $addedNodes[$arguments['id']] = $objectNode;
-                        }
-                    }
-
-                    //
-                    // @TODO: Validate Arguments
-                    // @TODO: Rename id argument to identifier
-                    //
-                    if (array_key_exists('update', $propertyValue)) {
-                        foreach($propertyValue['update'] as $arguments) {
-                            //
-                            // @TODO: Exception, if node doesn't exist
-                            //
-                            $objectNode = $node->getContext()->getNodeByIdentifier($arguments['id']);
-                            $this->applyPropertiesToNode($objectNode, $arguments['properties']);
-                        }
-                    }
-
-                    if (array_key_exists('remove', $propertyValue)) {
-                        foreach($propertyValue['remove'] as $identifier) {
-                            //
-                            // @TODO: Exception, if node doesn't exist
-                            //
-                            if (array_key_exists($identifier, $addedNodes)) {
-                                $objectNode = $addedNodes[$identifier];
-                            } else {
-                                $objectNode = $node->getContext()->getNodeByIdentifier($identifier);
-                            }
-
-                            $objectNode->remove();
-                        }
-                    }
-
-                    if (array_key_exists('hide', $propertyValue)) {
-                        foreach($propertyValue['hide'] as $identifier) {
-                            //
-                            // @TODO: Exception, if node doesn't exist
-                            //
-                            if (array_key_exists($identifier, $addedNodes)) {
-                                $objectNode = $addedNodes[$identifier];
-                            } else {
-                                $objectNode = $node->getContext()->getNodeByIdentifier($identifier);
-                            }
-
-                            $objectNode->setHidden(true);
-                        }
-                    }
-
-                    if (array_key_exists('show', $propertyValue)) {
-                        foreach($propertyValue['show'] as $identifier) {
-                            //
-                            // @TODO: Exception, if node doesn't exist
-                            //
-                            if (array_key_exists($identifier, $addedNodes)) {
-                                $objectNode = $addedNodes[$identifier];
-                            } else {
-                                $objectNode = $node->getContext()->getNodeByIdentifier($identifier);
-                            }
-                            $objectNode->setHidden(false);
-                        }
-                    }
-
+                    $this->collectionService->performCollectionOperations(
+                        $node->getNode($propertyName),
+                        $propertyValue,
+                        $this
+                    );
                     break;
 
                 case \DateTime::class:
