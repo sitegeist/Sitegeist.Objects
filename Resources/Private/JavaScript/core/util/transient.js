@@ -14,9 +14,6 @@ import PropTypes from 'shim/prop-types';
 
 /**
  * @TODO: Better documentation
- * @TODO: The code looks fairly complex, simply because making this Component controllable
- *        introduces a lot of conditions. It's probably better to go the way via React's
- *        `getDerivedStateFromProps` lifecycle method to sync both state and props.
  */
 export default class Transient extends Component {
 	static propTypes = {
@@ -33,6 +30,10 @@ export default class Transient extends Component {
 		initial: {}
 	};
 
+	static getDerivedStateFromProps = (props, state) => ({
+		values: props.value || (state ? state.values : {})
+	});
+
 	state = {
 		values: this.props.value || this.props.initial
 	};
@@ -45,64 +46,68 @@ export default class Transient extends Component {
 	};
 
 	has = key => {
-		const values = this.props.value || this.state.values;
+		const {values} = this.state;
 
-		return ((key in values) && (values[key] !== undefined));
+		return (values && (key in values) && (values[key] !== undefined));
 	};
+
+	hasValues = () => {
+		const {values} = this.state;
+
+		return Object.keys(values).filter(key => values[key] !== undefined).length > 0;
+	}
 
 	get = key => {
-		const values = this.props.value || this.state.values;
+		if (this.has(key)) {
+			const {values} = this.state;
 
-		return values[key];
+			return values[key];
+		}
 	};
+
+	set = (key, value) => this.setState(state => ({
+		values: {
+			...state.values,
+			[key]: value
+		}
+	}), this.handleChange);
 
 	/**
-	 * @TODO: Should be named `set`
+	 * @TODO: deprecate
 	 */
-	add = (key, value) => {
-		this.setState(state => ({
-			values: {
-				...state.values,
-				[key]: value
-			}
-		}), this.handleChange);
-	};
+	add = this.set
 
-	remove = key => {
-		this.setState(state => ({
-			values: {
-				...state.values,
-				[key]: undefined
-			}
-		}), this.handleChange);
-	};
+	remove = key => this.setState(state => ({
+		values: {
+			...state.values,
+			[key]: undefined
+		}
+	}), this.handleChange);
 
-	reduce = reducer => {
-		this.setState(state => ({
-			values: reducer(state.values)
-		}), this.handleChange);
-	};
+	map = mapFunction => Object.keys(this.state.values)
+		.map((key, index, keys) => mapFunction(this.state.values[key], key, index, keys, this.state.values));
 
-	reset = () => {
-		this.setState({
-			values: {}
-		}, this.handleChange);
-	};
+	reduce = reducerFunction => this.setState(state => ({
+		values: reducerFunction(state.values)
+	}), this.handleChange);
+
+	reset = () => this.setState({
+		values: {}
+	}, this.handleChange);
 
 	render() {
-		const {has, get, add, remove, reduce, reset} = this;
-		const values = this.props.value || this.state.values;
-		const hasValues = Object.keys(values).filter(key => values[key] !== undefined).length > 0;
+		const {values} = this.state;
 
 		return this.props.children({
-			has,
-			get,
-			add,
-			remove,
-			reduce,
-			reset,
-			values,
-			hasValues
+			has: this.has,
+			get: this.get,
+			add: this.add,
+			remove: this.remove,
+			map: this.map,
+			reduce: this.reduce,
+			reset: this.reset,
+			hasValues: this.hasValues(),
+			values
 		});
 	}
 }
