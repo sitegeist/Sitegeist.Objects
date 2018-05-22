@@ -28,6 +28,7 @@ window.Sitegeist.Objects.runtime = {
 const {registerEditor} = require('./core/plugin/editorManager');
 const {registerConverter} = require('./core/plugin/converterManager');
 const {registerFilterEditor} = require('./core/plugin/filterManager');
+const {registerShortView} = require('./core/plugin/shortViewManager');
 
 //
 // Expose app container
@@ -48,7 +49,9 @@ window.Sitegeist.Objects.plugin = {
 	converters: {},
 	registerConverter,
 	filterEditors: {},
-	registerFilterEditor
+	registerFilterEditor,
+	shortViews: {},
+	registerShortView
 };
 
 console.log(window.Sitegeist.Objects);
