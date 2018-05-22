@@ -19,10 +19,6 @@ const GroupContainer = styled.section`
 	&:not(:last-child) {
 		margin-bottom: 4em!important;
 	}
-
-	${Icon} {
-		margin-right: 8px;
-	}
 `;
 
 const GroupHeadline = styled.h2`
@@ -38,6 +34,10 @@ const GroupHeadline = styled.h2`
 		width: 100%;
 		margin-left: 10px;
 		border-bottom: 1px solid #3f3f3f;
+	}
+
+	${Icon} {
+		margin-right: 8px;
 	}
 `;
 

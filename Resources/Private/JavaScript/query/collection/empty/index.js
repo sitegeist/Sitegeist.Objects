@@ -28,6 +28,10 @@ export const GET_COLLECTION = gql`
 				collection(name: $collectionName) {
 					emptyObjectDetail(nodeType: $itemNodeType) {
 						object {
+							nodeType {
+								icon
+								name
+							}
 							icon
 							label
 						}

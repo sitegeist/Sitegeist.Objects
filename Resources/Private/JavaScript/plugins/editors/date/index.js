@@ -98,6 +98,10 @@ window.Sitegeist.Objects.plugin.registerEditor('Date', class DateEditor extends 
 		value: value ? moment(value) : null
 	});
 
+	state = {
+		value: null
+	};
+
 	handleChange = value => {
 		const {commit} = this.props;
 

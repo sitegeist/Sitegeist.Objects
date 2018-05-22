@@ -78,11 +78,11 @@ class ObjectHelper
         $this->node = $node;
 
         //
-        // Invariant: nodeType must be of type "Sitegeist.Objects:Object"
+        // Invariant: nodeType must be of type "Sitegeist.Objects:AbstractObject"
         //
-        if (!$nodeType->isOfType('Sitegeist.Objects:Object')) {
+        if (!$nodeType->isOfType('Sitegeist.Objects:AbstractObject')) {
             throw new \InvalidArgumentException(
-                sprintf('NodeType "%s" must inherit from "Sitegeist.Objects:Object"', $nodeType->getName()),
+                sprintf('NodeType "%s" must inherit from "Sitegeist.Objects:AbstractObject"', $nodeType->getName()),
                 1524931043
             );
         }

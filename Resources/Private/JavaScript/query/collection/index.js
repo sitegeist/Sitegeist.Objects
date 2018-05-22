@@ -26,9 +26,12 @@ export const GET_COLLECTION = gql`
 			objectDetail(nodeType: $nodeType, identifier: $objectIdentifier) {
 				object {
 					nodeType {
+						icon
 						name
+						label
 						allowedGrandChildNodeTypes(name: $collectionName) {
 							name
+							label
 						}
 					}
 				}
