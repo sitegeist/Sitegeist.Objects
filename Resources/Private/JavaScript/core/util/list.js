@@ -137,7 +137,6 @@ export default class List extends Component {
 		this.setState(state => {
 			const values = [...(this.props.value || state.values)];
 			values.splice(toIndex, 0, values.splice(fromIndex, 1)[0]);
-			console.log({values});
 			return {values};
 		}, () => this.handleMove(movedItem, fromIndex, toIndex, this.state.values));
 	}
