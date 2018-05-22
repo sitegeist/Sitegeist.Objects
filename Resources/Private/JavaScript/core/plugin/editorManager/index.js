@@ -45,6 +45,7 @@ const Indicator = styled.div`
 export default class EditorManager extends Component {
 	static propTypes = {
 		name: PropTypes.string.isRequired,
+		options: PropTypes.object,
 		transient: PropTypes.object.isRequired,
 		property: PropTypes.object.isRequired,
 		storeIdentifier: PropTypes.string,
@@ -53,13 +54,14 @@ export default class EditorManager extends Component {
 	};
 
 	static defaultProps = {
+		options: null,
 		storeIdentifier: null,
 		objectIdentifier: null,
 		nodeType: null
 	};
 
 	render() {
-		const {name, transient, property, storeIdentifier, objectIdentifier, nodeType} = this.props;
+		const {name, options, transient, property, storeIdentifier, objectIdentifier, nodeType} = this.props;
 
 		if (!(name in window.Sitegeist.Objects.plugin.editors)) {
 			throw new Error(`Could not find Editor "${name}"`);
@@ -70,6 +72,7 @@ export default class EditorManager extends Component {
 			storeIdentifier,
 			objectIdentifier,
 			nodeType,
+			options: options || property.editorOptions,
 			name: property.name,
 			id: `property-${property.name}`,
 			label: property.label,

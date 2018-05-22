@@ -45,6 +45,7 @@ export const GET_DETAIL = gql`
 							label
 							value
 							editor
+							editorOptions
 						}
 					}
 				}
