@@ -19,8 +19,8 @@ import Icon from '../../ui/primitives/icon';
 import Button from '../../ui/primitives/button';
 import ButtonList from '../../ui/primitives/buttonList';
 
-const Tabs = ({tabs, children}) => (
-	<Select allItems={tabs.map(({name, ...data}) => ({name, data}))}>
+const Tabs = ({tabs, children, persistent}) => (
+	<Select allItems={tabs.map(({name, ...data}) => ({name, data}))} persistent={persistent}>
 		{({isSelected, selectedItem, select}) => (
 			<React.Fragment>
 				{children({
@@ -54,7 +54,12 @@ Tabs.propTypes = {
 		label: PropTypes.string.isRequired,
 		icon: PropTypes.string
 	})).isRequired,
-	children: PropTypes.func.isRequired
+	children: PropTypes.func.isRequired,
+	persistent: PropTypes.string
+};
+
+Tabs.defaultProps = {
+	persistent: null
 };
 
 export default Tabs;

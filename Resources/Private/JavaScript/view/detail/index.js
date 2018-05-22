@@ -121,7 +121,7 @@ export default class DetailView extends Component {
 		const {storeIdentifier, nodeType, objectIdentifier} = this.props;
 
 		return (
-			<Tabs tabs={store.objectDetail.tabs}>
+			<Tabs tabs={store.objectDetail.tabs} persistent={`detailView-tabs-${objectIdentifier}`}>
 				{tab => (
 					<Layout
 						renderHeader={tab.renderTabsHeader}
