@@ -14,9 +14,6 @@ import PropTypes from 'shim/prop-types';
 
 /**
  * @TODO: Better documentation
- * @TODO: The code looks fairly complex, simply because making this Component controllable
- *        introduces a lot of conditions. It's probably better to go the way via React's
- *        `getDerivedStateFromProps` lifecycle method to sync both state and props.
  */
 export default class Select extends Component {
 	static propTypes = {
@@ -28,10 +25,12 @@ export default class Select extends Component {
 		})).isRequired,
 		onChange: PropTypes.func,
 		children: PropTypes.func,
-		allowEmpty: PropTypes.bool
+		allowEmpty: PropTypes.bool,
+		persistent: PropTypes.string
 	};
 
 	static defaultProps = {
+		persistent: null,
 		allowEmpty: false,
 		initial: null,
 		value: null,
@@ -39,25 +38,43 @@ export default class Select extends Component {
 		children: () => {}
 	};
 
+	static getDerivedStateFromProps = (props, state) => ({
+		selected: state && 'selected' in state ? state.selected : (
+			props.value || this.getInitialSelectionConsideringPersistentSelection()
+		)
+	});
+
 	state = {
-		selected: this.getInitialValue()
+		selected: this.getInitialSelectionConsideringPersistentSelection()
 	};
 
-	getInitialValue() {
+	getInitialSelectionConsideringPersistentSelection() {
+		if (this.props.persistent) {
+			const persistentSelection = window.sessionStorage.getItem(this.props.persistent);
+
+			if (
+				persistentSelection &&
+				persistentSelection !== '"null"' &&
+				this.getSelectedItem(persistentSelection)
+			) {
+				return persistentSelection;
+			}
+		}
+
+		return this.getInitialSelection();
+	}
+
+	getInitialSelection() {
 		if (this.props.value) {
-			return null;
+			return this.props.value;
 		}
 
 		return this.props.allowEmpty === true ?
 			this.props.initial : (this.props.initial || this.props.allItems[0].name);
 	}
 
-	getValue() {
-		return this.props.value || this.state.selected || this.getInitialValue();
-	}
-
 	getSelectedItem(value = null) {
-		const selected = value || this.getValue();
+		const selected = value || this.state.selected;
 		const {allItems} = this.props;
 		const [selectedItem] = allItems.filter(item => item.name === selected);
 
@@ -75,52 +92,55 @@ export default class Select extends Component {
 		});
 	}
 
-	select = value => {
-		if (!this.props.allItems.some(({name}) => name === value)) {
-			throw new Error(`${value} cannot be selected!`);
-		}
+	select = selected => this.setState({
+		selected
+	}, () => this.handleChange(this.state.selected));
 
-		if (!this.props.value) {
-			this.setState({selected: value});
+	toggleSelect = value => {
+		if (this.isSelected(value)) {
+			this.clear();
+		} else {
+			this.select(value);
 		}
-
-		this.handleChange(value);
-	}
+	};
 
 	clear = () => {
-		if (!this.props.value && this.props.allowEmpty) {
-			this.setState({selected: null}, this.handleChange);
+		if (this.props.allowEmpty) {
+			this.setState({selected: null}, () => this.handleChange(this.state.selected));
 		}
 	};
 
 	isSelected = value => {
-		if (this.props.value) {
-			return this.props.value === value;
-		}
+		const {selected} = this.state;
 
-		return this.state.selected === value;
+		return selected === value;
 	}
 
 	reset = () => {
-		this.select(this.getInitialValue());
+		this.select(this.getInitialSelection());
 	};
 
 	render() {
 		const {allItems} = this.props;
-		const {select, clear, isSelected, reset} = this;
-		const value = this.getValue();
+		const {selected} = this.state;
 		const selectedItem = this.getSelectedItem();
-		const hasSelection = selectedItem !== null;
+		const hasSelection = Boolean(selectedItem);
+
+		if (this.props.persistent) {
+			window.sessionStorage.setItem(this.props.persistent, selected);
+		}
 
 		return this.props.children({
-			select,
-			clear,
-			isSelected,
-			reset,
+			select: this.select,
+			clear: this.clear,
+			isSelected: this.isSelected,
+			reset: this.reset,
+			toggleSelect: this.toggleSelect,
+			value: selected, /* @TODO: deprecate */
 			hasSelection,
 			allItems,
 			selectedItem,
-			value
+			selected
 		});
 	}
 }
