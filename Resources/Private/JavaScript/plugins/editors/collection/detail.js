@@ -9,13 +9,14 @@
  * For the full copyright and license information, please read the
  * LICENSE.md file that was distributed with this source code.
  */
-import React, {Component} from 'shim/react';
+import React, {Fragment, Component} from 'shim/react';
 import styled from 'shim/styled-components';
 
 import Button from '../../../ui/primitives/button';
 import Icon from '../../../ui/primitives/icon';
 
 import Transient from '../../../core/util/transient';
+import Confirm from '../../../core/util/confirm';
 
 import EditorManager from '../../../core/plugin/editorManager';
 import ShortViewManager from '../../../core/plugin/shortViewManager';
@@ -170,12 +171,39 @@ export default class Detail extends Component {
 					</ShortView>
 					<Operations>
 						{/* @TODO: This is a desctructive operation - the user needs to confirm this */}
-						<Button
-							className={item.hasMode('remove') ? 'neos-button-success' : 'neos-button-danger'}
-							onClick={() => item.toggleMode('remove')}
+						<Confirm
+							question={
+								<Fragment>
+									Möchten Sie{' '}
+									<ShortViewManager
+										name={shortView}
+										options={shortViewOptions}
+										nodeType={nodeType}
+										label={label}
+										properties={item.payload.properties.reduce((properties, property) => {
+											if (transient.has(property.name)) {
+												properties[property.name] = transient.get(property.name);
+											} else {
+												properties[property.name] = property.value;
+											}
+
+											return properties;
+										}, {})}
+									/>
+									{' '}wirklich löschen?
+								</Fragment>
+							}
+							onConfirm={() => item.toggleMode('remove')}
 						>
-							<Icon className={item.hasMode('remove') ? 'icon-recycle' : 'icon-trash'}/>
-						</Button>
+							{confirm => (
+								<Button
+									className={item.hasMode('remove') ? 'neos-button-success' : 'neos-button-danger'}
+									onClick={confirm.show}
+								>
+									<Icon className={item.hasMode('remove') ? 'icon-recycle' : 'icon-trash'}/>
+								</Button>
+							)}
+						</Confirm>
 						<Button
 							onClick={() => item.toggleMode(item.payload.isHidden ? 'show' : 'hide')}
 						>
