@@ -50,10 +50,10 @@ class CollectionService
         // Create all nodes that are marked for creation
         //
         $createdNodes = [];
-        foreach ($payload as $item) {
+        foreach ($payload as $index => $item) {
             if (in_array('add', $item['modes']) && !array_key_exists($item['identifier'], $removedNodes)) {
                 $itemNode = $collectionNode->createNode(
-                    $nodeService->generateUniqueNodeName($collectionNode, 'item'),
+                    $nodeService->generateUniqueNodeName($collectionNode, 'item-' . $index),
                     $this->nodeTypeManager->getNodeType($item['payload']['nodeType'])
                 );
 
