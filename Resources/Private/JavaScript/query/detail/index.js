@@ -32,6 +32,7 @@ export const GET_DETAIL = gql`
 						name
 					}
 					hasUnpublishedChanges
+					previewUri
 				}
 				tabs {
 					name

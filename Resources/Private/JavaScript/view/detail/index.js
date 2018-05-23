@@ -55,6 +55,14 @@ const renderParent = (parent, index, parents) => {
 	}
 };
 
+const HeaderGroup = styled.div`
+
+`;
+const Header = styled.div`
+	display: flex;
+	justify-content: space-between;
+`;
+
 const Body = styled.div`
 	padding: 0 54px!important;
 `;
@@ -125,7 +133,20 @@ export default class DetailView extends Component {
 			<Tabs tabs={store.objectDetail.tabs} persistent={`detailView-tabs-${objectIdentifier}`}>
 				{tab => (
 					<Layout
-						renderHeader={tab.renderTabsHeader}
+						renderHeader={() => (
+							<Header>
+								<HeaderGroup>{tab.renderTabsHeader()}</HeaderGroup>
+								<HeaderGroup>
+									<a href={store.objectDetail.object.previewUri} target="_blank">
+										<Button>
+											<Icon className="icon-external-link"/>
+											{/* @TODO: I18n */}
+											Vorschau
+										</Button>
+									</a>
+								</HeaderGroup>
+							</Header>
+						)}
 						renderFooter={() => this.renderFooter({
 							store,
 							transient,
