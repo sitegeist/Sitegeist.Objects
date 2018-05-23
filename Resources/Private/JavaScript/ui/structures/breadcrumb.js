@@ -63,7 +63,7 @@ const Breadcrumb = ({items}) => ReactDOM.createPortal(
 		].map((item, index, list) => (
 			<li key={item.link}>
 				<UniversalLink to={item.link} className={item.isActive ? 'active' : ''}>
-					<i className={item.icon}/>
+					<i className={item.icon} style={{marginRight: index > 1 ? '4px' : null}}/>
 					{item.label}
 				</UniversalLink>
 				{index === list.length - 1 ? '' : (
