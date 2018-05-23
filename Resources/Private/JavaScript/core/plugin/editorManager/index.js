@@ -30,7 +30,7 @@ const Indicator = styled.div`
 	position: absolute;
 	top: 1.75em;
 	left: -9px;
-	bottom: 1em;
+	bottom: 2em;
 	width: 4px;
 	${props => {
 		if (props.isDirty) {
