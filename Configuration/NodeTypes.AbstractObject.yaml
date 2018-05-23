@@ -1,2 +1,4 @@
 'Sitegeist.Objects:AbstractObject':
   abstract: true
+  superTypes:
+    'Sitegeist.Objects:Node': true

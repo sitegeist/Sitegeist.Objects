@@ -1,11 +1,9 @@
 'Sitegeist.Objects:Store':
   superTypes:
-    'Neos.Neos:Node': true
+    'Sitegeist.Objects:Node': true
   constraints:
     nodeTypes:
       '*': false
-      'Sitegeist.Objects:Store': true
-      'Sitegeist.Objects:Object': true
   properties:
     title:
       type: string

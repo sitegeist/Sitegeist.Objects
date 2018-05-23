@@ -1,0 +1,4 @@
+'Sitegeist.Objects:Node':
+  abstract: true
+  superType:
+    'Neos.Neos:Node': true

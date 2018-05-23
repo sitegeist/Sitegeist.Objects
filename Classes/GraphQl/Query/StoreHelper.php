@@ -90,12 +90,18 @@ class StoreHelper
     /**
      * Get parent nodes
      *
-     * @return array<NodeInterface>
+     * @return \Generator<NodeInterface>
      */
     public function getParents()
     {
         $flowQuery = new FlowQuery([$this->node]);
-        return $flowQuery->parentsUntil('[instanceof Sitegeist.Objects:Root]')->get();
+
+        $parentNode = $this->node->getParent();
+
+        while ($parentNode->getNodeType()->isOfType('Sitegeist.Objects:Node')) {
+            yield $parentNode;
+            $parentNode = $parentNode->getParent();
+        }
     }
 
     /**

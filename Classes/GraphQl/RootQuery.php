@@ -88,10 +88,12 @@ class RootQuery extends ObjectType
                     ],
                     'resolve' => function($_, $arguments) {
                         $contentContext = $this->contentContextFactory->create($arguments['context']);
-                        $rootNode = $contentContext->getRootNode()->getNode($this->rootNodeName);
+                        $query = $this->queryBuilder
+                            ->query($contentContext->getRootNode())
+                            ->nodeType('Sitegeist.Objects:RootStore');
 
-                        foreach($rootNode->getChildNodes('Sitegeist.Objects:Store') as $storeNode) {
-                            yield new StoreHelper($storeNode);
+                        foreach($query->execute() as $result) {
+                            yield new StoreHelper($result);
                         }
                     }
                 ],
