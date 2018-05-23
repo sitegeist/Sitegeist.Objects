@@ -17,10 +17,11 @@ const Overlay = styled.div`
 	left: 0;
 	bottom: 0;
 	right: 0;
-	background-color: rgba(0, 0, 0, .7);
+	background-color: rgba(0, 0, 0, .85);
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	z-index: 100000;
 `;
 
 export default Overlay;

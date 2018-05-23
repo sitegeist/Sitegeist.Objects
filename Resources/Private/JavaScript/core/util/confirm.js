@@ -71,7 +71,6 @@ export default class Confirm extends Component {
 										Ja
 									</Button>
 									<Button
-										className="neos-button-warning"
 										onClick={() => {
 											open.setFalse();
 											this.handleCancellation();
