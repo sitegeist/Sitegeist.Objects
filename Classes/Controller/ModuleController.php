@@ -29,6 +29,12 @@ class ModuleController extends AbstractModuleController
     protected $endpointConfigurations;
 
     /**
+     * @Flow\InjectConfiguration(path="plugins")
+     * @var array
+     */
+    protected $plugins;
+
+    /**
      * @Flow\Inject
      * @var UserService
      */
@@ -46,5 +52,15 @@ class ModuleController extends AbstractModuleController
 
         $this->view->assign('apiEndpoint', '/' . $apiEndpoint);
         $this->view->assign('workspaceName', $this->userService->getPersonalWorkspaceName());
+
+        $additionalJavaScriptFiles = [];
+        foreach($this->plugins as $plugin) {
+            $additionalJavaScriptFiles = array_merge(
+                $additionalJavaScriptFiles,
+                $plugin
+            );
+        }
+
+        $this->view->assign('additionalJavaScriptFiles', $additionalJavaScriptFiles);
     }
 }
