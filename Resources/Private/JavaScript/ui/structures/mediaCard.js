@@ -43,7 +43,7 @@ const Card = styled.div`
 	> :first-child {
 		cursor: move;
 		width: 100px;
-		padding: 0 10px;
+		margin-right: 10px;
 
 		i {
 			font-size: 100px !important;
