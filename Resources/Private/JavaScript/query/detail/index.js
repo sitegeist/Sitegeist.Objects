@@ -31,6 +31,7 @@ export const GET_DETAIL = gql`
 					nodeType {
 						name
 					}
+					hasUnpublishedChanges
 				}
 				tabs {
 					name

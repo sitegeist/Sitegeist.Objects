@@ -214,7 +214,6 @@ export default class Operations extends Component {
 					</PublishObjectsMutation>
 				)}
 			</History>
-
 		);
 	}
 

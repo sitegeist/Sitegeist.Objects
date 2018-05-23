@@ -28,6 +28,7 @@ import Group from '../../ui/structures/group';
 import Layout from '../../ui/layout';
 
 import Controller from './controller';
+import Operations from './operations';
 
 /**
  * @TODO: renderParent Redundancy
@@ -164,77 +165,15 @@ export default class DetailView extends Component {
 		);
 	}
 
-	renderFooter = ({
-		store,
-		transient,
-		isBusy,
-		createObjectMutation,
-		createObjectAndContinueMutation,
-		updateObjectMutation,
-		removeObjectMutation
-	}) => (
-		<ButtonList>
-			<Condition condition={Boolean(store.objectDetail.object.identifier)}>
-				<Button
-					disabled={isBusy || !transient.hasValues}
-					onClick={() => updateObjectMutation.updateObject(transient.values)}
-				>
-					<Icon className="icon-save"/>
-					Speichern
-				</Button>
-			</Condition>
+	renderFooter = ({store, transient}) => {
+		const {storeIdentifier} = this.props;
 
-			<Condition condition={!store.objectDetail.object.identifier}>
-				<Button
-					disabled={isBusy || !transient.hasValues}
-					onClick={() => createObjectMutation.createObject(transient.values)}
-				>
-					<Icon className="icon-plus"/>
-					{/* @TODO: I18n */}
-					Erstellen
-				</Button>
-			</Condition>
-
-			<Condition condition={!store.objectDetail.object.identifier}>
-				<Button
-					disabled={isBusy || !transient.hasValues}
-					onClick={() => {
-						createObjectAndContinueMutation.createObject(transient.values);
-						transient.reset();
-					}}
-				>
-					<Icon className="icon-plus"/>
-					{/* @TODO: I18n */}
-					Erstellen & weiter
-				</Button>
-			</Condition>
-
-			<Condition condition={transient.hasValues}>
-				<Button disabled={isBusy} onClick={transient.reset}>
-					<Icon className="icon-undo"/>
-					{/* @TODO: I18n */}
-					Zurücksetzen
-				</Button>
-			</Condition>
-
-			<Condition condition={Boolean(store.objectDetail.object.identifier)}>
-				<Confirm
-					question={`Wollen Sie ${store.objectDetail.object.label} wirklich löschen?`}
-					onConfirm={removeObjectMutation.removeObject}
-				>
-					{confirm => (
-						<Button
-							disabled={isBusy}
-							className="neos-button-danger"
-							onClick={confirm.show}
-						>
-							<Icon className="icon-trash"/>
-							{/* @TODO: I18n */}
-							Löschen
-						</Button>
-					)}
-				</Confirm>
-			</Condition>
-		</ButtonList>
-	);
+		return (
+			<Operations
+				storeIdentifier={storeIdentifier}
+				object={store.objectDetail.object}
+				transient={transient}
+			/>
+		);
+	}
 }
