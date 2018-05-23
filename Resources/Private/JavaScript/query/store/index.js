@@ -67,6 +67,7 @@ export const GET_STORE = gql`
 						isRemoved
 						isHidden
 						hasUnpublishedChanges
+						previewUri
 					}
 					tableCells {
 						value

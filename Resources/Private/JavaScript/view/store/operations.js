@@ -59,6 +59,9 @@ export default class Operations extends Component {
 					{selection.length === 1 ?
 						this.renderCopy(selection[0]) : null
 					}
+					{selection.length === 1 && selection[0].previewUri ?
+						this.renderPreview(selection[0]) : null
+					}
 					{hidableItems.length > 0 ?
 						this.renderHide(hidableItems) : null
 					}
@@ -83,6 +86,7 @@ export default class Operations extends Component {
 			<Link to={`/store/${storeIdentifier}/edit/${item.identifier}`}>
 				<Button>
 					<Icon className="icon-pencil"/>
+					{/* @TODO: I18n */}
 					Bearbeiten
 				</Button>
 			</Link>
@@ -109,6 +113,7 @@ export default class Operations extends Component {
 								disable={result.loading}
 							>
 								<Icon className="icon-copy"/>
+								{/* @TODO: I18n */}
 								Kopieren
 							</Button>
 						)}
@@ -116,6 +121,18 @@ export default class Operations extends Component {
 				)}
 			</History>
 
+		);
+	}
+
+	renderPreview(item) {
+		return (
+			<a href={item.previewUri} target="_blank">
+				<Button>
+					<Icon className="icon-pencil"/>
+					{/* @TODO: I18n */}
+					Vorschau
+				</Button>
+			</a>
 		);
 	}
 
@@ -136,6 +153,7 @@ export default class Operations extends Component {
 								disable={result.loading}
 							>
 								<Icon className="icon-eye-close"/>
+								{/* @TODO: I18n */}
 								Verstecken{hidableItems.length > 1 ? ` (${hidableItems.length})` : ''}
 							</Button>
 						)}
@@ -162,6 +180,7 @@ export default class Operations extends Component {
 								disabled={result.loading}
 							>
 								<Icon className="icon-eye"/>
+								{/* @TODO: I18n */}
 								Anzeigen{showableItems.length > 1 ? ` (${showableItems.length})` : ''}
 							</Button>
 						)}
@@ -188,6 +207,7 @@ export default class Operations extends Component {
 								disabled={result.loading}
 							>
 								<Icon className="icon-globe"/>
+								{/* @TODO: I18n */}
 								Veröffentlichen{publishableItems.length > 1 ? ` (${publishableItems.length})` : ''}
 							</Button>
 						)}
@@ -216,6 +236,7 @@ export default class Operations extends Component {
 								disabled={result.loading}
 							>
 								<Icon className="icon-trash"/>
+								{/* @TODO: I18n */}
 								Verwerfen{publishableItems.length > 1 ? ` (${publishableItems.length})` : ''}
 							</Button>
 						)}

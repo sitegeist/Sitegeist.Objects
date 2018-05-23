@@ -63,6 +63,10 @@ class ObjectQuery extends ObjectType
                     'type' => Type::boolean(),
                     'description' => 'Does the object have unpublished changes?'
                 ],
+                'previewUri' => [
+                    'type' => Type::string(),
+                    'description' => 'Preview Uri for this object'
+                ],
                 'properties' => [
                     'type' => JsonScalar::type(),
                     'description' => 'All properties of this object'

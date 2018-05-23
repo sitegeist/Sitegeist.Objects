@@ -14,8 +14,13 @@ namespace Sitegeist\Objects\Service;
  */
 
 use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Http\Request;
+use Neos\Flow\Http\Uri;
+use Neos\Flow\Mvc\Routing\UriBuilder;
+use Neos\Flow\Mvc\ActionRequest;
 use Neos\Utility\ObjectAccess;
 use Neos\Eel\Helper\StringHelper;
+use Neos\Neos\Domain\Service\NodeShortcutResolver;
 use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\ContentRepository\Domain\Service\NodeTypeManager;
 use Neos\ContentRepository\Domain\Service\NodeServiceInterface;
@@ -56,6 +61,12 @@ class NodeService
      * @var CollectionService
      */
     protected $collectionService;
+
+    /**
+     * @Flow\Inject
+     * @var NodeShortcutResolver
+     */
+    protected $nodeShortcutResolver;
 
     /**
      * For debugging purposes only!
@@ -169,5 +180,47 @@ class NodeService
             $this->publishingService->discardNode($unpublishedNode);
             yield $unpublishedNode;
         }
+    }
+
+    /**
+     * Get the URI to a given node
+     *
+     * @param NodeInterface $node
+     * @param boolean $resolveShortcuts
+     * @return string The rendered URI
+     * @throws \Exception
+     */
+    public function buildUriFromNode(NodeInterface $node, $resolveShortcuts = true)
+    {
+        if ($resolveShortcuts) {
+            $resolvedNode = $this->nodeShortcutResolver->resolveShortcutTarget($node);
+        } else {
+            $resolvedNode = $node;
+        }
+
+        if (is_string($resolvedNode)) {
+            return $resolvedNode;
+        }
+
+        if (!$resolvedNode instanceof NodeInterface) {
+            throw new \Exception(
+                sprintf('Could not resolve shortcut target for node "%s"', $node->getPath()),
+                1527066615
+            );
+        }
+
+        //
+        // Create a dummy parent request
+        //
+        $httpRequest = Request::create(new Uri('http://neos.io'));
+        $request = new ActionRequest($httpRequest);
+
+        $uriBuilder = new UriBuilder();
+        $uriBuilder->setRequest($request);
+
+        return $uriBuilder
+            ->reset()
+            ->setFormat($request->getFormat())
+            ->uriFor('show', array('node' => $resolvedNode), 'Frontend\Node', 'Neos.Neos');
     }
 }

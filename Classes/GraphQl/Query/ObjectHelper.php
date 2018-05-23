@@ -16,6 +16,7 @@ namespace Sitegeist\Objects\GraphQl\Query;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Persistence\PersistenceManagerInterface;
 use Neos\Eel\FlowQuery\FlowQuery;
+use Neos\Eel\Helper\StringHelper;
 use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\ContentRepository\Domain\Model\NodeType;
 use Neos\Neos\Service\Mapping\NodePropertyConverterService;
@@ -52,6 +53,12 @@ class ObjectHelper
      * @var PersistenceManagerInterface
      */
     protected $persistenceManager;
+
+    /**
+     * @Flow\Inject
+     * @var StringHelper
+     */
+    protected $stringHelper;
 
     /**
      * Protected Constructor: Use factory methods below!
@@ -224,6 +231,22 @@ class ObjectHelper
         }
 
         return false;
+    }
+
+    /**
+     * @TODO: method comment
+     *
+     * @return string|null
+     */
+    public function getPreviewUri()
+    {
+        if (
+            $this->hasNode() &&
+            $this->nodeType->isOfType('Neos.Neos:Document') &&
+            $this->stringHelper->startsWith($this->node->getPath(), '/sites')
+        ) {
+            return $this->nodeService->buildUriFromNode($this->node);
+        }
     }
 
     /**
