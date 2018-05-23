@@ -53,5 +53,3 @@ window.Sitegeist.Objects.plugin = {
 	shortViews: {},
 	registerShortView
 };
-
-console.log(window.Sitegeist.Objects);
