@@ -23,13 +23,13 @@ import Icon from '../../ui/primitives/icon';
 import Button from '../../ui/primitives/button';
 import ButtonList from '../../ui/primitives/buttonList';
 import Breadcrumb from '../../ui/structures/breadcrumb';
-import NumberInput from '../../ui/primitives/numberInput';
 import SelectBox from '../../ui/structures/selectBox';
 import Table from '../../ui/structures/table';
 
 import Layout from '../../ui/layout';
 
 import Filter from './filter';
+import Header from './header';
 import Operations from './operations';
 
 const HeaderPanel = styled.div`
@@ -38,21 +38,6 @@ const HeaderPanel = styled.div`
 		display: block;
 		margin-right: 10px!important;
 	}
-`;
-
-const Pagination = styled.div`
-	> *:not(:first-child) {
-		margin-left: 40px;
-	}
-`;
-
-const PageInput = styled(NumberInput)`
-	width: 80px!important;
-	margin: 0 8px!important;
-`;
-
-const Form = styled.form`
-	display: inline-block;
 `;
 
 const defaultPageSize = 10;
@@ -188,55 +173,19 @@ export default class StoreView extends Component {
 					}
 				]}
 			/>
-			<HeaderPanel>
-				<Transient initial={{search: this.state.query.search}}>
-					{searchState => (
-						<form onSubmit={() => this.handleSearch(searchState.get('search'))}>
-							<input
-								type="text"
-								placeholder="Suchbegriff..."
-								value={searchState.get('search')}
-								onChange={event => searchState.add('search', event.target.value)}
-							/>
-							<Button>
-								<Icon className="icon-search"/>
-							</Button>
-						</form>
-					)}
-				</Transient>
-
-				<ButtonList>
-					{/* @TODO: NodeType Selector */}
-					<Link to={`/store/${this.props.identifier}/create/${store.nodeType.allowedChildNodeTypes[0].name}`}>
-						<Button>
-							{/* @TODO. I18n */}
-							<Icon className="icon-plus"/>
-							Neu erstellen
-						</Button>
-					</Link>
-
-					<Filter
-						filterConfiguration={store.objectIndex.filterConfiguration}
-						filters={this.state.query.filters || []}
-						onChange={this.handleFilterChange}
-					/>
-				</ButtonList>
-
-				<Operations
-					storeIdentifier={this.props.identifier}
-					selection={this.state.selection.map(identifier => {
-						const [item] = store.objectIndex.tableRows.filter(
-							({object}) => object.identifier === identifier
-						);
-
-						if (item) {
-							return item.object;
-						}
-
-						return null;
-					}).filter(i => i)}
-				/>
-			</HeaderPanel>
+			<Header
+				initialSearchTerm={this.state.query.search}
+				filterConfiguration={store.objectIndex.filterConfiguration}
+				filters={this.state.query.filters || []}
+				page={Math.ceil(this.state.query.from / this.state.query.length)}
+				pages={Math.ceil(store.objectIndex.totalNumberOfRows / this.state.query.length)}
+				pageSize={this.state.query.length}
+				pageSizeOptions={[5, 10, 20, 50, 100]}
+				onSearch={this.handleSearch}
+				onFilterChange={this.handleFilterChange}
+				onPageChange={this.handlePageChange}
+				onPageSizeChange={this.handlePageSizeChange}
+			/>
 		</React.Fragment>
 	)
 
@@ -317,49 +266,22 @@ export default class StoreView extends Component {
 	}
 
 	renderFooter = store => {
-		const {query} = this.state;
-		const pageSize = query.length;
-		const page = Math.ceil(query.from / query.length);
-		const pages = Math.ceil(store.objectIndex.totalNumberOfRows / query.length);
-		const pageSizeOptions = [5, 10, 20, 50, 100];
-
 		return (
-			<Pagination>
-				<Button onClick={() => this.handlePageChange(page - 1)} disabled={!this.state.query.from}>
-					{/* @TODO: I18n */}
-					Vorherige Seite
-				</Button>
-				<Condition condition={pages > 1}>
-					<Transient initial={{value: page + 1}}>
-						{page => (
-							<Form onSubmit={() => this.handlePageChange(page.get('value') - 1)}>
-							Seite
-								<PageInput
-									value={page.get('value')}
-									onChange={event => page.add('value', parseInt(event.target.value, 10))}
-									onClick={event => event.target.select()}
-								/>
-							von {pages}
-							</Form>
-						)}
-					</Transient>
-				</Condition>
-				<SelectBox
-					allItems={pageSizeOptions.map(option => ({
-						name: `${option}-items-per-page`,
-						data: {
-							label: `${option} Einträge pro Seite`, /* @TODO: I18n */
-							value: option
-						}
-					}))}
-					value={`${pageSize}-items-per-page`}
-					onChange={({data}) => this.handlePageSizeChange(data.value)}
-				/>
-				<Button onClick={() => this.handlePageChange(page + 1)} disabled={page === pages - 1}>
-					{/* @TODO: I18n */}
-					Nächste Seite
-				</Button>
-			</Pagination>
+			<Operations
+				storeIdentifier={this.props.identifier}
+				nodeTypeForCreation={store.nodeType.allowedChildNodeTypes[0].name}
+				selection={this.state.selection.map(identifier => {
+					const [item] = store.objectIndex.tableRows.filter(
+						({object}) => object.identifier === identifier
+					);
+
+					if (item) {
+						return item.object;
+					}
+
+					return null;
+				}).filter(i => i)}
+			/>
 		);
 	}
 }

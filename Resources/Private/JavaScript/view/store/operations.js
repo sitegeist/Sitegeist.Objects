@@ -12,22 +12,47 @@
 import React, {Fragment, Component} from 'shim/react';
 import PropTypes from 'shim/prop-types';
 import {Link} from 'react-router-dom';
+import styled from 'shim/styled-components';
 
-import ButtonList from '../../ui/primitives/buttonList';
-import Button from '../../ui/primitives/button';
-import Icon from '../../ui/primitives/icon';
+import History from '../../core/history';
+import Confirm from '../../core/util/confirm';
 
 import HideObjectsMutation from '../../mutation/hideObjects';
 import ShowObjectsMutation from '../../mutation/showObjects';
 import DiscardObjectsMutation from '../../mutation/discardObjects';
 import PublishObjectsMutation from '../../mutation/publishObjects';
 import CopyObjectMutation from '../../mutation/copyObject';
-import History from '../../core/history';
+
+import ButtonList from '../../ui/primitives/buttonList';
+import Button from '../../ui/primitives/button';
+import Icon from '../../ui/primitives/icon';
+
+const Container = styled.div`
+	display: flex;
+	justify-content: space-between;
+`;
+
+const List = styled.ul`
+	list-style-type: circle;
+	padding-left: 16px!important;
+	margin: 16px 0!important;
+
+	li {
+		display: flex;
+		align-items: center;
+		margin-bottom: 8px;
+	}
+
+	${Icon} {
+		margin-right: 10px;
+	}
+`;
 
 export default class Operations extends Component {
 	static propTypes = {
 		selection: PropTypes.array.isRequired,
-		storeIdentifier: PropTypes.string.isRequired
+		storeIdentifier: PropTypes.string.isRequired,
+		nodeTypeForCreation: PropTypes.string.isRequired
 	};
 
 	reloadStore = (history, storeIdentifier) => () => {
@@ -50,33 +75,52 @@ export default class Operations extends Component {
 		const hidableItems = selection.filter(item => !item.isHidden);
 		const publishableItems = selection.filter(item => item.hasUnpublishedChanges);
 
-		return selection[0] ? (
-			<Fragment>
+		return (
+			<Container>
 				<ButtonList>
-					{selection.length === 1 ?
-						this.renderEdit(selection[0]) : null
+					{selection.length === 0 ?
+						this.renderCreate() : null
 					}
 					{selection.length === 1 ?
-						this.renderCopy(selection[0]) : null
+						this.renderEdit(selection[0]) : null
 					}
 					{selection.length === 1 && selection[0].previewUri ?
 						this.renderPreview(selection[0]) : null
 					}
+					{selection.length === 1 ?
+						this.renderCopy(selection[0]) : null
+					}
 					{hidableItems.length > 0 ?
 						this.renderHide(hidableItems) : null
 					}
-					{hidableItems.length === 0 ?
+					{selection.length > 0 && hidableItems.length === 0 ?
 						this.renderShow(selection) : null
 					}
 				</ButtonList>
-				{publishableItems.length > 0 ? (
-					<ButtonList>
-						{this.renderPublish(publishableItems)}
-						{this.renderDiscard(publishableItems)}
-					</ButtonList>
-				) : null}
-			</Fragment>
-		) : null;
+				<ButtonList>
+					{publishableItems.length > 0 ?
+						this.renderPublish(publishableItems) : null
+					}
+					{publishableItems.length > 0 ?
+						this.renderDiscard(publishableItems) : null
+					}
+				</ButtonList>
+			</Container>
+		);
+	}
+
+	renderCreate() {
+		const {storeIdentifier, nodeTypeForCreation} = this.props;
+
+		return (
+			<Link to={`/store/${storeIdentifier}/create/${nodeTypeForCreation}`}>
+				<Button>
+					{/* @TODO. I18n */}
+					<Icon className="icon-plus"/>
+					Neu erstellen
+				</Button>
+			</Link>
+		);
 	}
 
 	renderEdit(item) {
@@ -128,7 +172,7 @@ export default class Operations extends Component {
 		return (
 			<a href={item.previewUri} target="_blank">
 				<Button>
-					<Icon className="icon-pencil"/>
+					<Icon className="icon-external-link"/>
 					{/* @TODO: I18n */}
 					Vorschau
 				</Button>
@@ -202,14 +246,35 @@ export default class Operations extends Component {
 						onCompleted={this.reloadStore(history, storeIdentifier)}
 					>
 						{({result, publishObjects}) => (
-							<Button
-								onClick={publishObjects}
-								disabled={result.loading}
+							<Confirm
+								question={
+									<Fragment>
+										{/* @TODO. I18n */}
+										Möchten Sie die Objekte
+										<List>
+											{publishableItems.map(item => (
+												<li key={item.identifier}>
+													<Icon className={item.icon}/>
+													{item.label}
+												</li>
+											))}
+										</List>
+										wirklich veröffentlichen?
+									</Fragment>
+								}
+								onConfirm={publishObjects}
 							>
-								<Icon className="icon-globe"/>
-								{/* @TODO: I18n */}
-								Veröffentlichen{publishableItems.length > 1 ? ` (${publishableItems.length})` : ''}
-							</Button>
+								{confirm => (
+									<Button
+										onClick={confirm.show}
+										disabled={result.loading}
+									>
+										<Icon className="icon-globe"/>
+										{/* @TODO: I18n */}
+										Veröffentlichen{publishableItems.length > 1 ? ` (${publishableItems.length})` : ''}
+									</Button>
+								)}
+							</Confirm>
 						)}
 					</PublishObjectsMutation>
 				)}
@@ -229,15 +294,37 @@ export default class Operations extends Component {
 						onCompleted={this.reloadStore(history, storeIdentifier)}
 					>
 						{({result, discardObjects}) => (
-							<Button
-								onClick={discardObjects}
-								className="neos-button-warning"
-								disabled={result.loading}
+							<Confirm
+								question={
+									<Fragment>
+										{/* @TODO. I18n */}
+										Möchten Sie die Objekte
+										<List>
+											{publishableItems.map(item => (
+												<li key={item.identifier}>
+													<Icon className={item.icon}/>
+													{item.label}
+												</li>
+											))}
+										</List>
+										wirklich verwerfen?
+									</Fragment>
+								}
+								onConfirm={discardObjects}
 							>
-								<Icon className="icon-trash"/>
-								{/* @TODO: I18n */}
-								Verwerfen{publishableItems.length > 1 ? ` (${publishableItems.length})` : ''}
-							</Button>
+								{confirm => (
+									<Button
+										onClick={confirm.show}
+										className="neos-button-warning"
+										disabled={result.loading}
+									>
+										<Icon className="icon-trash"/>
+										{/* @TODO: I18n */}
+										Verwerfen{publishableItems.length > 1 ? ` (${publishableItems.length})` : ''}
+									</Button>
+								)}
+							</Confirm>
+
 						)}
 					</DiscardObjectsMutation>
 				)}
