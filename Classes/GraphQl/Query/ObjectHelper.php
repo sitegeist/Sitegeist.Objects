@@ -252,6 +252,25 @@ class ObjectHelper
     /**
      * @TODO: method comment
      *
+     * @return string|null
+     */
+    public function getFrontendUri()
+    {
+        if (
+            $this->hasNode() &&
+            $this->nodeType->isOfType('Neos.Neos:Document') &&
+            $this->stringHelper->startsWith($this->node->getPath(), '/sites')
+        ) {
+            $flowQuery = new FlowQuery([$this->node]);
+            $nodeInLiveWorkspace = $flowQuery->context(['workspaceName' => 'live'])->get(0);
+
+            return $this->nodeService->buildUriFromNode($nodeInLiveWorkspace);
+        }
+    }
+
+    /**
+     * @TODO: method comment
+     *
      * @param array  $arguments
      * @return mixed
      */

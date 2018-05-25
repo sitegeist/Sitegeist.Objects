@@ -67,6 +67,10 @@ class ObjectQuery extends ObjectType
                     'type' => Type::string(),
                     'description' => 'Preview Uri for this object'
                 ],
+                'frontendUri' => [
+                    'type' => Type::string(),
+                    'description' => 'Frontend Uri for this object'
+                ],
                 'properties' => [
                     'type' => JsonScalar::type(),
                     'description' => 'All properties of this object'
