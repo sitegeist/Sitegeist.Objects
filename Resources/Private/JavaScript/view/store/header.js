@@ -52,7 +52,7 @@ const PageInput = styled(NumberInput)`
 export default class Header extends Component {
 	static propTypes = {
 		initialSearchTerm: PropTypes.string,
-		filterConfiguration: PropTypes.object.isRequired,
+		filterConfiguration: PropTypes.array.isRequired,
 		filters: PropTypes.array,
 		page: PropTypes.number.isRequired,
 		pages: PropTypes.number.isRequired,
