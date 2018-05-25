@@ -16,13 +16,23 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 //
+// @TODO: There has to be a better way
+//
+import container, {constants, dropHandlers} from '../../../node_modules/smooth-dnd';
+
+//
 // Expose Runtime dependencies
 //
 window.Sitegeist.Objects.runtime = {
 	React,
 	ReactDOM,
 	PropTypes,
-	styled
+	styled,
+	smoothDnd: {
+		container,
+		constants,
+		dropHandlers
+	}
 };
 
 const {registerEditor} = require('./core/plugin/editorManager');
