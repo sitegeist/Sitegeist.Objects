@@ -79,7 +79,7 @@ class StoreHelper
         //
         if (!$node->getNodeType()->isOfType('Sitegeist.Objects:Store')) {
             throw new \InvalidArgumentException(
-                sprintf('NodeType "%s" must inherit from "Sitegeist.Objects:Store"', $nodeType->getName()),
+                sprintf('NodeType "%s" must inherit from "Sitegeist.Objects:Store"', $node->getNodeType()->getName()),
                 1524931043
             );
         }
