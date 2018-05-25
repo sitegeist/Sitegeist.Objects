@@ -121,7 +121,7 @@ class CollectionService
         foreach ($payload as $item) {
             if ((
                     in_array('move-before', $item['modes']) || in_array('move-after', $item['modes'])
-            ) && !array_key_exists($item['identifier'], $removedNodes)) {
+            ) && !array_key_exists($item['identifier'], $removedNodes) && array_key_exists('moveReference', $item)) {
                 $itemNode = null;
                 if (array_key_exists($item['identifier'], $createdNodes)) {
                     $itemNode = $createdNodes[$item['identifier']];
