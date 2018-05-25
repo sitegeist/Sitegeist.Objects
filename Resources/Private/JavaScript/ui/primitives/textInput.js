@@ -12,10 +12,36 @@
 import React from 'shim/react';
 import styled from 'shim/styled-components';
 
-const Input = styled.input`
-	width: 100%!important;
+const Container = styled.div`
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+
+	label {
+		flex-grow: 1;
+		background-color: #3f3f3f;
+		cursor: text!important;
+		margin-bottom: 0!important;
+	}
+
+	input {
+		width: 100%;
+		flex-grow: 0;
+	}
+
+	input:focus + label {
+		background-color: #fff;
+	}
 `;
 
-const TextInput = props => <Input type="text" {...props}/>;
+const Input = ({id, ...props}) => (
+	<Container>
+		<input id={id} type="text" {...props}/>
+		<label htmlFor={id}/>
+	</Container>
+);
+
+const TextInput = styled(Input)`
+`;
 
 export default TextInput;
