@@ -26,7 +26,7 @@ import Condition from './condition';
  */
 export default class Confirm extends Component {
 	static propTypes = {
-		question: PropTypes.string.isRequired,
+		question: PropTypes.node.isRequired,
 		onConfirm: PropTypes.func,
 		onCancel: PropTypes.func,
 		children: PropTypes.func
