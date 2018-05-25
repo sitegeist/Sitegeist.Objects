@@ -17,9 +17,6 @@ import createController from '../../core/controller';
 import Transient from '../../core/util/transient';
 
 import DetailQuery from '../../query/detail';
-import CreateObjectMutation from '../../mutation/createObject';
-import UpdateObjectMutation from '../../mutation/updateObject';
-import RemoveObjectMutation from '../../mutation/removeObject';
 
 export default createController({
 	propTypes: {
@@ -27,7 +24,7 @@ export default createController({
 		objectIdentifier: PropTypes.string,
 		nodeType: PropTypes.string
 	},
-	components: ({storeIdentifier, objectIdentifier, nodeType, history}) => ({
+	components: ({storeIdentifier, objectIdentifier, nodeType}) => ({
 		detailQuery: (
 			<DetailQuery
 				storeIdentifier={storeIdentifier}
@@ -35,73 +32,9 @@ export default createController({
 				nodeType={nodeType}
 			/>
 		),
-		createObjectMutation: (
-			<CreateObjectMutation
-				storeIdentifier={storeIdentifier}
-				nodeType={nodeType}
-				onCompleted={({store}) => {
-					/* @TODO: Flash Message */
-					/**
-					 * @TODO: Workaround as per
-					 *        https://github.com/ReactTraining/react-router/issues/1982#issuecomment-314167564
-					 *        Everybody seems to make their libraries defensive as hell nowadays... 🙄
-					 *        I know it's wrong to do this at this point, but I do not have an alternative, since the
-					 *        Apollo Cache Invalidation doesn't work properly.
-					 */
-					history.push(`/empty`);
-					setTimeout(() => {
-						history.replace(`/store/${storeIdentifier}/edit/${store.createObject.identifier}`);
-					});
-				}}
-			/>
-		),
-		createObjectAndContinueMutation: (
-			<CreateObjectMutation
-				storeIdentifier={storeIdentifier}
-				nodeType={nodeType}
-				onCompleted={() => {
-					/* @TODO: Flash Message */
-				}}
-			/>
-		),
-		updateObjectMutation: (
-			<UpdateObjectMutation
-				storeIdentifier={storeIdentifier}
-				objectIdentifier={objectIdentifier}
-				onCompleted={() => {
-					/* @TODO: Flash Message */
-					/**
-					 * @TODO: Workaround as per
-					 *        https://github.com/ReactTraining/react-router/issues/1982#issuecomment-314167564
-					 *        Everybody seems to make their libraries defensive as hell nowadays... 🙄
-					 *        I know it's wrong to do this at this point, but I do not have an alternative, since the
-					 *        Apollo Cache Invalidation doesn't work properly.
-					 */
-					history.push(`/empty`);
-					setTimeout(() => {
-						history.replace(`/store/${storeIdentifier}/edit/${objectIdentifier}`);
-					});
-				}}
-			/>
-		),
-		removeObjectMutation: (
-			<RemoveObjectMutation
-				storeIdentifier={storeIdentifier}
-				objectIdentifier={objectIdentifier}
-				onCompleted={() => {
-					/* @TODO: Flash Message */
-					history.push(`/store/${storeIdentifier}`);
-				}}
-			/>
-		),
 		transient: (<Transient/>)
 	}),
-	mapProps: ({detailQuery, createObjectMutation, createObjectAndContinueMutation, updateObjectMutation}) => ({
-		isBusy: (
-			(createObjectMutation.status && createObjectMutation.status.loading) ||
-			(createObjectAndContinueMutation.status && createObjectAndContinueMutation.status.loading) ||
-			(updateObjectMutation.status && updateObjectMutation.status.loading)
-		),
+	mapProps: ({detailQuery}) => ({
 		store: detailQuery.store
 	})
 });
