@@ -19,7 +19,7 @@ window.Sitegeist.Objects.plugin.registerEditor('Boolean', class BooleanEditor ex
 		id: PropTypes.string.isRequired,
 		label: PropTypes.string.isRequired,
 		commit: PropTypes.func.isRequired,
-		value: PropTypes.string
+		value: PropTypes.bool
 	};
 
 	static defaultProps = {
