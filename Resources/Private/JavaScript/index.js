@@ -50,6 +50,7 @@ import './plugins/filterEditors/date';
 // Core Short Views
 //
 import './plugins/shortViews/dateRange';
+import './plugins/shortViews/value';
 
 const {appContainer} = window.Sitegeist.Objects;
 
