@@ -49,18 +49,18 @@ const Toggler = styled.div`
 `;
 
 const IconAndLabel = styled.div`
-	width: 100px;
+	width: 32px;
 	flex-grow: 0;
 	flex-shrink: 0;
+	justify-content: center;
 
 	${Icon} {
 		cursor: move;
-		margin-right: 8px;
 	}
 `;
 
 const ShortView = styled.div`
-	width: calc(100% - 228px);
+	width: calc(100% - 160px);
 	flex-grow: 0;
 	flex-shrink: 0;
 `;
@@ -150,7 +150,6 @@ export default class Detail extends Component {
 					</Toggler>
 					<IconAndLabel>
 						<Icon className={item.payload.icon}/>
-						{item.payload.label}
 					</IconAndLabel>
 					<ShortView>
 						<ShortViewManager
