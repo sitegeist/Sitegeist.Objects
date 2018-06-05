@@ -153,7 +153,9 @@ class StoreHelper
     public function getObjects(array $arguments)
     {
         $query = $this->queryBuilder->query($this->node)
-            ->nodeType('Sitegeist.Objects:Object')->exactMatch('__parentNode', $this->node->getIdentifier());
+            ->nodeType('Sitegeist.Objects:Object')
+            ->exactMatch('__workspace', $this->node->getContext()->getWorkspace()->getName())
+            ->exactMatch('__parentNode', $this->node->getIdentifier());
 
         if (array_key_exists('search', $arguments) && $arguments['search']) {
             $query = $query->fullText($arguments['search']);
@@ -205,7 +207,8 @@ class StoreHelper
         // @TODO: Workaround for invalid queries
         //
         try {
-            return [$query->execute(), $query->count()];
+            $result = $query->execute();
+            return [$result, $result->count()];
         } catch (\Exception $e) {
             return [[], 0];
         }
