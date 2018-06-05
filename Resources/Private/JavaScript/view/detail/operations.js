@@ -14,6 +14,7 @@ import PropTypes from 'shim/prop-types';
 import styled from 'shim/styled-components';
 
 import History from '../../core/history';
+import {publishFlashMessage} from '../../core/flashMessage';
 import Confirm from '../../core/util/confirm';
 
 import CreateObjectMutation from '../../mutation/createObject';
@@ -85,8 +86,13 @@ export default class Operations extends Component {
 					<UpdateObjectMutation
 						storeIdentifier={storeIdentifier}
 						objectIdentifier={object.identifier}
-						onCompleted={() => {
-							/* @TODO: Flash Message */
+						onCompleted={({store}) => {
+							publishFlashMessage({
+								severity: 'success',
+								/* @TODO: I18n */
+								message: `"${store.object.update.label}" wurde erfolgreich gespeichert.`,
+								timeout: 5000
+							});
 							this.reloadDetail(history, storeIdentifier, object.identifier);
 						}}
 					>
@@ -119,7 +125,12 @@ export default class Operations extends Component {
 						storeIdentifier={storeIdentifier}
 						objectIdentifiers={[object.identifier]}
 						onCompleted={() => {
-							/* @TODO: Flash Message */
+							publishFlashMessage({
+								severity: 'success',
+								/* @TODO: I18n */
+								message: `"${object.label}" wurde erfolgreich veröffentlicht.`,
+								timeout: 5000
+							});
 							this.reloadDetail(history, storeIdentifier, object.identifier);
 						}}
 					>
@@ -157,7 +168,12 @@ export default class Operations extends Component {
 						storeIdentifier={storeIdentifier}
 						objectIdentifiers={[object.identifier]}
 						onCompleted={() => {
-							/* @TODO: Flash Message */
+							publishFlashMessage({
+								severity: 'success',
+								/* @TODO: I18n */
+								message: `"${object.label}" wurde erfolgreich veröffentlicht.`,
+								timeout: 5000
+							});
 							this.reloadDetail(history, storeIdentifier, object.identifier);
 						}}
 					>
@@ -203,7 +219,12 @@ export default class Operations extends Component {
 						storeIdentifier={storeIdentifier}
 						objectIdentifiers={[object.identifier]}
 						onCompleted={() => {
-							/* @TODO: Flash Message */
+							publishFlashMessage({
+								severity: 'success',
+								/* @TODO: I18n */
+								message: `"${object.label}" wurde erfolgreich verworfen.`,
+								timeout: 5000
+							});
 							this.reloadDetail(history, storeIdentifier, object.identifier);
 						}}
 					>
@@ -245,7 +266,12 @@ export default class Operations extends Component {
 						storeIdentifier={storeIdentifier}
 						nodeType={object.nodeType.name}
 						onCompleted={({store}) => {
-							/* @TODO: Flash Message */
+							publishFlashMessage({
+								severity: 'success',
+								/* @TODO: I18n */
+								message: `"${store.createObject.label}" wurde erfolgreich erstellt.`,
+								timeout: 5000
+							});
 							this.reloadDetail(history, storeIdentifier, store.createObject.identifier);
 						}}
 					>
@@ -287,7 +313,12 @@ export default class Operations extends Component {
 						storeIdentifier={storeIdentifier}
 						objectIdentifier={object.identifier}
 						onCompleted={() => {
-							/* @TODO: Flash Message */
+							publishFlashMessage({
+								severity: 'success',
+								/* @TODO: I18n */
+								message: `"${object.label}" wurde erfolgreich gelöscht.`,
+								timeout: 5000
+							});
 							history.push(`/store/${storeIdentifier}`);
 						}}
 					>

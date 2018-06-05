@@ -9,10 +9,11 @@
  * For the full copyright and license information, please read the
  * LICENSE.md file that was distributed with this source code.
  */
-import React, {Component} from 'shim/react';
+import React, {Component, Fragment} from 'shim/react';
 import PropTypes from 'shim/prop-types';
 
 import ApolloProvider from '../apollo';
+import FlashMessageManager from '../flashMessage';
 
 const {csrfToken$, apiEndpoint} = window.Sitegeist.Objects;
 
@@ -35,9 +36,13 @@ class Application extends Component {
 		const {csrfToken} = this.state;
 
 		return (
-			<ApolloProvider csrfToken={csrfToken} apiEndpoint={apiEndpoint}>
-				{this.props.children}
-			</ApolloProvider>
+			<Fragment>
+				<FlashMessageManager/>
+				<ApolloProvider csrfToken={csrfToken} apiEndpoint={apiEndpoint}>
+					{this.props.children}
+				</ApolloProvider>
+			</Fragment>
+
 		);
 	}
 }
