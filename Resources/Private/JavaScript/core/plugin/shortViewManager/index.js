@@ -21,7 +21,7 @@ export default class ShortViewManager extends Component {
 		name: PropTypes.string.isRequired,
 		properties: PropTypes.object.isRequired,
 		nodeType: PropTypes.shape({
-			icon: PropTypes.string.isRequired,
+			icon: PropTypes.string,
 			label: PropTypes.string.isRequired
 		}).isRequired,
 		label: PropTypes.string.isRequired,
