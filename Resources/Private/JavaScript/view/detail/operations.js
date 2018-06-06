@@ -16,6 +16,7 @@ import styled from 'shim/styled-components';
 import History from '../../core/history';
 import {publishFlashMessage} from '../../core/flashMessage';
 import Confirm from '../../core/util/confirm';
+import convertProperties from '../../core/plugin/converterManager';
 
 import CreateObjectMutation from '../../mutation/createObject';
 import UpdateObjectMutation from '../../mutation/updateObject';
@@ -96,10 +97,13 @@ export default class Operations extends Component {
 							this.reloadDetail(history, storeIdentifier, object.identifier);
 						}}
 					>
-						{updateObjectMutation => (
+						{({execute}) => (
 							<Button
 								disabled={!transient.hasValues}
-								onClick={() => updateObjectMutation.updateObject(transient.values)}
+								onClick={async () => {
+									const properties = await convertProperties(transient.values);
+									execute({properties});
+								}}
 							>
 								<Icon className="icon-save"/>
 								Speichern
@@ -134,11 +138,11 @@ export default class Operations extends Component {
 							this.reloadDetail(history, storeIdentifier, object.identifier);
 						}}
 					>
-						{({publishObjects}) => (
+						{({execute}) => (
 							/* @TODO: I18n */
 							<Confirm
 								question={`Wollen Sie ihre Änderungen an "${object.label}" wirklich veröffentlichen?`}
-								onConfirm={publishObjects}
+								onConfirm={() => execute()}
 							>
 								{confirm => (
 									<Button
@@ -177,17 +181,20 @@ export default class Operations extends Component {
 							this.reloadDetail(history, storeIdentifier, object.identifier);
 						}}
 					>
-						{publishObjectsMutation => (
+						{({execute}) => (
 							<UpdateObjectMutation
 								storeIdentifier={storeIdentifier}
 								objectIdentifier={object.identifier}
-								onCompleted={publishObjectsMutation.publishObjects}
+								onCompleted={() => execute()}
 							>
-								{updateObjectMutation => (
+								{({execute}) => (
 									/* @TODO: I18n */
 									<Confirm
 										question={`Wollen Sie ihre Änderungen an "${object.label}" wirklich veröffentlichen?`}
-										onConfirm={() => updateObjectMutation.updateObject(transient.values)}
+										onClick={async () => {
+											const properties = await convertProperties(transient.values);
+											execute({properties});
+										}}
 									>
 										{confirm => (
 											<Button
@@ -228,13 +235,13 @@ export default class Operations extends Component {
 							this.reloadDetail(history, storeIdentifier, object.identifier);
 						}}
 					>
-						{({discardObjects}) => (
+						{({execute}) => (
 							/* @TODO: I18n */
 							<Confirm
 								question={`Wollen Sie ihre Änderungen an "${object.label}" wirklich verwerfen?`}
 								onConfirm={() => {
 									transient.reset();
-									discardObjects();
+									execute();
 								}}
 							>
 								{confirm => (
@@ -275,10 +282,13 @@ export default class Operations extends Component {
 							this.reloadDetail(history, storeIdentifier, store.createObject.identifier);
 						}}
 					>
-						{createObjectMutation => (
+						{({execute}) => (
 							<Button
 								disabled={!transient.hasValues}
-								onClick={() => createObjectMutation.createObject(transient.values)}
+								onClick={async () => {
+									const properties = await convertProperties(transient.values);
+									execute({properties});
+								}}
 							>
 								<Icon className="icon-plus"/>
 								{/* @TODO: I18n */}
@@ -322,10 +332,10 @@ export default class Operations extends Component {
 							history.push(`/store/${storeIdentifier}`);
 						}}
 					>
-						{removeObjectMutation => (
+						{({execute}) => (
 							<Confirm
 								question={`Wollen Sie ${object.label} wirklich löschen?`}
-								onConfirm={removeObjectMutation.removeObject}
+								onConfirm={() => execute()}
 							>
 								{confirm => (
 									<Button

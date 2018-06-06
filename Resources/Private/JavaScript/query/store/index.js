@@ -9,14 +9,11 @@
  * For the full copyright and license information, please read the
  * LICENSE.md file that was distributed with this source code.
  */
-import React from 'shim/react';
-import {Query} from 'react-apollo';
-import gql from 'graphql-tag';
 import PropTypes from 'shim/prop-types';
 
-import Layout from '../../ui/layout';
+import {query} from '../../core/graphql/gql';
 
-export const GET_STORE = gql`
+const GetStoreQuery = query/* GraphQL */`
 	query getStore(
 		$context: ContentContextInput!,
 		$identifier: ID!,
@@ -77,35 +74,6 @@ export const GET_STORE = gql`
 		}
 	}
 `;
-
-/* @TODO: PropTypes */
-const GetStoreQuery = ({children, context, identifier, from, length, sort, order, search, filters}) => (
-	<Query
-		query={GET_STORE}
-		variables={{context, identifier, from, length, sort, order, search, filters}}
-	>
-		{({loading, error, data}) => {
-			//
-			// @TODO: Better load handling
-			//
-			if (loading) {
-				return (
-					<Layout
-						renderHeader={() => null}
-						renderFooter={() => null}
-					>
-						{() => 'Loading...'}
-					</Layout>
-				);
-			}
-			if (error) {
-				return `Error: ${error}`;
-			}
-
-			return children(data);
-		}}
-	</Query>
-);
 
 GetStoreQuery.propTypes = {
 	context: PropTypes.shape({

@@ -9,12 +9,11 @@
  * For the full copyright and license information, please read the
  * LICENSE.md file that was distributed with this source code.
  */
-import React from 'shim/react';
-import {Query} from 'react-apollo';
-import gql from 'graphql-tag';
 import PropTypes from 'shim/prop-types';
 
-export const GET_COLLECTION = gql`
+import {query} from '../../../core/graphql/gql';
+
+const GetCollectionQuery = query/* GraphQL */`
 	query getCollection(
 		$context: ContentContextInput!,
 		$storeIdentifier: ID!,
@@ -47,27 +46,6 @@ export const GET_COLLECTION = gql`
 		}
 	}
 `;
-
-const GetCollectionQuery = ({children, context, storeIdentifier, objectIdentifier, nodeType, itemNodeType, collectionName}) => (
-	<Query
-		query={GET_COLLECTION}
-		variables={{context, storeIdentifier, objectIdentifier, nodeType, itemNodeType, collectionName}}
-	>
-		{({loading, error, data}) => {
-			//
-			// @TODO: Better load handling
-			//
-			if (loading) {
-				return 'Loading...';
-			}
-			if (error) {
-				return `Error: ${error}`;
-			}
-
-			return children(data);
-		}}
-	</Query>
-);
 
 GetCollectionQuery.propTypes = {
 	context: PropTypes.shape({

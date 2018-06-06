@@ -11,6 +11,7 @@
  */
 import React, {Component} from 'shim/react';
 import {Link} from 'react-router-dom';
+import lru from 'lru-cache';
 
 import StoresQuery from '../../query/stores';
 
@@ -21,9 +22,15 @@ import Message from '../../ui/primitives/message';
 import Breadcrumb from '../../ui/structures/breadcrumb';
 
 export default class StoresView extends Component {
+	componentDidMount() {
+		if (!this.cache) {
+			this.cache = lru(1);
+		}
+	}
+
 	render() {
 		return (
-			<StoresQuery>
+			<StoresQuery cache={this.cache}>
 				{({stores}) => {
 					if (stores.length > 0) {
 						return (

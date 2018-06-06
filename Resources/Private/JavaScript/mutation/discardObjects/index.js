@@ -9,12 +9,11 @@
  * For the full copyright and license information, please read the
  * LICENSE.md file that was distributed with this source code.
  */
-import React from 'shim/react';
-import {Mutation} from 'react-apollo';
-import gql from 'graphql-tag';
 import PropTypes from 'shim/prop-types';
 
-export const DISCARD_OBJECTS = gql`
+import {mutation} from '../../core/graphql/gql';
+
+const DiscardObjectsMutation = mutation/* GraphQL */`
 	mutation discardObjects(
 		$context: ContentContextInput!,
 		$storeIdentifier: ID!,
@@ -32,17 +31,6 @@ export const DISCARD_OBJECTS = gql`
 		}
 	}
 `;
-
-const DiscardObjectsMutation = ({onCompleted, context, storeIdentifier, objectIdentifiers, children}) => (
-	<Mutation mutation={DISCARD_OBJECTS} onCompleted={onCompleted}>
-		{(mutation, {loading, called, data}) => children({
-			result: {loading, called, data},
-			discardObjects: () => mutation({
-				variables: {context, storeIdentifier, objectIdentifiers}
-			})
-		})}
-	</Mutation>
-);
 
 DiscardObjectsMutation.propTypes = {
 	onCompleted: PropTypes.func,

@@ -127,7 +127,7 @@ export default class Header extends Component {
 					Vorherige Seite
 				</Button>
 				{pages > 1 ? (
-					<Transient initial={{value: page + 1}}>
+					<Transient value={{value: page + 1}}>
 						{page => (
 							<PageForm onSubmit={() => onPageChange(page.get('value') - 1)}>
 								{/* @TODO: I18n */}

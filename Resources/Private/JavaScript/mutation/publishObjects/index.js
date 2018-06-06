@@ -9,12 +9,11 @@
  * For the full copyright and license information, please read the
  * LICENSE.md file that was distributed with this source code.
  */
-import React from 'shim/react';
-import {Mutation} from 'react-apollo';
-import gql from 'graphql-tag';
 import PropTypes from 'shim/prop-types';
 
-export const PUBLISH_OBJECTS = gql`
+import {mutation} from '../../core/graphql/gql';
+
+const PublishObjectsMutation = mutation/* GraphQL */`
 	mutation publishObjects(
 		$context: ContentContextInput!,
 		$storeIdentifier: ID!,
@@ -32,17 +31,6 @@ export const PUBLISH_OBJECTS = gql`
 		}
 	}
 `;
-
-const PublishObjectsMutation = ({onCompleted, context, storeIdentifier, objectIdentifiers, children}) => (
-	<Mutation mutation={PUBLISH_OBJECTS} onCompleted={onCompleted}>
-		{(mutation, {loading, called, data}) => children({
-			result: {loading, called, data},
-			publishObjects: () => mutation({
-				variables: {context, storeIdentifier, objectIdentifiers}
-			})
-		})}
-	</Mutation>
-);
 
 PublishObjectsMutation.propTypes = {
 	onCompleted: PropTypes.func,

@@ -151,11 +151,8 @@ export default class Operations extends Component {
 							history.push(`/store/${storeIdentifier}/edit/${copy.identifier}`);
 						}}
 					>
-						{({result, copyObject}) => (
-							<Button
-								onClick={copyObject}
-								disable={result.loading}
-							>
+						{({execute}) => (
+							<Button onClick={execute}>
 								<Icon className="icon-copy"/>
 								{/* @TODO: I18n */}
 								Kopieren
@@ -191,11 +188,8 @@ export default class Operations extends Component {
 						objectIdentifiers={hidableItems.map(item => item.identifier)}
 						onCompleted={this.reloadStore(history, storeIdentifier)}
 					>
-						{({result, hideObjects}) => (
-							<Button
-								onClick={hideObjects}
-								disable={result.loading}
-							>
+						{({execute}) => (
+							<Button onClick={() => execute()}>
 								<Icon className="icon-eye-close"/>
 								{/* @TODO: I18n */}
 								Verstecken{hidableItems.length > 1 ? ` (${hidableItems.length})` : ''}
@@ -218,11 +212,8 @@ export default class Operations extends Component {
 						objectIdentifiers={showableItems.map(item => item.identifier)}
 						onCompleted={this.reloadStore(history, storeIdentifier)}
 					>
-						{({result, showObjects}) => (
-							<Button
-								onClick={showObjects}
-								disabled={result.loading}
-							>
+						{({execute}) => (
+							<Button onClick={() => execute()}>
 								<Icon className="icon-eye"/>
 								{/* @TODO: I18n */}
 								Anzeigen{showableItems.length > 1 ? ` (${showableItems.length})` : ''}
@@ -245,7 +236,7 @@ export default class Operations extends Component {
 						objectIdentifiers={publishableItems.map(item => item.identifier)}
 						onCompleted={this.reloadStore(history, storeIdentifier)}
 					>
-						{({result, publishObjects}) => (
+						{({execute}) => (
 							<Confirm
 								question={
 									<Fragment>
@@ -262,13 +253,10 @@ export default class Operations extends Component {
 										wirklich veröffentlichen?
 									</Fragment>
 								}
-								onConfirm={publishObjects}
+								onConfirm={() => execute()}
 							>
 								{confirm => (
-									<Button
-										onClick={confirm.show}
-										disabled={result.loading}
-									>
+									<Button onClick={confirm.show}>
 										<Icon className="icon-globe"/>
 										{/* @TODO: I18n */}
 										Veröffentlichen{publishableItems.length > 1 ? ` (${publishableItems.length})` : ''}
@@ -293,7 +281,7 @@ export default class Operations extends Component {
 						objectIdentifiers={publishableItems.map(item => item.identifier)}
 						onCompleted={this.reloadStore(history, storeIdentifier)}
 					>
-						{({result, discardObjects}) => (
+						{({execute}) => (
 							<Confirm
 								question={
 									<Fragment>
@@ -310,13 +298,12 @@ export default class Operations extends Component {
 										wirklich verwerfen?
 									</Fragment>
 								}
-								onConfirm={discardObjects}
+								onConfirm={() => execute()}
 							>
 								{confirm => (
 									<Button
 										onClick={confirm.show}
 										className="neos-button-warning"
-										disabled={result.loading}
 									>
 										<Icon className="icon-trash"/>
 										{/* @TODO: I18n */}

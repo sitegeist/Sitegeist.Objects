@@ -78,10 +78,12 @@ window.Sitegeist.Objects.plugin.registerEditor('Collection', class CollectionEdi
 	}
 
 	renderCollection(store) {
+		const {value} = this.props;
+
 		return (
 			<Collection
 				onChange={this.handleChange}
-				initialValue={store.objectDetail.collection.objectDetails.map(objectDetail => ({
+				value={value && value.payload ? value.payload : store.objectDetail.collection.objectDetails.map(objectDetail => ({
 					identifier: objectDetail.object.identifier,
 					payload: {
 						icon: objectDetail.object.icon,
@@ -132,6 +134,7 @@ window.Sitegeist.Objects.plugin.registerEditor('Collection', class CollectionEdi
 					)}
 				</DragAndDropList>
 				<EmptyCollectionItemQuery
+					key={`collection-empty-${name}`}
 					storeIdentifier={storeIdentifier}
 					objectIdentifier={objectIdentifier}
 					nodeType={nodeType}

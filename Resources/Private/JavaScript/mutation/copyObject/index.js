@@ -9,12 +9,11 @@
  * For the full copyright and license information, please read the
  * LICENSE.md file that was distributed with this source code.
  */
-import React from 'shim/react';
-import {Mutation} from 'react-apollo';
-import gql from 'graphql-tag';
 import PropTypes from 'shim/prop-types';
 
-export const COPY_OBJECT = gql`
+import {mutation} from '../../core/graphql/gql';
+
+const CopyObjectMutation = mutation/* GraphQL */`
 	mutation copyObject(
 		$context: ContentContextInput!,
 		$storeIdentifier: ID!,
@@ -33,17 +32,6 @@ export const COPY_OBJECT = gql`
 		}
 	}
 `;
-
-const CopyObjectMutation = ({onCompleted, context, storeIdentifier, objectIdentifier, children}) => (
-	<Mutation mutation={COPY_OBJECT} onCompleted={onCompleted}>
-		{(mutation, {loading, called, data}) => children({
-			result: {loading, called, data},
-			copyObject: () => mutation({
-				variables: {context, storeIdentifier, objectIdentifier}
-			})
-		})}
-	</Mutation>
-);
 
 CopyObjectMutation.propTypes = {
 	onCompleted: PropTypes.func,

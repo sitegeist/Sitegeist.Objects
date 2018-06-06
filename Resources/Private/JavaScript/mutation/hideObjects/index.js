@@ -9,12 +9,11 @@
  * For the full copyright and license information, please read the
  * LICENSE.md file that was distributed with this source code.
  */
-import React from 'shim/react';
-import {Mutation} from 'react-apollo';
-import gql from 'graphql-tag';
 import PropTypes from 'shim/prop-types';
 
-export const HIDE_OBJECTS = gql`
+import {mutation} from '../../core/graphql/gql';
+
+const HideObjectsMutation = mutation/* GraphQL */`
 	mutation hideObjects(
 		$context: ContentContextInput!,
 		$storeIdentifier: ID!,
@@ -32,17 +31,6 @@ export const HIDE_OBJECTS = gql`
 		}
 	}
 `;
-
-const HideObjectsMutation = ({onCompleted, context, storeIdentifier, objectIdentifiers, children}) => (
-	<Mutation mutation={HIDE_OBJECTS} onCompleted={onCompleted}>
-		{(mutation, {loading, called, data}) => children({
-			result: {loading, called, data},
-			hideObjects: () => mutation({
-				variables: {context, storeIdentifier, objectIdentifiers}
-			})
-		})}
-	</Mutation>
-);
 
 HideObjectsMutation.propTypes = {
 	onCompleted: PropTypes.func,

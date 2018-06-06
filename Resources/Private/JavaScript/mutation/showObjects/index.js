@@ -9,12 +9,11 @@
  * For the full copyright and license information, please read the
  * LICENSE.md file that was distributed with this source code.
  */
-import React from 'shim/react';
-import {Mutation} from 'react-apollo';
-import gql from 'graphql-tag';
 import PropTypes from 'shim/prop-types';
 
-export const SHOW_OBJECTS = gql`
+import {mutation} from '../../core/graphql/gql';
+
+const ShowObjectsMutation = mutation/* GraphQL */`
 	mutation showObjects(
 		$context: ContentContextInput!,
 		$storeIdentifier: ID!,
@@ -32,17 +31,6 @@ export const SHOW_OBJECTS = gql`
 		}
 	}
 `;
-
-const ShowObjectsMutation = ({onCompleted, context, storeIdentifier, objectIdentifiers, children}) => (
-	<Mutation mutation={SHOW_OBJECTS} onCompleted={onCompleted}>
-		{(mutation, {loading, called, data}) => children({
-			result: {loading, called, data},
-			showObjects: () => mutation({
-				variables: {context, storeIdentifier, objectIdentifiers}
-			})
-		})}
-	</Mutation>
-);
 
 ShowObjectsMutation.propTypes = {
 	onCompleted: PropTypes.func,

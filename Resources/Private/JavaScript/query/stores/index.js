@@ -9,12 +9,11 @@
  * For the full copyright and license information, please read the
  * LICENSE.md file that was distributed with this source code.
  */
-import React from 'shim/react';
-import {Query} from 'react-apollo';
-import gql from 'graphql-tag';
 import PropTypes from 'shim/prop-types';
 
-export const GET_STORES = gql`
+import {query} from '../../core/graphql/gql';
+
+const GetStoresQuery = query/* GraphQL */`
 	query getStores($context: ContentContextInput!) {
 		stores(context: $context) {
 			identifier
@@ -25,27 +24,6 @@ export const GET_STORES = gql`
 		}
 	}
 `;
-
-const GetStoresQuery = ({children, context}) => (
-	<Query
-		query={GET_STORES}
-		variables={{context}}
-	>
-		{({loading, error, data}) => {
-			//
-			// @TODO: Better load handling
-			//
-			if (loading) {
-				return 'Loading...';
-			}
-			if (error) {
-				return `Error: ${error}`;
-			}
-
-			return children(data);
-		}}
-	</Query>
-);
 
 GetStoresQuery.propTypes = {
 	context: PropTypes.shape({

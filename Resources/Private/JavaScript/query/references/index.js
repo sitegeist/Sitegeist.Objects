@@ -9,12 +9,11 @@
  * For the full copyright and license information, please read the
  * LICENSE.md file that was distributed with this source code.
  */
-import React from 'shim/react';
-import {Query} from 'react-apollo';
-import gql from 'graphql-tag';
 import PropTypes from 'shim/prop-types';
 
-export const GET_REFERENCES = gql`
+import {query} from '../../core/graphql/gql';
+
+const GetReferencesQuery = query/* GraphQL */`
 	query getReferences(
 		$context: ContentContextInput!,
 		$search: String!,
@@ -37,27 +36,6 @@ export const GET_REFERENCES = gql`
 		}
 	}
 `;
-
-const GetReferencesQuery = ({children, context, search, searchRoot, nodeType, directChildrenOnly}) => (
-	<Query
-		query={GET_REFERENCES}
-		variables={{context, search, searchRoot, nodeType, directChildrenOnly}}
-	>
-		{({loading, error, data}) => {
-			//
-			// @TODO: Better load handling
-			//
-			if (loading) {
-				return 'Loading...';
-			}
-			if (error) {
-				return `Error: ${error}`;
-			}
-
-			return children(data);
-		}}
-	</Query>
-);
 
 GetReferencesQuery.propTypes = {
 	context: PropTypes.shape({

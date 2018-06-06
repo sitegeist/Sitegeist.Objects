@@ -9,14 +9,13 @@
  * For the full copyright and license information, please read the
  * LICENSE.md file that was distributed with this source code.
  */
-import React from 'shim/react';
-import {Mutation} from 'react-apollo';
-import gql from 'graphql-tag';
 import PropTypes from 'shim/prop-types';
+
+import {mutation} from '../../core/graphql/gql';
 
 import convertProperties from '../../core/plugin/converterManager';
 
-export const UPDATE_OBJECT = gql`
+const UpdateObjectMutation = mutation/* GraphQL */`
 	mutation createObject(
 		$context: ContentContextInput!,
 		$storeIdentifier: ID!,
@@ -35,21 +34,6 @@ export const UPDATE_OBJECT = gql`
 		}
 	}
 `;
-
-const UpdateObjectMutation = ({onCompleted, context, storeIdentifier, objectIdentifier, children}) => (
-	<Mutation mutation={UPDATE_OBJECT} onCompleted={onCompleted}>
-		{(mutation, {loading, called, data}) => children({
-			result: {loading, called, data},
-			updateObject: async rawProperties => {
-				const properties = await convertProperties(rawProperties);
-
-				mutation({
-					variables: {context, storeIdentifier, objectIdentifier, properties}
-				});
-			}
-		})}
-	</Mutation>
-);
 
 UpdateObjectMutation.propTypes = {
 	onCompleted: PropTypes.func,

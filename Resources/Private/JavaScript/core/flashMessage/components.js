@@ -26,15 +26,17 @@ const FlashMessage = ({content, severity, message, onClose, ...props}) => (
 				<div className="neos-message">
 					<div
 						className={mergeClassNames({
-							'neos-notification-content expandable': true,
+							'neos-notification-content expandable': Boolean(content),
 							expanded: expanded.is
 						})}
 					>
 						<i className={`icon-${severity}`}/>
 						<div className="neos-notification-heading" onClick={expanded.toggle}>{message}</div>
-						<div className="neos-expand-content" style={{display: expanded.is ? 'block' : 'none'}}>
-							{content}
-						</div>
+						{content ? (
+							<div className="neos-expand-content" style={{display: expanded.is ? 'block' : 'none'}}>
+								{content}
+							</div>
+						) : null}
 					</div>
 				</div>
 			</div>

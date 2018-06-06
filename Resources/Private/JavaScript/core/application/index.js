@@ -12,37 +12,19 @@
 import React, {Component, Fragment} from 'shim/react';
 import PropTypes from 'shim/prop-types';
 
-import ApolloProvider from '../apollo';
 import FlashMessageManager from '../flashMessage';
-
-const {csrfToken$, apiEndpoint} = window.Sitegeist.Objects;
 
 class Application extends Component {
 	static propTypes = {
 		children: PropTypes.node.isRequired
 	};
 
-	state = {
-		csrfToken: window.Sitegeist.Objects.csrfToken
-	};
-
-	componentDidMount() {
-		csrfToken$.subscribe({
-			next: csrfToken => this.setState({csrfToken})
-		});
-	}
-
 	render() {
-		const {csrfToken} = this.state;
-
 		return (
 			<Fragment>
 				<FlashMessageManager/>
-				<ApolloProvider csrfToken={csrfToken} apiEndpoint={apiEndpoint}>
-					{this.props.children}
-				</ApolloProvider>
+				{this.props.children}
 			</Fragment>
-
 		);
 	}
 }

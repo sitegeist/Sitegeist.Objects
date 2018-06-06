@@ -13,6 +13,7 @@ import React, {Component} from 'shim/react';
 import PropTypes from 'shim/prop-types';
 import {Link} from 'react-router-dom';
 import styled from 'shim/styled-components';
+import lru from 'lru-cache';
 
 import Condition from '../../core/util/condition';
 import Transient from '../../core/util/transient';
@@ -94,6 +95,16 @@ export default class StoreView extends Component {
 	}
 
 	state = this.getInitialState();
+
+	componentDidMount() {
+		if (!this.cache) {
+			this.cache = lru(500);
+		}
+	}
+
+	componentWillUnmount() {
+		this.cache.reset();
+	}
 
 	handleSelection = ({items}) => {
 		this.setState({selection: items});
@@ -196,7 +207,7 @@ export default class StoreView extends Component {
 		window.sessionStorage.setItem(`storeView-${identifier}`, JSON.stringify({query}));
 
 		return (
-			<StoreQuery identifier={identifier} {...query}>
+			<StoreQuery cache={this.cache} identifier={identifier} {...query}>
 				{({store}) => (
 					<Layout
 						renderHeader={() => this.renderHeader(store)}

@@ -9,12 +9,11 @@
  * For the full copyright and license information, please read the
  * LICENSE.md file that was distributed with this source code.
  */
-import React from 'shim/react';
-import {Query} from 'react-apollo';
-import gql from 'graphql-tag';
 import PropTypes from 'shim/prop-types';
 
-export const GET_DETAIL = gql`
+import {query} from '../../core/graphql/gql';
+
+const GetDetailQuery = query/* GraphQL */`
 	query getDetail($context: ContentContextInput!, $storeIdentifier: ID!, $objectIdentifier: ID, $nodeType: String) {
 		store(context: $context, identifier: $storeIdentifier) {
 			objectDetail(nodeType: $nodeType, identifier: $objectIdentifier) {
@@ -55,27 +54,6 @@ export const GET_DETAIL = gql`
 		}
 	}
 `;
-
-const GetDetailQuery = ({children, context, nodeType, storeIdentifier, objectIdentifier}) => (
-	<Query
-		query={GET_DETAIL}
-		variables={{context, nodeType, storeIdentifier, objectIdentifier}}
-	>
-		{({loading, error, data}) => {
-			//
-			// @TODO: Better load handling
-			//
-			if (loading) {
-				return 'Loading...';
-			}
-			if (error) {
-				return `Error: ${error}`;
-			}
-
-			return children(data);
-		}}
-	</Query>
-);
 
 GetDetailQuery.propTypes = {
 	context: PropTypes.shape({
