@@ -9,195 +9,118 @@
  * For the full copyright and license information, please read the
  * LICENSE.md file that was distributed with this source code.
  */
-import React, {Component} from 'shim/react';
+import React, {Component, Fragment} from 'shim/react';
 import PropTypes from 'shim/prop-types';
-import styled from 'shim/styled-components';
+import invariant from 'invariant';
 
-import Condition from '../../core/util/condition';
-import Confirm from '../../core/util/confirm';
+import Transient from '../../core/util/transient';
+import {query} from '../../core/graphql/gql';
 
-import EditorManager from '../../core/plugin/editorManager';
-
-import Icon from '../../lib/presentation/primitives/icon';
-import Button from '../../lib/presentation/primitives/button';
-import ButtonList from '../../lib/presentation/primitives/buttonList';
 import Breadcrumb from '../../lib/presentation/structures/breadcrumb';
-import Tabs from '../../lib/presentation/structures/tabs';
-import Group from '../../lib/presentation/structures/group';
 
-import Layout from '../../lib/presentation/layout';
+import DetailView from './view';
 
-import Controller from './controller';
-import Operations from './operations';
-
-/**
- * @TODO: renderParent Redundancy
- */
-const renderParent = (parent, index, parents) => {
-	switch (parent.type) {
-		case 'object': {
-			const grandparent = parents[index - 1];
-
-			return {
-				icon: parent.icon,
-				label: parent.label,
-				link: `/${grandparent.type}/${grandparent.identifier}/edit/${parent.identifier}`
-			};
+const GetDetailQuery = query/* GraphQL */`
+	query getDetail($context: ContentContextInput!, $storeIdentifier: ID!, $objectIdentifier: ID, $nodeType: String) {
+		store(context: $context, identifier: $storeIdentifier) {
+			identifier
+			objectDetail(nodeType: $nodeType, identifier: $objectIdentifier) {
+				object {
+					identifier
+					parents {
+						type
+						identifier
+						icon
+						label
+					}
+					icon
+					label
+					nodeType {
+						name
+					}
+					hasUnpublishedChanges
+					previewUri
+				}
+				tabs {
+					name
+					icon
+					label
+					groups {
+						name
+						icon
+						label
+						properties {
+							name
+							label
+							value
+							editor
+							editorOptions
+						}
+					}
+				}
+			}
 		}
-
-		case 'store':
-		default:
-			return {
-				icon: parent.icon,
-				label: parent.label,
-				link: `/${parent.type}/${parent.identifier}`
-			};
 	}
+`;
+
+GetDetailQuery.defaultProps = {
+	/* @TODO: Better context handling */
+	context: window.Sitegeist.Objects.contentContext
 };
 
-const HeaderGroup = styled.div`
-
-`;
-const Header = styled.div`
-	display: flex;
-	justify-content: space-between;
-`;
-
-const Body = styled.div`
-	padding: 0 54px!important;
-	display: ${props => props.isVisible ? 'block' : 'none'};
-`;
-
-export default class DetailView extends Component {
+export default class extends Component {
 	static propTypes = {
 		storeIdentifier: PropTypes.string.isRequired,
-		nodeType: PropTypes.string,
-		objectIdentifier: PropTypes.string
+		objectIdentifier: PropTypes.string,
+		nodeType: PropTypes.string
 	};
 
 	static defaultProps = {
-		nodeType: null,
-		objectIdentifier: null
+		objectIdentifier: null,
+		nodeType: null
 	};
 
 	render() {
-		const {storeIdentifier, nodeType, objectIdentifier} = this.props;
+		const {storeIdentifier, objectIdentifier, nodeType} = this.props;
+
+		invariant(objectIdentifier || nodeType, 'Either objectIdentifier or nodeType must be set');
 
 		return (
-			<Controller
+			<GetDetailQuery
 				storeIdentifier={storeIdentifier}
 				objectIdentifier={objectIdentifier}
 				nodeType={nodeType}
-				forceUpdate={() => {
-					this.forceUpdate();
-				}}
 			>
-				{({
-					store,
-					...controller
-				}) => (
-					<React.Fragment>
-						{this.renderBreadCrumb(store)}
-						{this.renderBody({store, ...controller})}
-					</React.Fragment>
-				)}
-			</Controller>
-		);
-	}
+				{({store}) => {
+					const {object} = store.objectDetail;
 
-	renderBreadCrumb = store => {
-		const {storeIdentifier, objectIdentifier} = this.props;
-
-		return (
-			<Breadcrumb
-				items={[
-					...[...store.objectDetail.object.parents].reverse().map(renderParent),
-					{
-						icon: store.objectDetail.object.icon,
-						label: objectIdentifier ?
-							`${store.objectDetail.object.label} bearbeiten` : /* @TODO: I18n */
-							`Neues ${store.objectDetail.object.label} erstellen`, /* @TODO: I18n */
-						link: objectIdentifier ?
-							`/store/${storeIdentifier}/edit/${objectIdentifier}` :
-							`/store/${storeIdentifier}/create/${store.objectDetail.object.nodeType.name}`,
-						isActive: true
-					}
-				]}
-			/>
-		);
-	}
-
-	renderBody = ({store, transient, ...controller}) => {
-		const {storeIdentifier, nodeType, objectIdentifier} = this.props;
-
-		return (
-			<Tabs tabs={store.objectDetail.tabs} persistent={`detailView-tabs-${objectIdentifier}`}>
-				{({tabs, renderTabsHeader}) => (
-					<Layout
-						renderHeader={() => (
-							<Header>
-								<HeaderGroup>
-									{renderTabsHeader(tab => tab.groups.some(group => group.properties.some(
-										property => Boolean(transient.get(property.name))
-									)))}
-								</HeaderGroup>
-								<HeaderGroup>
-									<a href={store.objectDetail.object.previewUri} target="_blank">
-										<Button>
-											<Icon className="icon-external-link"/>
-											{/* @TODO: I18n */}
-											Vorschau
-										</Button>
-									</a>
-								</HeaderGroup>
-							</Header>
-						)}
-						renderFooter={() => this.renderFooter({
-							store,
-							transient,
-							...controller
-						})}
-					>
-						{() => tabs.map(tab => (
-							<Body key={tab.name} isVisible={tab.isSelected}>
-								{tab.groups.map(group => (
-									<Group
-										key={group.name}
-										headline={
-											<React.Fragment>
-												<Icon className={group.icon}/>
-												{group.label}
-											</React.Fragment>
-										}
-									>
-										{group.properties.map(property => (
-											<EditorManager
-												key={property.name}
-												name={property.editor}
-												property={property}
-												transient={transient}
-												storeIdentifier={storeIdentifier}
-												objectIdentifier={objectIdentifier}
-												nodeType={nodeType}
-											/>
-										))}
-									</Group>
-								))}
-							</Body>
-						))}
-					</Layout>
-				)}
-			</Tabs>
-		);
-	}
-
-	renderFooter = ({store, transient}) => {
-		return (
-			<Operations
-				store={store}
-				object={store.objectDetail.object}
-				transient={transient}
-			/>
+					return (
+						<Fragment>
+							<Breadcrumb
+								parents={object.parents}
+								current={{
+									icon: object.icon,
+									label: object.identifier ?
+										`${object.label} bearbeiten` : /* @TODO: I18n */
+										`Neues ${object.label} erstellen`, /* @TODO: I18n */
+									link: object.identifier ?
+										`/store/${store.identifier}/edit/${object.identifier}` :
+										`/store/${store.identifier}/create/${object.nodeType.name}`
+								}}
+							/>
+							<Transient>
+								{transient => (
+									<DetailView
+										store={store}
+										transient={transient}
+										{...store.objectDetail}
+									/>
+								)}
+							</Transient>
+						</Fragment>
+					);
+				}}
+			</GetDetailQuery>
 		);
 	}
 }

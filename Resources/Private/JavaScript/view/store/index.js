@@ -12,61 +12,20 @@
 import React, {Component} from 'shim/react';
 import PropTypes from 'shim/prop-types';
 import {Link} from 'react-router-dom';
-import styled from 'shim/styled-components';
 import lru from 'lru-cache';
-
-import Condition from '../../core/util/condition';
-import Transient from '../../core/util/transient';
 
 import StoreQuery from '../../query/store';
 
 import Icon from '../../lib/presentation/primitives/icon';
-import Button from '../../lib/presentation/primitives/button';
-import ButtonList from '../../lib/presentation/primitives/buttonList';
 import Breadcrumb from '../../lib/presentation/structures/breadcrumb';
-import SelectBox from '../../lib/presentation/structures/selectBox';
 import Table from '../../lib/presentation/structures/table';
 
 import Layout from '../../lib/presentation/layout';
 
-import Filter from './filter';
 import Header from './header';
 import Operations from './operations';
 
-const HeaderPanel = styled.div`
-	display: flex;
-	> * {
-		display: block;
-		margin-right: 10px!important;
-	}
-`;
-
 const defaultPageSize = 10;
-
-/**
- * @TODO: renderParent Redundancy
- */
-const renderParent = (parent, index, parents) => {
-	switch (parent.type) {
-		case 'object': {
-			const grandparent = parents[index - 1];
-
-			return {
-				icon: parent.icon,
-				label: parent.label,
-				link: `/${grandparent.type}/${grandparent.identifier}/edit/${parent.identifier}`
-			};
-		}
-
-		case 'store':
-		default:
-			return {
-				icon: parent.icon,
-				label: parent.label,
-				link: `/${parent.type}/${parent.identifier}`
-			};
-	}
-};
 
 export default class StoreView extends Component {
 	static propTypes = {
@@ -174,15 +133,13 @@ export default class StoreView extends Component {
 	renderHeader = store => (
 		<React.Fragment>
 			<Breadcrumb
-				items={[
-					...[...store.parents].reverse().map(renderParent),
-					{
-						icon: store.icon,
-						label: store.label,
-						link: `/store/${store.identifier}`,
-						isActive: true
-					}
-				]}
+				parents={store.parents}
+				current={{
+					icon: store.icon,
+					label: store.label,
+					link: `/store/${store.identifier}`,
+					isActive: true
+				}}
 			/>
 			<Header
 				initialSearchTerm={this.state.query.search}
@@ -211,9 +168,7 @@ export default class StoreView extends Component {
 				{({store}) => (
 					<Layout
 						renderHeader={() => this.renderHeader(store)}
-						renderFooter={() => this.renderFooter(store)}
-					>
-						{() => (
+						renderBody={() => (
 							<Table
 								onSelect={this.handleSelection}
 								columns={[{
@@ -270,7 +225,8 @@ export default class StoreView extends Component {
 								className="-highlight"
 							/>
 						)}
-					</Layout>
+						renderFooter={() => this.renderFooter(store)}
+					/>
 				)}
 			</StoreQuery>
 		);

@@ -17,6 +17,10 @@ const Button = styled.button`
 	display: inline-flex!important;
 	align-items: center!important;
 
+	${props => props.hasChanges && `
+		border-left: 4px solid #ce00a8!important;
+	`}
+
 	${Icon} {
 		${props => props.children.filter && props.children.filter(i => i).length > 1 && `
 			margin-right: 10px;

@@ -52,40 +52,66 @@ UniversalLink.propTypes = {
 	to: PropTypes.string.isRequired
 };
 
-const Breadcrumb = ({items}) => ReactDOM.createPortal(
+const renderParent = (parent, index, parents) => {
+	switch (parent.type) {
+		case 'object': {
+			const grandparent = parents[index - 1];
+
+			return {
+				icon: parent.icon,
+				label: parent.label,
+				link: `/${grandparent.type}/${grandparent.identifier}/edit/${parent.identifier}`
+			};
+		}
+
+		case 'store':
+		default:
+			return {
+				icon: parent.icon,
+				label: parent.label,
+				link: `/${parent.type}/${parent.identifier}`
+			};
+	}
+};
+
+const Breadcrumb = ({parents, current}) => ReactDOM.createPortal(
 	<React.Fragment>
 		{[
 			...originalElements.map(item => ({
 				...item,
-				isActive: item.isInitiallyActive && !items.some(item => item.isActive)
+				isActive: item.isInitiallyActive && !current.link
 			})),
-			...items
-		].map((item, index, list) => (
+			...[...parents].reverse().map(renderParent),
+			current.link ? {...current, isActive: true} : {}
+		].map((item, index) => item.link ? (
 			<li key={item.link}>
+				{index === 0 ? '' : (
+					<span className="neos-divider">/</span>
+				)}
 				<UniversalLink to={item.link} className={item.isActive ? 'active' : ''}>
 					<i className={item.icon} style={{marginRight: index > 1 ? '4px' : null}}/>
 					{item.label}
 				</UniversalLink>
-				{index === list.length - 1 ? '' : (
-					<span className="neos-divider">/</span>
-				)}
 			</li>
-		))}
+		) : null)}
 	</React.Fragment>,
 	breadcrumbContainer
 );
 
 Breadcrumb.propTypes = {
-	items: PropTypes.arrayOf(PropTypes.shape({
-		link: PropTypes.string.isRequired,
-		icon: PropTypes.string.isRequired,
-		label: PropTypes.string.isRequired,
+	/* @TODO: Be more precise than that */
+	parents: PropTypes.arrayOf(PropTypes.object),
+	current: PropTypes.shape({
+		link: PropTypes.string,
+		icon: PropTypes.string,
+		label: PropTypes.string,
 		isActive: PropTypes.bool
-	}))
+	})
 };
 
 Breadcrumb.defaultProps = {
-	items: []
+	parents: [],
+	current: {}
 };
 
 export default Breadcrumb;

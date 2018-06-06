@@ -60,6 +60,13 @@ export default class EditorManager extends Component {
 		nodeType: null
 	};
 
+	shouldComponentUpdate({transient}) {
+		const oldValue = this.props.transient.values[this.props.property.name];
+		const newValue = transient.values[this.props.property.name];
+
+		return (oldValue !== newValue);
+	}
+
 	render() {
 		const {name, options, transient, property, storeIdentifier, objectIdentifier, nodeType} = this.props;
 

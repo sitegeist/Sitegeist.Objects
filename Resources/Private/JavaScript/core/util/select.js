@@ -140,7 +140,12 @@ export default class Select extends Component {
 			hasSelection,
 			allItems,
 			selectedItem,
-			selected
+			selected,
+			map: mapFn => allItems.map(item => mapFn({
+				...item,
+				isSelected: this.isSelected(item.name),
+				select: () => this.select(item.name)
+			}))
 		});
 	}
 }

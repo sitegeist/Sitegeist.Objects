@@ -58,7 +58,7 @@ const Footer = styled.footer`
 export default class Layout extends Component {
 	static propTypes = {
 		renderHeader: PropTypes.func.isRequired,
-		children: PropTypes.func.isRequired,
+		renderBody: PropTypes.func.isRequired,
 		renderFooter: PropTypes.func.isRequired
 	};
 
@@ -69,7 +69,7 @@ export default class Layout extends Component {
 					{this.props.renderHeader()}
 				</Header>
 				<Body>
-					{this.props.children()}
+					{this.props.renderBody()}
 				</Body>
 				<Footer>
 					{this.props.renderFooter()}
