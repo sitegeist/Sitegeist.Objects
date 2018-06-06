@@ -15,9 +15,9 @@ export const registerConverter = (name, converterFunction) => {
 
 export default async function convertPropertiesRecursively(value) {
 	//
-	// Value is not an object. Just echo.
+	// Value is not an object or value is null. Just echo.
 	//
-	if (typeof value !== 'object') {
+	if (typeof value !== 'object' || value === null) {
 		return value;
 	}
 
