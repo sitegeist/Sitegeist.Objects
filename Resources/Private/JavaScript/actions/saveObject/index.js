@@ -43,7 +43,7 @@ CreateObjectMutation.defaultProps = {
 };
 
 const UpdateObjectMutation = mutation/* GraphQL */`
-	mutation createObject(
+	mutation updateObject(
 		$context: ContentContextInput!,
 		$storeIdentifier: ID!,
 		$objectIdentifier: ID!,
