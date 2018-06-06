@@ -36,10 +36,15 @@ const HideObjectsMutation = mutation/* GraphQL */`
 	}
 `;
 
+HideObjectsMutation.defaultProps = {
+	/* @TODO: Better context handling */
+	context: window.Sitegeist.Objects.contentContext
+};
+
 export default class HideObjects extends Component {
 	static propTypes = {
 		storeIdentifier: PropTypes.string.isRequired,
-		items: PropTypes.arrayOf(PropTypes.shape({
+		objects: PropTypes.arrayOf(PropTypes.shape({
 			identifier: PropTypes.string.isRequired,
 			icon: PropTypes.string,
 			label: PropTypes.string.isRequired,
@@ -49,20 +54,20 @@ export default class HideObjects extends Component {
 	};
 
 	static defaultProps = {
-		renderAction: (execute, {items}) => (
+		renderAction: (execute, {objects}) => (
 			<Button onClick={execute}>
 				<Icon className="icon-eye-close"/>
 				{/* @TODO: I18n */}
-				Verstecken{items.length > 1 ? ` (${items.length})` : ''}
+				Verstecken{objects.length > 1 ? ` (${objects.length})` : ''}
 			</Button>
 		),
-		onCompleted: (store, {goTo}, {items, storeIdentifier}) => {
+		onCompleted: (store, {goTo}, {objects, storeIdentifier}) => {
 			publishFlashMessage({
 				severity: 'success',
 				/* @TODO: I18n */
-				message: items.length > 1 ?
-					`${items.length} Objekte wurden versteckt.` :
-					`"${items[0].label}" wurde versteckt.`,
+				message: objects.length > 1 ?
+					`${objects.length} Objekte wurden versteckt.` :
+					`"${objects[0].label}" wurde versteckt.`,
 				timeout: 5000
 			});
 
@@ -71,14 +76,14 @@ export default class HideObjects extends Component {
 	}
 
 	render() {
-		const {storeIdentifier, items, renderAction, onCompleted} = this.props;
+		const {storeIdentifier, objects, renderAction, onCompleted} = this.props;
 
 		return (
 			<History>
 				{history => (
 					<HideObjectsMutation
 						storeIdentifier={storeIdentifier}
-						objectIdentifiers={items.map(item => item.identifier)}
+						objectIdentifiers={objects.map(object => object.identifier)}
 						onCompleted={({store}) => onCompleted(store, history, this.props)}
 					>
 						{({execute}) => renderAction(() => execute(), this.props)}

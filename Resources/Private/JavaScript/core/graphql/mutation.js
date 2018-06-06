@@ -15,6 +15,15 @@ import PropTypes from 'shim/prop-types';
 import Authorize from '../application/authorize';
 
 class Mutation extends Component {
+	static propTypes = {
+		children: PropTypes.func.isRequired,
+		variables: PropTypes.object
+	};
+
+	static defaultProps = {
+		variables: {}
+	};
+
 	state = {
 		isLoading: false,
 		hasError: false,
@@ -28,8 +37,7 @@ class Mutation extends Component {
 	});
 
 	execute = async (overrideVariables = {}) => {
-		const {query, variables, cache, authorize, onCompleted} = this.props;
-		const {cacheIdentifier} = this.state;
+		const {query, variables, authorize, onCompleted} = this.props;
 		const {csrfToken, apiEndpoint} = window.Sitegeist.Objects;
 
 		this.setState({isLoading: true});
@@ -55,13 +63,7 @@ class Mutation extends Component {
 					isLoading: false,
 					hasError: false,
 					result: jsonResult.data
-				}, () => {
-					if (cache) {
-						cache.set(cacheIdentifier, this.state);
-					}
-
-					onCompleted(jsonResult.data);
-				});
+				}, () => onCompleted(jsonResult.data));
 			} else {
 				if (httpResult.status === 401) {
 					await authorize();

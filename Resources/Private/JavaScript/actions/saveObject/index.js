@@ -40,6 +40,11 @@ const CreateObjectMutation = mutation/* GraphQL */`
 	}
 `;
 
+CreateObjectMutation.defaultProps = {
+	/* @TODO: Better context handling */
+	context: window.Sitegeist.Objects.contentContext
+};
+
 const UpdateObjectMutation = mutation/* GraphQL */`
 	mutation createObject(
 		$context: ContentContextInput!,
@@ -60,10 +65,17 @@ const UpdateObjectMutation = mutation/* GraphQL */`
 	}
 `;
 
+UpdateObjectMutation.defaultProps = {
+	/* @TODO: Better context handling */
+	context: window.Sitegeist.Objects.contentContext
+};
+
 export default class SaveObject extends Component {
 	static propTypes = {
 		storeIdentifier: PropTypes.string.isRequired,
-		objectIdentifier: PropTypes.string,
+		object: PropTypes.shape({
+			identifier: PropTypes.string.isRequired
+		}),
 		nodeTypeName: PropTypes.string,
 		renderAction: PropTypes.func,
 		onCreate: PropTypes.func,
@@ -72,7 +84,7 @@ export default class SaveObject extends Component {
 	};
 
 	static defaultProps = {
-		objectIdentifier: null,
+		object: null,
 		nodeTypeName: null,
 		renderAction: (execute, {transient}) => (
 			<Button
@@ -114,16 +126,16 @@ export default class SaveObject extends Component {
 	};
 
 	render() {
-		const {storeIdentifier, objectIdentifier, nodeTypeName, renderAction, onCreate, onUpdate} = this.props;
+		const {storeIdentifier, object, nodeTypeName, renderAction, onCreate, onUpdate} = this.props;
 
-		invariant(objectIdentifier || nodeTypeName, 'Either objectIdentifier or nodeTypeName must be set!');
+		invariant(object || nodeTypeName, 'Either objectIdentifier or nodeTypeName must be set!');
 
 		return (
 			<History>
-				{history => objectIdentifier ? (
+				{history => object ? (
 					<UpdateObjectMutation
 						storeIdentifier={storeIdentifier}
-						objectIdentifier={objectIdentifier}
+						objectIdentifier={object.identifier}
 						onCompleted={({store}) => onUpdate(store, history, this.props)}
 					>
 						{({execute}) => renderAction(() => this.handleSaveAction(execute), this.props)}

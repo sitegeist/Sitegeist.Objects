@@ -33,7 +33,7 @@ const List = styled.ul`
 
 export default class NodeList extends Component {
 	static propTypes = {
-		items: PropTypes.arrayOf(PropTypes.shape({
+		nodes: PropTypes.arrayOf(PropTypes.shape({
 			identifier: PropTypes.string.isRequired,
 			icon: PropTypes.string,
 			label: PropTypes.string.isRequired,
@@ -41,14 +41,14 @@ export default class NodeList extends Component {
 	};
 
 	render() {
-		const {items} = this.props;
+		const {nodes} = this.props;
 
 		return (
 			<List>
-				{items.map(item => (
-					<li key={item.identifier}>
-						<Icon className={item.icon}/>
-						{item.label}
+				{nodes.map(node => (
+					<li key={node.identifier}>
+						<Icon className={node.icon}/>
+						{node.label}
 					</li>
 				))}
 			</List>

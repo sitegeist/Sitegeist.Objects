@@ -40,10 +40,15 @@ const RemoveObjectsMutation = mutation/* GraphQL */`
 	}
 `;
 
+RemoveObjectsMutation.defaultProps = {
+	/* @TODO: Better context handling */
+	context: window.Sitegeist.Objects.contentContext
+};
+
 export default class RemoveObject extends Component {
 	static propTypes = {
 		storeIdentifier: PropTypes.string.isRequired,
-		items: PropTypes.arrayOf(PropTypes.shape({
+		objects: PropTypes.arrayOf(PropTypes.shape({
 			identifier: PropTypes.string.isRequired,
 			icon: PropTypes.string,
 			label: PropTypes.string.isRequired,
@@ -54,34 +59,34 @@ export default class RemoveObject extends Component {
 	};
 
 	static defaultProps = {
-		renderQuestion: ({items}) => items.length > 1 ? (
+		renderQuestion: ({objects}) => objects.length > 1 ? (
 			<Fragment>
 				{/* @TODO. I18n */}
-				Möchten Sie die Objekte <NodeList items={items}/> wirklich löschen?
+				Möchten Sie die Objekte <NodeList nodes={objects}/> wirklich löschen?
 			</Fragment>
 		) : (
 			<Fragment>
 				{/* @TODO. I18n */}
-				Möchten Sie das Objekt <NodeList items={items}/> wirklich löschen?
+				Möchten Sie das Objekt <NodeList nodes={objects}/> wirklich löschen?
 			</Fragment>
 		),
-		renderAction: (execute, {items}) => (
+		renderAction: (execute, {objects}) => (
 			<Button
 				className="neos-button-danger"
 				onClick={execute}
 			>
 				<Icon className="icon-trash"/>
 				{/* @TODO: I18n */}
-				Löschen{items.length > 1 ? ` (${items.length})` : ''}
+				Löschen{objects.length > 1 ? ` (${objects.length})` : ''}
 			</Button>
 		),
-		onCompleted: (store, {goTo}, {items, storeIdentifier}) => {
+		onCompleted: (store, {goTo}, {objects, storeIdentifier}) => {
 			publishFlashMessage({
 				severity: 'success',
 				/* @TODO: I18n */
-				message: items.length > 1 ?
-					`${items.length} Objekte wurden versteckt.` :
-					`"${items[0].label}" wurde versteckt.`,
+				message: objects.length > 1 ?
+					`${objects.length} Objekte wurden versteckt.` :
+					`"${objects[0].label}" wurde versteckt.`,
 				timeout: 5000
 			});
 
@@ -90,14 +95,14 @@ export default class RemoveObject extends Component {
 	};
 
 	render() {
-		const {storeIdentifier, items, renderQuestion, renderAction, onCompleted} = this.props;
+		const {storeIdentifier, objects, renderQuestion, renderAction, onCompleted} = this.props;
 
 		return (
 			<History>
 				{history => (
 					<RemoveObjectsMutation
 						storeIdentifier={storeIdentifier}
-						objectIdentifiers={items.map(item => item.identifier)}
+						objectIdentifiers={objects.map(object => object.identifier)}
 						onCompleted={({store}) => onCompleted(store, history, this.props)}
 					>
 						{({execute}) => (

@@ -38,10 +38,17 @@ const CopyObjectMutation = mutation/* GraphQL */`
 	}
 `;
 
+CopyObjectMutation.defaultProps = {
+	/* @TODO: Better context handling */
+	context: window.Sitegeist.Objects.contentContext
+};
+
 export default class CopyObject extends Component {
 	static propTypes = {
 		storeIdentifier: PropTypes.string.isRequired,
-		objectIdentifier: PropTypes.string.isRequired,
+		object: PropTypes.shape({
+			identifier: PropTypes.string.isRequired
+		}).isRequired,
 		renderAction: PropTypes.func,
 		onCompleted: PropTypes.func
 	};
@@ -58,17 +65,17 @@ export default class CopyObject extends Component {
 	};
 
 	render() {
-		const {storeIdentifier, objectIdentifier, renderAction, onCompleted} = this.props;
+		const {storeIdentifier, object, renderAction, onCompleted} = this.props;
 
 		return (
 			<History>
 				{history => (
 					<CopyObjectMutation
 						storeIdentifier={storeIdentifier}
-						objectIdentifier={objectIdentifier}
+						objectIdentifier={object.identifier}
 						onCompleted={({store}) => onCompleted({...store, identifier: storeIdentifier}, history)}
 					>
-						{({execute}) => renderAction(execute)}
+						{({execute}) => renderAction(() => execute(), this.props)}
 					</CopyObjectMutation>
 				)}
 			</History>

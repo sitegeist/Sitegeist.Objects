@@ -62,7 +62,7 @@ export default class SaveAndPublishObject extends Component {
 		return (
 			<PublishObjects
 				storeIdentifier={storeIdentifier}
-				items={[object]}
+				objects={[object]}
 				renderAction={publish => (
 					<SaveObject
 						storeIdentifier={storeIdentifier}
