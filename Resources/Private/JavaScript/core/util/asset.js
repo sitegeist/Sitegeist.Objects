@@ -16,11 +16,11 @@ export default class Asset extends Component {
 	static propTypes = {
 		asset: PropTypes.oneOfType([
 			PropTypes.shape({
-				type: PropTypes.oneOf(['asset']).isRequired,
+				'@@sitegeist/objects/type': PropTypes.oneOf(['asset']).isRequired,
 				payload: PropTypes.string.isRequired
 			}),
 			PropTypes.shape({
-				type: PropTypes.oneOf(['asset']).isRequired,
+				'@@sitegeist/objects/type': PropTypes.oneOf(['asset']).isRequired,
 				payload: PropTypes.shape({
 					name: PropTypes.string.isRequired,
 					size: PropTypes.number.isRequired,
