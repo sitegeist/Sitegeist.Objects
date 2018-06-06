@@ -14,6 +14,8 @@ import PropTypes from 'shim/prop-types';
 
 import Authorize from '../application/authorize';
 
+import Loader from './loader';
+
 class Mutation extends Component {
 	static propTypes = {
 		children: PropTypes.func.isRequired,
@@ -93,6 +95,7 @@ class Mutation extends Component {
 
 		return (
 			<Fragment key={cacheIdentifier}>
+				{this.state.isLoading ? (<Loader/>) : null}
 				{children({
 					...this.state,
 					execute: this.execute

@@ -14,6 +14,8 @@ import PropTypes from 'shim/prop-types';
 
 import Authorize from '../application/authorize';
 
+import Loader from './loader';
+
 class Query extends Component {
 	static propTypes = {
 		cache: PropTypes.object,
@@ -109,7 +111,12 @@ class Query extends Component {
 			return children(cache.get(cacheIdentifier));
 		}
 
-		return <Fragment key={cacheIdentifier}>{children(this.state)}</Fragment>;
+		return (
+			<Fragment key={cacheIdentifier}>
+				{this.state.isLoading ? (<Loader/>) : null}
+				{children(this.state)}
+			</Fragment>
+		);
 	}
 }
 
