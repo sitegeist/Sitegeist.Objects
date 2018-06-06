@@ -13,7 +13,7 @@ import {BehaviorSubject} from 'rxjs';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import styled, {keyframes} from 'styled-components';
 
 //
 // @TODO: There has to be a better way
@@ -28,6 +28,7 @@ window.Sitegeist.Objects.runtime = {
 	ReactDOM,
 	PropTypes,
 	styled,
+	styledKeyframes: keyframes,
 	smoothDnd: {
 		container,
 		constants,
