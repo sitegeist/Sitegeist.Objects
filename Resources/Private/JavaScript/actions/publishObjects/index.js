@@ -47,7 +47,9 @@ PublishObjectsMutation.defaultProps = {
 
 export default class PublishObjects extends Component {
 	static propTypes = {
-		storeIdentifier: PropTypes.string.isRequired,
+		store: PropTypes.shape({
+			identifier: PropTypes.string.isRequired
+		}).isRequired,
 		objects: PropTypes.arrayOf(PropTypes.shape({
 			identifier: PropTypes.string.isRequired,
 			icon: PropTypes.string,
@@ -77,7 +79,7 @@ export default class PublishObjects extends Component {
 				Veröffentlichen{objects.length > 1 ? ` (${objects.length})` : ''}
 			</Button>
 		),
-		onCompleted: (store, {goTo}, {objects, storeIdentifier}) => {
+		onCompleted: (_, {goTo}, {objects, store}) => {
 			publishFlashMessage({
 				severity: 'success',
 				/* @TODO: I18n */
@@ -87,18 +89,18 @@ export default class PublishObjects extends Component {
 				timeout: 5000
 			});
 
-			goTo(`/store/${storeIdentifier}`);
+			goTo(`/store/${store.identifier}`);
 		}
 	}
 
 	render() {
-		const {storeIdentifier, objects, renderQuestion, renderAction, onCompleted} = this.props;
+		const {store, objects, renderQuestion, renderAction, onCompleted} = this.props;
 
 		return (
 			<History>
 				{history => (
 					<PublishObjectsMutation
-						storeIdentifier={storeIdentifier}
+						storeIdentifier={store.identifier}
 						objectIdentifiers={objects.map(object => object.identifier)}
 						onCompleted={({store}) => onCompleted(store, history, this.props)}
 					>

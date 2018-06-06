@@ -72,7 +72,9 @@ UpdateObjectMutation.defaultProps = {
 
 export default class SaveObject extends Component {
 	static propTypes = {
-		storeIdentifier: PropTypes.string.isRequired,
+		store: PropTypes.shape({
+			identifier: PropTypes.string.isRequired
+		}).isRequired,
 		object: PropTypes.shape({
 			identifier: PropTypes.string.isRequired
 		}),
@@ -96,25 +98,25 @@ export default class SaveObject extends Component {
 				Speichern
 			</Button>
 		),
-		onCreate: (store, {goTo}) => {
+		onCreate: ({createObject}, {goTo}, {store}) => {
 			publishFlashMessage({
 				severity: 'success',
 				/* @TODO: I18n */
-				message: `"${store.createObject.label}" wurde erfolgreich erstellt.`,
+				message: `"${createObject.label}" wurde erfolgreich erstellt.`,
 				timeout: 5000
 			});
 
-			goTo(`/store/${store.identifier}/edit/${store.createObject.identifier}`);
+			goTo(`/store/${store.identifier}/edit/${createObject.identifier}`);
 		},
-		onUpdate: (store, {goTo}) => {
+		onUpdate: ({updateObject}, {goTo}, {store}) => {
 			publishFlashMessage({
 				severity: 'success',
 				/* @TODO: I18n */
-				message: `"${store.createObject.label}" wurde erfolgreich gespeichert.`,
+				message: `"${updateObject.label}" wurde erfolgreich gespeichert.`,
 				timeout: 5000
 			});
 
-			goTo(`/store/${store.identifier}/edit/${store.updateObject.identifier}`);
+			goTo(`/store/${store.identifier}/edit/${updateObject.identifier}`);
 		}
 	};
 
@@ -126,15 +128,15 @@ export default class SaveObject extends Component {
 	};
 
 	render() {
-		const {storeIdentifier, object, nodeTypeName, renderAction, onCreate, onUpdate} = this.props;
+		const {store, object, nodeTypeName, renderAction, onCreate, onUpdate} = this.props;
 
-		invariant(object || nodeTypeName, 'Either objectIdentifier or nodeTypeName must be set!');
+		invariant(object || nodeTypeName, 'Either object or nodeTypeName must be set!');
 
 		return (
 			<History>
 				{history => object ? (
 					<UpdateObjectMutation
-						storeIdentifier={storeIdentifier}
+						storeIdentifier={store.identifier}
 						objectIdentifier={object.identifier}
 						onCompleted={({store}) => onUpdate(store, history, this.props)}
 					>
@@ -142,7 +144,7 @@ export default class SaveObject extends Component {
 					</UpdateObjectMutation>
 				) : (
 					<CreateObjectMutation
-						storeIdentifier={storeIdentifier}
+						storeIdentifier={store.identifier}
 						nodeType={nodeTypeName}
 						onCompleted={({store}) => onCreate(store, history, this.props)}
 					>

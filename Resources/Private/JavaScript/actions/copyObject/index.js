@@ -45,7 +45,9 @@ CopyObjectMutation.defaultProps = {
 
 export default class CopyObject extends Component {
 	static propTypes = {
-		storeIdentifier: PropTypes.string.isRequired,
+		store: PropTypes.shape({
+			identifier: PropTypes.string.isRequired
+		}).isRequired,
 		object: PropTypes.shape({
 			identifier: PropTypes.string.isRequired
 		}).isRequired,
@@ -61,19 +63,21 @@ export default class CopyObject extends Component {
 				Kopieren
 			</Button>
 		),
-		onCompleted: (store, {goTo}) => goTo(`/store/${store.identifier}/edit/${store.object.copy.identifier}`)
+		onCompleted: ({object}, {goTo}, {store}) => {
+			goTo(`/store/${store.identifier}/edit/${object.copy.identifier}`);
+		}
 	};
 
 	render() {
-		const {storeIdentifier, object, renderAction, onCompleted} = this.props;
+		const {store, object, renderAction, onCompleted} = this.props;
 
 		return (
 			<History>
 				{history => (
 					<CopyObjectMutation
-						storeIdentifier={storeIdentifier}
+						storeIdentifier={store.identifier}
 						objectIdentifier={object.identifier}
-						onCompleted={({store}) => onCompleted({...store, identifier: storeIdentifier}, history)}
+						onCompleted={({store}) => onCompleted(store, history, this.props)}
 					>
 						{({execute}) => renderAction(() => execute(), this.props)}
 					</CopyObjectMutation>

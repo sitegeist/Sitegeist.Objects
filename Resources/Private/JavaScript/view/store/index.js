@@ -279,7 +279,7 @@ export default class StoreView extends Component {
 	renderFooter = store => {
 		return (
 			<Operations
-				storeIdentifier={this.props.identifier}
+				store={store}
 				nodeTypeForCreation={store.nodeType.allowedChildNodeTypes[0].name}
 				selection={this.state.selection.map(identifier => {
 					const [item] = store.objectIndex.tableRows.filter(

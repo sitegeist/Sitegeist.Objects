@@ -22,7 +22,9 @@ import SaveObject from '../saveObject';
 
 export default class SaveAndPublishObject extends Component {
 	static propTypes = {
-		storeIdentifier: PropTypes.string.isRequired,
+		store: PropTypes.shape({
+			identifier: PropTypes.string.isRequired
+		}).isRequired,
 		object: PropTypes.shape({
 			identifier: PropTypes.string.isRequired,
 			label: PropTypes.string.isRequired,
@@ -57,16 +59,16 @@ export default class SaveAndPublishObject extends Component {
 	};
 
 	render() {
-		const {storeIdentifier, object, renderAction, onCompleted, transient} = this.props;
+		const {store, object, renderAction, onCompleted, transient} = this.props;
 
 		return (
 			<PublishObjects
-				storeIdentifier={storeIdentifier}
+				store={store}
 				objects={[object]}
 				renderAction={publish => (
 					<SaveObject
-						storeIdentifier={storeIdentifier}
-						objectIdentifier={object.identifier}
+						store={store}
+						object={object}
 						transient={transient}
 						renderAction={renderAction}
 						onUpdate={publish}
