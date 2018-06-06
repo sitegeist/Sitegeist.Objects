@@ -30,13 +30,14 @@ const Checkbox = ({id, isChecked, onChange, children}) => (
 
 Checkbox.propTypes = {
 	id: PropTypes.string.isRequired,
-	isChecked: PropTypes.bool.isRequired,
+	isChecked: PropTypes.bool,
 	onChange: PropTypes.func.isRequired,
 	children: PropTypes.node
 };
 
 Checkbox.defaultProps = {
-	children: null
+	children: null,
+	isChecked: false
 };
 
 export default Checkbox;
