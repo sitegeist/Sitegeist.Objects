@@ -20,7 +20,25 @@ class History extends Component {
 	};
 
 	render() {
-		return this.props.children(this.props.history);
+		const {history} = this.props;
+
+		return this.props.children({
+			push: (...args) => history.push(...args),
+			replace: (...args) => history.replace(...args),
+			goTo: target => {
+				/**
+				 * @TODO: Workaround as per
+				 *        https://github.com/ReactTraining/react-router/issues/1982#issuecomment-314167564
+				 *        Everybody seems to make their libraries defensive as hell nowadays... 🙄
+				 *        I know it's wrong to do this at this point, but I do not have an alternative, since the
+				 *        Apollo Cache Invalidation doesn't work properly.
+				 */
+				history.push(`/empty`);
+				setTimeout(() => {
+					history.replace(target);
+				});
+			}
+		});
 	}
 }
 
