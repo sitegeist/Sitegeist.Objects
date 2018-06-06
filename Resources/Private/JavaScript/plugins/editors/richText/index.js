@@ -9,8 +9,8 @@
  * For the full copyright and license information, please read the
  * LICENSE.md file that was distributed with this source code.
  */
-import ProseMirror from '../../../ui/prosemirror';
-import Editor from '../../../ui/structures/editor';
+import ProseMirror from '../../../lib/presentation/prosemirror';
+import Editor from '../../../lib/presentation/structures/editor';
 
 const {React, PropTypes} = window.Sitegeist.Objects.runtime;
 const {Component} = window.Sitegeist.Objects.runtime.React;

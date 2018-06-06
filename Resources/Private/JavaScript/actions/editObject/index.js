@@ -13,8 +13,8 @@ import React, {Component} from 'shim/react';
 import PropTypes from 'shim/prop-types';
 import {Link} from 'react-router-dom';
 
-import Button from '../../ui/primitives/button';
-import Icon from '../../ui/primitives/icon';
+import Button from '../../lib/presentation/primitives/button';
+import Icon from '../../lib/presentation/primitives/icon';
 
 export default class EditObject extends Component {
 	static propTypes = {

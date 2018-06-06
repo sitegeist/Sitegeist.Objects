@@ -16,8 +16,8 @@ import History from '../../core/history';
 import {mutation} from '../../core/graphql/gql';
 import {publishFlashMessage} from '../../core/flashMessage';
 
-import Button from '../../ui/primitives/button';
-import Icon from '../../ui/primitives/icon';
+import Button from '../../lib/presentation/primitives/button';
+import Icon from '../../lib/presentation/primitives/icon';
 
 const HideObjectsMutation = mutation/* GraphQL */`
 	mutation hideObjects(

@@ -15,8 +15,8 @@ import PropTypes from 'shim/prop-types';
 import History from '../../core/history';
 import {mutation} from '../../core/graphql/gql';
 
-import Button from '../../ui/primitives/button';
-import Icon from '../../ui/primitives/icon';
+import Button from '../../lib/presentation/primitives/button';
+import Icon from '../../lib/presentation/primitives/icon';
 
 const CopyObjectMutation = mutation/* GraphQL */`
 	mutation copyObject(

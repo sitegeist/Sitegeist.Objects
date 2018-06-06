@@ -15,10 +15,10 @@ import styled from 'shim/styled-components';
 
 import Transient from '../../core/util/transient';
 
-import Button from '../../ui/primitives/button';
-import Icon from '../../ui/primitives/icon';
-import NumberInput from '../../ui/primitives/numberInput';
-import SelectBox from '../../ui/structures/selectBox';
+import Button from '../../lib/presentation/primitives/button';
+import Icon from '../../lib/presentation/primitives/icon';
+import NumberInput from '../../lib/presentation/primitives/numberInput';
+import SelectBox from '../../lib/presentation/structures/selectBox';
 
 import Filter from './filter';
 

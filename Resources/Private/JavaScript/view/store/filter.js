@@ -19,11 +19,11 @@ import FilterManager from '../../core/plugin/filterManager';
 import List from '../../core/util/list';
 import Toggle from '../../core/util/toggle';
 
-import Button from '../../ui/primitives/button';
-import ButtonList from '../../ui/primitives/buttonList';
-import Icon from '../../ui/primitives/icon';
-import Modal from '../../ui/primitives/modal';
-import OriginalSelectBox from '../../ui/structures/selectBox';
+import Button from '../../lib/presentation/primitives/button';
+import ButtonList from '../../lib/presentation/primitives/buttonList';
+import Icon from '../../lib/presentation/primitives/icon';
+import Modal from '../../lib/presentation/primitives/modal';
+import OriginalSelectBox from '../../lib/presentation/structures/selectBox';
 
 const Container = styled.div`
 	display: flex;

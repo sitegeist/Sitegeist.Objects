@@ -18,8 +18,8 @@ import {publishFlashMessage} from '../../core/flashMessage';
 import {mutation} from '../../core/graphql/gql';
 import convertProperties from '../../core/plugin/converterManager';
 
-import Button from '../../ui/primitives/button';
-import Icon from '../../ui/primitives/icon';
+import Button from '../../lib/presentation/primitives/button';
+import Icon from '../../lib/presentation/primitives/icon';
 
 const CreateObjectMutation = mutation/* GraphQL */`
 	mutation createObject(
@@ -118,12 +118,15 @@ export default class SaveObject extends Component {
 	handleSaveAction = async execute => {
 		const {transient} = this.props;
 		try {
-			console.log(transient.values);
+			console.log({before: transient.values});
 			const properties = await convertProperties(transient.values);
-			console.log({properties});
+			console.log({after: properties});
 			execute({properties});
 		} catch (error) {
-			console.error(error);
+			publishFlashMessage({
+				severity: 'success',
+				message: error
+			});
 		}
 	};
 

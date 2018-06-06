@@ -18,14 +18,14 @@ import Confirm from '../../core/util/confirm';
 
 import EditorManager from '../../core/plugin/editorManager';
 
-import Icon from '../../ui/primitives/icon';
-import Button from '../../ui/primitives/button';
-import ButtonList from '../../ui/primitives/buttonList';
-import Breadcrumb from '../../ui/structures/breadcrumb';
-import Tabs from '../../ui/structures/tabs';
-import Group from '../../ui/structures/group';
+import Icon from '../../lib/presentation/primitives/icon';
+import Button from '../../lib/presentation/primitives/button';
+import ButtonList from '../../lib/presentation/primitives/buttonList';
+import Breadcrumb from '../../lib/presentation/structures/breadcrumb';
+import Tabs from '../../lib/presentation/structures/tabs';
+import Group from '../../lib/presentation/structures/group';
 
-import Layout from '../../ui/layout';
+import Layout from '../../lib/presentation/layout';
 
 import Controller from './controller';
 import Operations from './operations';
@@ -65,6 +65,7 @@ const Header = styled.div`
 
 const Body = styled.div`
 	padding: 0 54px!important;
+	display: ${props => props.isVisible ? 'block' : 'none'};
 `;
 
 export default class DetailView extends Component {
@@ -131,11 +132,15 @@ export default class DetailView extends Component {
 
 		return (
 			<Tabs tabs={store.objectDetail.tabs} persistent={`detailView-tabs-${objectIdentifier}`}>
-				{tab => (
+				{({tabs, renderTabsHeader}) => (
 					<Layout
 						renderHeader={() => (
 							<Header>
-								<HeaderGroup>{tab.renderTabsHeader()}</HeaderGroup>
+								<HeaderGroup>
+									{renderTabsHeader(tab => tab.groups.some(group => group.properties.some(
+										property => Boolean(transient.get(property.name))
+									)))}
+								</HeaderGroup>
 								<HeaderGroup>
 									<a href={store.objectDetail.object.previewUri} target="_blank">
 										<Button>
@@ -153,8 +158,8 @@ export default class DetailView extends Component {
 							...controller
 						})}
 					>
-						{() => (
-							<Body>
+						{() => tabs.map(tab => (
+							<Body key={tab.name} isVisible={tab.isSelected}>
 								{tab.groups.map(group => (
 									<Group
 										key={group.name}
@@ -179,7 +184,7 @@ export default class DetailView extends Component {
 									</Group>
 								))}
 							</Body>
-						)}
+						))}
 					</Layout>
 				)}
 			</Tabs>
@@ -187,8 +192,6 @@ export default class DetailView extends Component {
 	}
 
 	renderFooter = ({store, transient}) => {
-		const {storeIdentifier} = this.props;
-
 		return (
 			<Operations
 				store={store}

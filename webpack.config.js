@@ -22,7 +22,7 @@ module.exports = {
 			shim: path.resolve(__dirname, 'Resources/Private/JavaScript/shim'),
 			'@sitegeist-objects/core/util': path.resolve(__dirname, 'Resources/Private/JavaScript/core/util'),
 			'@sitegeist-objects/query': path.resolve(__dirname, 'Resources/Private/JavaScript/query'),
-			'@sitegeist-objects/ui': path.resolve(__dirname, 'Resources/Private/JavaScript/ui'),
+			'@sitegeist-objects/lib': path.resolve(__dirname, 'Resources/Private/JavaScript/lib'),
 			'smooth-dnd': path.resolve(__dirname, 'Resources/Private/JavaScript/shim/smooth-dnd')
 		}
 	},

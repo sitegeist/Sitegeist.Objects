@@ -13,8 +13,8 @@ import React from 'shim/react';
 import PropTypes from 'shim/prop-types';
 import styled from 'shim/styled-components';
 
-import Icon from '../../ui/primitives/icon';
-import Button from '../../ui/primitives/button';
+import Icon from '../primitives/icon';
+import Button from '../primitives/button';
 
 import SelectBox from './selectBox';
 

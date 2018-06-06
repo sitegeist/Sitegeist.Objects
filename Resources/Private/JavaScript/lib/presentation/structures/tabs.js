@@ -12,39 +12,34 @@
 import React from 'shim/react';
 import PropTypes from 'shim/prop-types';
 
-import Condition from '../../core/util/condition';
-import Select from '../../core/util/select';
+import Condition from '../../../core/util/condition';
+import Select from '../../../core/util/select';
 
-import Icon from '../../ui/primitives/icon';
-import Button from '../../ui/primitives/button';
-import ButtonList from '../../ui/primitives/buttonList';
+import Icon from '../primitives/icon';
+import Button from '../primitives/button';
+import ButtonList from '../primitives/buttonList';
 
 const Tabs = ({tabs, children, persistent}) => (
 	<Select allItems={tabs.map(({name, ...data}) => ({name, data}))} persistent={persistent}>
-		{({isSelected, selectedItem, select}) => (
-			<React.Fragment>
-				{children({
-					...selectedItem.data,
-					name: selectedItem.name,
-					renderTabsHeader: () => (
-						<ButtonList>
-							{tabs.map(tab => (
-								<Button
-									key={tab.name}
-									className={isSelected(tab.name) ? 'neos-active' : ''}
-									onClick={() => select(tab.name)}
-								>
-									<Condition condition={Boolean(tab.icon)}>
-										<Icon className={tab.icon}/>
-									</Condition>
-									{tab.label}
-								</Button>
-							))}
-						</ButtonList>
-					)
-				})}
-			</React.Fragment>
-		)}
+		{({isSelected, allItems, select}) => children({
+			tabs: allItems.map(tab => ({...tab.data, name: tab.name, isSelected: isSelected(tab.name)})),
+			renderTabsHeader: hasChanges => (
+				<ButtonList>
+					{tabs.map(tab => (
+						<Button
+							key={tab.name}
+							className={isSelected(tab.name) ? 'neos-active' : ''}
+							onClick={() => select(tab.name)}
+						>
+							<Condition condition={Boolean(tab.icon)}>
+								<Icon className={tab.icon}/>
+							</Condition>
+							{tab.label}{hasChanges(tab) ? ' (!)' : ''}
+						</Button>
+					))}
+				</ButtonList>
+			)
+		})}
 	</Select>
 );
 

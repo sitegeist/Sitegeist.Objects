@@ -12,8 +12,8 @@
 import React, {Component} from 'shim/react';
 import PropTypes from 'shim/prop-types';
 
-import Button from '../../ui/primitives/button';
-import Icon from '../../ui/primitives/icon';
+import Button from '../../lib/presentation/primitives/button';
+import Icon from '../../lib/presentation/primitives/icon';
 
 export default class PreviewObject extends Component {
 	static propTypes = {

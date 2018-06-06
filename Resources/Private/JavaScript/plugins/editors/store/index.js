@@ -11,9 +11,9 @@
  */
 import {Link} from 'react-router-dom';
 
-import Editor from '../../../ui/structures/editor';
+import Editor from '../../../lib/presentation/structures/editor';
 
-import Button from '../../../ui/primitives/button';
+import Button from '../../../lib/presentation/primitives/button';
 
 const {React, PropTypes} = window.Sitegeist.Objects.runtime;
 const {Component} = window.Sitegeist.Objects.runtime.React;

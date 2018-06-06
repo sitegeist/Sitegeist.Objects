@@ -20,14 +20,14 @@ import Transient from '../../core/util/transient';
 
 import StoreQuery from '../../query/store';
 
-import Icon from '../../ui/primitives/icon';
-import Button from '../../ui/primitives/button';
-import ButtonList from '../../ui/primitives/buttonList';
-import Breadcrumb from '../../ui/structures/breadcrumb';
-import SelectBox from '../../ui/structures/selectBox';
-import Table from '../../ui/structures/table';
+import Icon from '../../lib/presentation/primitives/icon';
+import Button from '../../lib/presentation/primitives/button';
+import ButtonList from '../../lib/presentation/primitives/buttonList';
+import Breadcrumb from '../../lib/presentation/structures/breadcrumb';
+import SelectBox from '../../lib/presentation/structures/selectBox';
+import Table from '../../lib/presentation/structures/table';
 
-import Layout from '../../ui/layout';
+import Layout from '../../lib/presentation/layout';
 
 import Filter from './filter';
 import Header from './header';

@@ -9,7 +9,7 @@
  * For the full copyright and license information, please read the
  * LICENSE.md file that was distributed with this source code.
  */
-import Checkbox from '../../../ui/primitives/checkbox';
+import Checkbox from '../../../lib/presentation/primitives/checkbox';
 
 const {React, PropTypes} = window.Sitegeist.Objects.runtime;
 const {Component} = window.Sitegeist.Objects.runtime.React;

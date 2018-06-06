@@ -12,10 +12,10 @@
 import React, {Component} from 'shim/react';
 import PropTypes from 'shim/prop-types';
 
-import Modal from '../../ui/primitives/modal';
-import Button from '../../ui/primitives/button';
-import ButtonList from '../../ui/primitives/buttonList';
-import Separator from '../../ui/primitives/separator';
+import Modal from '../../lib/presentation/primitives/modal';
+import Button from '../../lib/presentation/primitives/button';
+import ButtonList from '../../lib/presentation/primitives/buttonList';
+import Separator from '../../lib/presentation/primitives/separator';
 
 import Toggle from './toggle';
 import Condition from './condition';

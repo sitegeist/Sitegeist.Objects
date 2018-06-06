@@ -12,8 +12,8 @@
 import React from 'shim/react';
 import styled, {keyframes} from 'shim/styled-components';
 
-import Icon from '../../ui/primitives/icon';
-import Modal from '../../ui/primitives/modal';
+import Icon from '../../lib/presentation/primitives/icon';
+import Modal from '../../lib/presentation/primitives/modal';
 
 const rotate360 = keyframes`
 	from {

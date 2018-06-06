@@ -14,8 +14,8 @@ import PropTypes from 'shim/prop-types';
 
 import {publishFlashMessage} from '../../core/flashMessage';
 
-import Button from '../../ui/primitives/button';
-import Icon from '../../ui/primitives/icon';
+import Button from '../../lib/presentation/primitives/button';
+import Icon from '../../lib/presentation/primitives/icon';
 
 import PublishObjects from '../publishObjects';
 import SaveObject from '../saveObject';

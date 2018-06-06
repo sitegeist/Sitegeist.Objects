@@ -13,7 +13,7 @@ import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import styled from 'shim/styled-components';
 
-import Editor from '../../../ui/structures/editor';
+import Editor from '../../../lib/presentation/structures/editor';
 
 const {React, PropTypes} = window.Sitegeist.Objects.runtime;
 const {Component} = window.Sitegeist.Objects.runtime.React;

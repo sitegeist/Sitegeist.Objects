@@ -13,12 +13,12 @@ import React, {Component} from 'shim/react';
 import PropTypes from 'shim/prop-types';
 import styled from 'shim/styled-components';
 
-import Condition from '../../core/util/condition';
-import Toggle from '../../core/util/toggle';
-import Select from '../../core/util/select';
+import Condition from '../../../core/util/condition';
+import Toggle from '../../../core/util/toggle';
+import Select from '../../../core/util/select';
 
-import Button from '../../ui/primitives/button';
-import Icon from '../../ui/primitives/icon';
+import Button from '../primitives/button';
+import Icon from '../primitives/icon';
 
 const Overlay = styled.div`
 	position: fixed;

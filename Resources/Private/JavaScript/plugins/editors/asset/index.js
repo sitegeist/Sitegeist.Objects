@@ -13,11 +13,11 @@ import Condition from '../../../core/util/condition';
 import Toggle from '../../../core/util/toggle';
 import Asset from '../../../core/util/asset';
 
-import UploadInput from '../../../ui/primitives/uploadInput';
-import Button from '../../../ui/primitives/button';
-import Editor from '../../../ui/structures/editor';
-import MediaCard from '../../../ui/structures/mediaCard';
-import MediaBrowser from '../../../ui/structures/mediaBrowser';
+import UploadInput from '../../../lib/presentation/primitives/uploadInput';
+import Button from '../../../lib/presentation/primitives/button';
+import Editor from '../../../lib/presentation/structures/editor';
+import MediaCard from '../../../lib/presentation/structures/mediaCard';
+import MediaBrowser from '../../../lib/presentation/structures/mediaBrowser';
 
 const {React, PropTypes} = window.Sitegeist.Objects.runtime;
 const {Component} = window.Sitegeist.Objects.runtime.React;

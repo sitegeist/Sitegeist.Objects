@@ -12,10 +12,10 @@
 import {Container, Draggable} from 'react-smooth-dnd';
 import styled from 'shim/styled-components';
 
-import Icon from '../../../ui/primitives/icon';
-import Button from '../../../ui/primitives/button';
-import TextInput from '../../../ui/primitives/textInput';
-import Editor from '../../../ui/structures/editor';
+import Icon from '../../../lib/presentation/primitives/icon';
+import Button from '../../../lib/presentation/primitives/button';
+import TextInput from '../../../lib/presentation/primitives/textInput';
+import Editor from '../../../lib/presentation/structures/editor';
 
 import List from '../../../core/util/list';
 

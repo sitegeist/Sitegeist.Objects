@@ -12,9 +12,9 @@
 import React, {Component, Fragment} from 'shim/react';
 import PropTypes from 'shim/prop-types';
 
-import Modal from '../../ui/primitives/modal';
-import TextInput from '../../ui/primitives/textInput';
-import Button from '../../ui/primitives/button';
+import Modal from '../../lib/presentation/primitives/modal';
+import TextInput from '../../lib/presentation/primitives/textInput';
+import Button from '../../lib/presentation/primitives/button';
 
 import Transient from '../util/transient';
 import {publishFlashMessage} from '../flashMessage';

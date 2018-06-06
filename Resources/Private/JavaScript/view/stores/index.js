@@ -15,11 +15,11 @@ import lru from 'lru-cache';
 
 import StoresQuery from '../../query/stores';
 
-import IconCard from '../../ui/structures/iconCard';
-import Grid from '../../ui/primitives/grid';
-import Message from '../../ui/primitives/message';
+import IconCard from '../../lib/presentation/structures/iconCard';
+import Grid from '../../lib/presentation/primitives/grid';
+import Message from '../../lib/presentation/primitives/message';
 
-import Breadcrumb from '../../ui/structures/breadcrumb';
+import Breadcrumb from '../../lib/presentation/structures/breadcrumb';
 
 export default class StoresView extends Component {
 	componentDidMount() {

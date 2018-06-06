@@ -23,9 +23,9 @@ import DiscardObjects from '../../actions/discardObjects';
 import PublishObjects from '../../actions/publishObjects';
 import CopyObject from '../../actions/copyObject';
 
-import ButtonList from '../../ui/primitives/buttonList';
-import Button from '../../ui/primitives/button';
-import Icon from '../../ui/primitives/icon';
+import ButtonList from '../../lib/presentation/primitives/buttonList';
+import Button from '../../lib/presentation/primitives/button';
+import Icon from '../../lib/presentation/primitives/icon';
 
 /* @TODO: Ad-hoc styled component */
 const Container = styled.div`

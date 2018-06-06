@@ -18,9 +18,9 @@ import {mutation} from '../../core/graphql/gql';
 import Confirm from '../../core/util/confirm';
 import {publishFlashMessage} from '../../core/flashMessage';
 
-import Button from '../../ui/primitives/button';
-import Icon from '../../ui/primitives/icon';
-import NodeList from '../../ui/structures/nodeList';
+import Button from '../../lib/presentation/primitives/button';
+import Icon from '../../lib/presentation/primitives/icon';
+import NodeList from '../../lib/presentation/structures/nodeList';
 
 const DiscardObjectsMutation = mutation/* GraphQL */`
 	mutation discardObjects(

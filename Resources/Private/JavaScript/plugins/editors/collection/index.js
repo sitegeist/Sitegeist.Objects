@@ -12,10 +12,10 @@
 import React, {Component} from 'shim/react';
 import PropTypes from 'shim/prop-types';
 
-import Button from '../../../ui/primitives/button';
-import Icon from '../../../ui/primitives/icon';
-import Editor from '../../../ui/structures/editor';
-import DragAndDropList from '../../../ui/structures/dragAndDropList';
+import Button from '../../../lib/presentation/primitives/button';
+import Icon from '../../../lib/presentation/primitives/icon';
+import Editor from '../../../lib/presentation/structures/editor';
+import DragAndDropList from '../../../lib/presentation/structures/dragAndDropList';
 
 import Collection from '../../../core/util/collection';
 import Select from '../../../core/util/select';

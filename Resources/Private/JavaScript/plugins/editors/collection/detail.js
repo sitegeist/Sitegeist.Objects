@@ -12,8 +12,8 @@
 import React, {Fragment, Component} from 'shim/react';
 import styled from 'shim/styled-components';
 
-import Button from '../../../ui/primitives/button';
-import Icon from '../../../ui/primitives/icon';
+import Button from '../../../lib/presentation/primitives/button';
+import Icon from '../../../lib/presentation/primitives/icon';
 
 import Transient from '../../../core/util/transient';
 import Confirm from '../../../core/util/confirm';

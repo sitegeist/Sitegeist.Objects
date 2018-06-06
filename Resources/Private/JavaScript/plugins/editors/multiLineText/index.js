@@ -9,8 +9,8 @@
  * For the full copyright and license information, please read the
  * LICENSE.md file that was distributed with this source code.
  */
-import TextArea from '../../../ui/primitives/textArea';
-import Editor from '../../../ui/structures/editor';
+import TextArea from '../../../lib/presentation/primitives/textArea';
+import Editor from '../../../lib/presentation/structures/editor';
 
 const {React, PropTypes} = window.Sitegeist.Objects.runtime;
 const {Component} = window.Sitegeist.Objects.runtime.React;

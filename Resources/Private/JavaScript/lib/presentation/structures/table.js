@@ -16,9 +16,9 @@ import ReactTable, {ReactTableDefaults} from 'react-table';
 import checkboxHOC from 'react-table/lib/hoc/selectTable';
 import mergeClassNames from 'classnames';
 
-import MultiSelect from '../../core/util/multiselect';
+import MultiSelect from '../../../core/util/multiselect';
 
-import Checkbox from '../../ui/primitives/checkbox';
+import Checkbox from '../primitives/checkbox';
 
 const CheckboxTable = checkboxHOC(ReactTable);
 
