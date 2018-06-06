@@ -13,21 +13,16 @@ import React, {Component} from 'shim/react';
 import PropTypes from 'shim/prop-types';
 import styled from 'shim/styled-components';
 
-import History from '../../core/history';
-import {publishFlashMessage} from '../../core/flashMessage';
-import Confirm from '../../core/util/confirm';
-import convertProperties from '../../core/plugin/converterManager';
-
-import CreateObjectMutation from '../../mutation/createObject';
-import UpdateObjectMutation from '../../mutation/updateObject';
-import RemoveObjectMutation from '../../mutation/removeObject';
-import PublishObjectsMutation from '../../mutation/publishObjects';
-import DiscardObjectsMutation from '../../mutation/discardObjects';
+import SaveObject from '../../actions/saveObject';
+import RemoveObjects from '../../actions/removeObjects';
+import PublishObjects from '../../actions/publishObjects';
+import DiscardObjects from '../../actions/discardObjects';
 
 import ButtonList from '../../ui/primitives/buttonList';
 import Button from '../../ui/primitives/button';
 import Icon from '../../ui/primitives/icon';
 
+/* @TODO: Ad-Hoc styled component  */
 const Container = styled.div`
 	display: flex;
 	justify-content: space-between;
@@ -41,317 +36,40 @@ export default class Operations extends Component {
 				name: PropTypes.string.isRequired
 			})
 		}).isRequired,
-		storeIdentifier: PropTypes.string.isRequired,
+		store: PropTypes.shape({
+			identifier: PropTypes.string.isRequired
+		}).isRequired,
 		transient: PropTypes.object.isRequired
 	};
 
-	reloadDetail = (history, storeIdentifier, objectIdentifier) => {
-		/* @TODO: Flash Message */
-		/**
-		 * @TODO: Workaround as per
-		 *        https://github.com/ReactTraining/react-router/issues/1982#issuecomment-314167564
-		 *        Everybody seems to make their libraries defensive as hell nowadays... 🙄
-		 *        I know it's wrong to do this at this point, but I do not have an alternative, since the
-		 *        Apollo Cache Invalidation doesn't work properly.
-		 */
-		history.push(`/empty`);
-		setTimeout(() => {
-			history.replace(`/store/${storeIdentifier}/edit/${objectIdentifier}`);
-		});
-	}
-
 	render() {
-		const {object} = this.props;
+		const {object, store, transient} = this.props;
 
 		return (
 			<Container>
 				<ButtonList>
-					{object.identifier ? this.renderSave() : this.renderCreate()}
-					{object.identifier ? this.renderPublish() : null}
+					{object.identifier ? (
+						<RemoveObjects store={store} objects={[object]}/>
+					) : null}
+
+					{object.identifier ? (
+						<DiscardObjects store={store} objects={[object]}/>
+					) : null}
+
+					<Button disabled={!transient.hasValues} onClick={transient.reset}>
+						<Icon className="icon-undo"/>
+						{/* @TODO: I18n */}
+						Zurücksetzen
+					</Button>
 				</ButtonList>
 				<ButtonList>
-					{this.renderReset()}
-					{object.identifier ? this.renderDiscard() : null}
-					{object.identifier ? this.renderDelete() : null}
+					{object.identifier ? (
+						<PublishObjects store={store} objects={[object]}/>
+					) : null}
+
+					<SaveObject store={store} object={object} transient={transient}/>
 				</ButtonList>
 			</Container>
-		);
-	}
-
-	renderSave() {
-		const {object, transient, storeIdentifier} = this.props;
-
-		return (
-			<History>
-				{history => (
-					<UpdateObjectMutation
-						storeIdentifier={storeIdentifier}
-						objectIdentifier={object.identifier}
-						onCompleted={({store}) => {
-							publishFlashMessage({
-								severity: 'success',
-								/* @TODO: I18n */
-								message: `"${store.object.update.label}" wurde erfolgreich gespeichert.`,
-								timeout: 5000
-							});
-							this.reloadDetail(history, storeIdentifier, object.identifier);
-						}}
-					>
-						{({execute}) => (
-							<Button
-								disabled={!transient.hasValues}
-								onClick={async () => {
-									const properties = await convertProperties(transient.values);
-									execute({properties});
-								}}
-							>
-								<Icon className="icon-save"/>
-								Speichern
-							</Button>
-						)}
-					</UpdateObjectMutation>
-				)}
-			</History>
-		);
-	}
-
-	renderPublish() {
-		const {storeIdentifier, transient, object} = this.props;
-
-		if (transient.hasValues) {
-			return this.renderSaveAndPublish();
-		}
-
-		return (
-			<History>
-				{history => (
-					<PublishObjectsMutation
-						storeIdentifier={storeIdentifier}
-						objectIdentifiers={[object.identifier]}
-						onCompleted={() => {
-							publishFlashMessage({
-								severity: 'success',
-								/* @TODO: I18n */
-								message: `"${object.label}" wurde erfolgreich veröffentlicht.`,
-								timeout: 5000
-							});
-							this.reloadDetail(history, storeIdentifier, object.identifier);
-						}}
-					>
-						{({execute}) => (
-							/* @TODO: I18n */
-							<Confirm
-								question={`Wollen Sie ihre Änderungen an "${object.label}" wirklich veröffentlichen?`}
-								onConfirm={() => execute()}
-							>
-								{confirm => (
-									<Button
-										onClick={confirm.show}
-										disabled={!object.hasUnpublishedChanges}
-									>
-										<Icon className="icon-globe"/>
-										{/* @TODO: I18n */}
-										Veröffentlichen
-									</Button>
-								)}
-							</Confirm>
-						)}
-					</PublishObjectsMutation>
-				)}
-			</History>
-		);
-	}
-
-	renderSaveAndPublish() {
-		const {storeIdentifier, transient, object} = this.props;
-
-		return (
-			<History>
-				{history => (
-					<PublishObjectsMutation
-						storeIdentifier={storeIdentifier}
-						objectIdentifiers={[object.identifier]}
-						onCompleted={() => {
-							publishFlashMessage({
-								severity: 'success',
-								/* @TODO: I18n */
-								message: `"${object.label}" wurde erfolgreich veröffentlicht.`,
-								timeout: 5000
-							});
-							this.reloadDetail(history, storeIdentifier, object.identifier);
-						}}
-					>
-						{({execute}) => (
-							<UpdateObjectMutation
-								storeIdentifier={storeIdentifier}
-								objectIdentifier={object.identifier}
-								onCompleted={() => execute()}
-							>
-								{({execute}) => (
-									/* @TODO: I18n */
-									<Confirm
-										question={`Wollen Sie ihre Änderungen an "${object.label}" wirklich veröffentlichen?`}
-										onClick={async () => {
-											const properties = await convertProperties(transient.values);
-											execute({properties});
-										}}
-									>
-										{confirm => (
-											<Button
-												onClick={confirm.show}
-												disabled={!transient.hasValues && !object.hasUnpublishedChanges}
-											>
-												<Icon className="icon-globe"/>
-												{/* @TODO: I18n */}
-												Speichern & Veröffentlichen
-											</Button>
-										)}
-									</Confirm>
-								)}
-							</UpdateObjectMutation>
-						)}
-					</PublishObjectsMutation>
-				)}
-			</History>
-		);
-	}
-
-	renderDiscard() {
-		const {storeIdentifier, transient, object} = this.props;
-
-		return (
-			<History>
-				{history => (
-					<DiscardObjectsMutation
-						storeIdentifier={storeIdentifier}
-						objectIdentifiers={[object.identifier]}
-						onCompleted={() => {
-							publishFlashMessage({
-								severity: 'success',
-								/* @TODO: I18n */
-								message: `"${object.label}" wurde erfolgreich verworfen.`,
-								timeout: 5000
-							});
-							this.reloadDetail(history, storeIdentifier, object.identifier);
-						}}
-					>
-						{({execute}) => (
-							/* @TODO: I18n */
-							<Confirm
-								question={`Wollen Sie ihre Änderungen an "${object.label}" wirklich verwerfen?`}
-								onConfirm={() => {
-									transient.reset();
-									execute();
-								}}
-							>
-								{confirm => (
-									<Button
-										className="neos-button-warning"
-										onClick={confirm.show}
-										disabled={!object.hasUnpublishedChanges}
-									>
-										<Icon className="icon-ban"/>
-										{/* @TODO: I18n */}
-										Verwerfen
-									</Button>
-								)}
-							</Confirm>
-						)}
-					</DiscardObjectsMutation>
-				)}
-			</History>
-		);
-	}
-
-	renderCreate() {
-		const {object, transient, storeIdentifier} = this.props;
-
-		return (
-			<History>
-				{history => (
-					<CreateObjectMutation
-						storeIdentifier={storeIdentifier}
-						nodeType={object.nodeType.name}
-						onCompleted={({store}) => {
-							publishFlashMessage({
-								severity: 'success',
-								/* @TODO: I18n */
-								message: `"${store.createObject.label}" wurde erfolgreich erstellt.`,
-								timeout: 5000
-							});
-							this.reloadDetail(history, storeIdentifier, store.createObject.identifier);
-						}}
-					>
-						{({execute}) => (
-							<Button
-								disabled={!transient.hasValues}
-								onClick={async () => {
-									const properties = await convertProperties(transient.values);
-									execute({properties});
-								}}
-							>
-								<Icon className="icon-plus"/>
-								{/* @TODO: I18n */}
-								Erstellen
-							</Button>
-						)}
-					</CreateObjectMutation>
-				)}
-			</History>
-		);
-	}
-
-	renderReset() {
-		const {transient} = this.props;
-
-		return (
-			<Button disabled={!transient.hasValues} onClick={transient.reset}>
-				<Icon className="icon-undo"/>
-				{/* @TODO: I18n */}
-				Zurücksetzen
-			</Button>
-		);
-	}
-
-	renderDelete() {
-		const {object, storeIdentifier} = this.props;
-
-		return (
-			<History>
-				{history => (
-					<RemoveObjectMutation
-						storeIdentifier={storeIdentifier}
-						objectIdentifier={object.identifier}
-						onCompleted={() => {
-							publishFlashMessage({
-								severity: 'success',
-								/* @TODO: I18n */
-								message: `"${object.label}" wurde erfolgreich gelöscht.`,
-								timeout: 5000
-							});
-							history.push(`/store/${storeIdentifier}`);
-						}}
-					>
-						{({execute}) => (
-							<Confirm
-								question={`Wollen Sie ${object.label} wirklich löschen?`}
-								onConfirm={() => execute()}
-							>
-								{confirm => (
-									<Button
-										className="neos-button-danger"
-										onClick={confirm.show}
-									>
-										<Icon className="icon-trash"/>
-										{/* @TODO: I18n */}
-										Löschen
-									</Button>
-								)}
-							</Confirm>
-						)}
-					</RemoveObjectMutation>
-				)}
-			</History>
 		);
 	}
 }

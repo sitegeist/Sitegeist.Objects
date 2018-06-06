@@ -16,6 +16,7 @@ import {query} from '../../core/graphql/gql';
 const GetDetailQuery = query/* GraphQL */`
 	query getDetail($context: ContentContextInput!, $storeIdentifier: ID!, $objectIdentifier: ID, $nodeType: String) {
 		store(context: $context, identifier: $storeIdentifier) {
+			identifier
 			objectDetail(nodeType: $nodeType, identifier: $objectIdentifier) {
 				object {
 					identifier

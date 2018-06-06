@@ -25,14 +25,11 @@ const CreateObjectMutation = mutation/* GraphQL */`
 	mutation createObject(
 		$context: ContentContextInput!,
 		$storeIdentifier: ID!,
-		$nodeType: String!,
+		$nodeTypeName: String!,
 		$properties: JSON!
 	) {
 		store(context: $context, identifier: $storeIdentifier) {
-			createObject(nodeType: $nodeType, properties: $properties) {
-				nodeType {
-					label
-				}
+			createObject(nodeType: $nodeTypeName, properties: $properties) {
 				identifier
 				label
 			}
@@ -55,9 +52,7 @@ const UpdateObjectMutation = mutation/* GraphQL */`
 		store(context: $context, identifier: $storeIdentifier) {
 			object(identifier: $objectIdentifier) {
 				update(properties: $properties) {
-					nodeType {
-						label
-					}
+					identifier
 					label
 				}
 			}
@@ -76,9 +71,11 @@ export default class SaveObject extends Component {
 			identifier: PropTypes.string.isRequired
 		}).isRequired,
 		object: PropTypes.shape({
-			identifier: PropTypes.string.isRequired
-		}),
-		nodeTypeName: PropTypes.string,
+			identifier: PropTypes.string,
+			nodeType: PropTypes.shape({
+				name: PropTypes.string.isRequired
+			})
+		}).isRequired,
 		renderAction: PropTypes.func,
 		onCreate: PropTypes.func,
 		onUpdate: PropTypes.func,
@@ -86,8 +83,6 @@ export default class SaveObject extends Component {
 	};
 
 	static defaultProps = {
-		object: null,
-		nodeTypeName: null,
 		renderAction: (execute, {transient}) => (
 			<Button
 				disabled={!transient.hasValues}
@@ -108,33 +103,38 @@ export default class SaveObject extends Component {
 
 			goTo(`/store/${store.identifier}/edit/${createObject.identifier}`);
 		},
-		onUpdate: ({updateObject}, {goTo}, {store}) => {
+		onUpdate: ({object}, {goTo}, {store}) => {
 			publishFlashMessage({
 				severity: 'success',
 				/* @TODO: I18n */
-				message: `"${updateObject.label}" wurde erfolgreich gespeichert.`,
+				message: `"${object.update.label}" wurde erfolgreich gespeichert.`,
 				timeout: 5000
 			});
 
-			goTo(`/store/${store.identifier}/edit/${updateObject.identifier}`);
+			goTo(`/store/${store.identifier}/edit/${object.update.identifier}`);
 		}
 	};
 
 	handleSaveAction = async execute => {
 		const {transient} = this.props;
-		const properties = await convertProperties(transient.values);
-
-		execute({properties});
+		try {
+			console.log(transient.values);
+			const properties = await convertProperties(transient.values);
+			console.log({properties});
+			execute({properties});
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
 	render() {
-		const {store, object, nodeTypeName, renderAction, onCreate, onUpdate} = this.props;
+		const {store, object, renderAction, onCreate, onUpdate} = this.props;
 
-		invariant(object || nodeTypeName, 'Either object or nodeTypeName must be set!');
+		invariant(object.identifier || object.nodeType, 'Either object.identifier or object.nodeType must be set!');
 
 		return (
 			<History>
-				{history => object ? (
+				{history => object.identifier ? (
 					<UpdateObjectMutation
 						storeIdentifier={store.identifier}
 						objectIdentifier={object.identifier}
@@ -145,7 +145,7 @@ export default class SaveObject extends Component {
 				) : (
 					<CreateObjectMutation
 						storeIdentifier={store.identifier}
-						nodeType={nodeTypeName}
+						nodeTypeName={object.nodeType.name}
 						onCompleted={({store}) => onCreate(store, history, this.props)}
 					>
 						{({execute}) => renderAction(() => this.handleSaveAction(execute), this.props)}

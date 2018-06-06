@@ -191,7 +191,7 @@ export default class DetailView extends Component {
 
 		return (
 			<Operations
-				storeIdentifier={storeIdentifier}
+				store={store}
 				object={store.objectDetail.object}
 				transient={transient}
 			/>

@@ -112,7 +112,7 @@ export default class RemoveObject extends Component {
 								question={renderQuestion(this.props)}
 								onConfirm={() => execute()}
 							>
-								{confirm => renderAction(confirm, this.props)}
+								{confirm => renderAction(confirm.show, this.props)}
 							</Confirm>
 						)}
 					</RemoveObjectsMutation>
