@@ -14,16 +14,31 @@ namespace Sitegeist\Objects\Controller;
  */
 
 use Neos\Flow\Annotations as Flow;
-use Wwwision\GraphQL\Controller\StandardController as GraphQlController;
+use Neos\Flow\I18n\Locale;
+use Neos\Flow\I18n\Service as I18nService;
 use Neos\Flow\Property\TypeConverter\PersistentObjectConverter;
+use Wwwision\GraphQL\Controller\StandardController as GraphQlController;
 use Neos\Media\TypeConverter\AssetInterfaceConverter;
 use Neos\Media\Domain\Repository\AssetRepository;
 use Neos\Media\Domain\Model\Asset;
 use Neos\Media\Domain\Model\ThumbnailConfiguration;
 use Neos\Media\Domain\Service\AssetService;
+use Neos\Neos\Service\UserService;
 
 class ApiController extends GraphQlController
 {
+    /**
+     * @Flow\Inject
+     * @var I18nService
+     */
+    protected $i18nService;
+
+    /**
+     * @Flow\Inject
+     * @var UserService
+     */
+    protected $userService;
+
     /**
      * @Flow\Inject
      * @var AssetRepository
@@ -35,6 +50,13 @@ class ApiController extends GraphQlController
      * @var AssetService
      */
     protected $assetService;
+
+    protected function initializeObject()
+    {
+        $this->i18nService->getConfiguration()->setCurrentLocale(
+            new Locale($this->userService->getInterfaceLanguage())
+        );
+    }
 
     /**
      * Initialization for uploadAction

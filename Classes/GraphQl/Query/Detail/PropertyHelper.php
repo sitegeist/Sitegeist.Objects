@@ -14,9 +14,9 @@ namespace Sitegeist\Objects\GraphQl\Query\Detail;
  */
 
 use Neos\Flow\Annotations as Flow;
+use Neos\Flow\I18n\EelHelper\TranslationHelper;
 use Neos\Utility\ObjectAccess;
 use Sitegeist\Objects\GraphQl\Query\ObjectHelper;
-use Neos\Flow\I18n\EelHelper\TranslationHelper;
 
 class PropertyHelper
 {
