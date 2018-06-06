@@ -51,6 +51,11 @@ class ApiController extends GraphQlController
      */
     protected $assetService;
 
+    /**
+     * Initialize this controller
+     *
+     * @return void
+     */
     protected function initializeObject()
     {
         $this->i18nService->getConfiguration()->setCurrentLocale(
