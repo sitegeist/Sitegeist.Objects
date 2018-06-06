@@ -9,15 +9,13 @@
  * For the full copyright and license information, please read the
  * LICENSE.md file that was distributed with this source code.
  */
-window.Sitegeist.Objects.plugin.registerConverter('collection', ({payload}) => {
-	return payload.map(item => ({
+window.Sitegeist.Objects.plugin.registerConverter('collection', ({payload}, convertPropertiesRecursively) => {
+	return Promise.all(payload.map(async item => ({
 		...item,
 		payload: {
 			...item.payload,
-			properties: item.payload.properties.reduce((properties, property) => {
-				properties[property.name] = property.value;
-				return properties;
-			}, {})
+			properties: await convertPropertiesRecursively(item.payload.transient),
+			transient: undefined
 		}
-	}));
+	})));
 });

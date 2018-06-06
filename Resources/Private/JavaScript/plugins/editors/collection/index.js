@@ -79,18 +79,20 @@ window.Sitegeist.Objects.plugin.registerEditor('Collection', class CollectionEdi
 
 	renderCollection(store) {
 		const {value} = this.props;
+		const {objectDetails} = store.objectDetail.collection;
 
 		return (
 			<Collection
 				onChange={this.handleChange}
-				value={value && value.payload ? value.payload : store.objectDetail.collection.objectDetails.map(objectDetail => ({
+				value={value && value.payload ? value.payload : objectDetails.map(objectDetail => ({
 					identifier: objectDetail.object.identifier,
 					payload: {
 						icon: objectDetail.object.icon,
 						nodeType: objectDetail.object.nodeType.name,
 						label: objectDetail.object.label,
 						isHidden: objectDetail.object.isHidden,
-						properties: objectDetail.properties
+						properties: objectDetail.properties,
+						transient: {}
 					},
 					modes: []
 				}))}
@@ -154,8 +156,8 @@ window.Sitegeist.Objects.plugin.registerEditor('Collection', class CollectionEdi
 									})
 								)}
 							>
-								{/* @TODO: I18n */}
 								<Icon className="icon-plus"/>
+								{/* @TODO: I18n */}
 								{allowedNodeType.label} hinzufügen
 							</Button>
 						);

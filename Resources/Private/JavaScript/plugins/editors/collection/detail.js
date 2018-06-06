@@ -102,34 +102,15 @@ const EditorArea = styled.div`
 `;
 
 export default class Detail extends Component {
-	static getDerivedStateFromProps = (props, state) => ({
-		originalProperties: state && 'originalProperties' in state ?
-			state.originalProperties :
-			props.item.payload.properties
-	});
-
-	state = {
-		//
-		// This is needed to track the dirty state of editors created
-		// by this component.
-		//
-		originalProperties: this.props.item.payload.properties
-	};
-
 	render() {
 		const {item} = this.props;
 
 		return (
 			<Transient
-				onChange={({values: properties}) => item.update(payload => ({
+				value={item.payload.transient}
+				onChange={({values}) => item.update(payload => ({
 					...payload,
-					properties: payload.properties.map(property => ({
-						...property,
-						value: (
-							property.name in properties ?
-								properties[property.name] : property.value
-						)
-					}))
+					transient: values
 				}))}
 			>
 				{transient => this.renderContent(transient)}
@@ -139,7 +120,6 @@ export default class Detail extends Component {
 
 	renderContent(transient) {
 		const {item, isOpen, storeIdentifier, onToggle, shortView, shortViewOptions, nodeType, label} = this.props;
-		const {originalProperties} = this.state;
 		const isHidden = (item.payload.isHidden && !item.hasMode('show')) || item.hasMode('hide');
 
 		return (
@@ -216,7 +196,7 @@ export default class Detail extends Component {
 				{isOpen ? (
 					/* @TODO: Proper Styles */
 					<EditorArea>
-						{originalProperties.map(property => (
+						{item.payload.properties.map(property => (
 							<EditorManager
 								key={property.name}
 								name={property.editor}
