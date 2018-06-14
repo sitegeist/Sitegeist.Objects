@@ -23,6 +23,7 @@ module.exports = {
 			'@sitegeist-objects/core/util': path.resolve(__dirname, 'Resources/Private/JavaScript/core/util'),
 			'@sitegeist-objects/core/graphql': path.resolve(__dirname, 'Resources/Private/JavaScript/core/graphql'),
 			'@sitegeist-objects/core/flashMessage': path.resolve(__dirname, 'Resources/Private/JavaScript/core/flashMessage'),
+			'@sitegeist-objects/actions': path.resolve(__dirname, 'Resources/Private/JavaScript/actions'),
 			'@sitegeist-objects/query': path.resolve(__dirname, 'Resources/Private/JavaScript/query'),
 			'@sitegeist-objects/lib': path.resolve(__dirname, 'Resources/Private/JavaScript/lib'),
 			'smooth-dnd': path.resolve(__dirname, 'Resources/Private/JavaScript/shim/smooth-dnd')
