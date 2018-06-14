@@ -45,9 +45,7 @@ const keys = {
 	'Shift-Ctrl-8': wrapInList(schema.nodes.bullet_list),
 	'Shift-Ctrl-9': wrapInList(schema.nodes.ordered_list),
 	'Ctrl->': wrapIn(schema.nodes.blockquote),
-	'Mod-Enter': chainCommands(exitCode, insertBreak),
 	'Shift-Enter': chainCommands(exitCode, insertBreak),
-	'Ctrl-Enter': chainCommands(exitCode, insertBreak), // Mac-only?
 	'Shift-Ctrl-0': setBlockType(schema.nodes.paragraph),
 	'Shift-Ctrl-\\': setBlockType(schema.nodes.code_block),
 	'Shift-Ctrl-1': setBlockType(schema.nodes.heading, {level: 1}),

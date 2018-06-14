@@ -9,9 +9,11 @@
  * For the full copyright and license information, please read the
  * LICENSE.md file that was distributed with this source code.
  */
-import React from 'shim/react';
+import React, {Component} from 'shim/react';
+import PropTypes from 'prop-types';
 import styled from 'shim/styled-components';
 import {HtmlEditor} from '@aeaton/react-prosemirror';
+import {selectAll} from 'prosemirror-commands';
 
 import Toolbar from '../structures/toolbar';
 
@@ -139,25 +141,71 @@ const processMenuRecursively = (menu, {state, dispatch}) => menu.map(item => {
 	}
 });
 
-export const RichTextRenderer = ({children, ...props}) => (
-	<HtmlEditor
-		options={options}
-		render={({state, dispatch, editor, ...props}) => children({
+class EditorRenderer extends Component {
+	static propTypes = {
+		children: PropTypes.func.isRequired,
+		state: PropTypes.object.isRequired,
+		dispatch: PropTypes.func.isRequired,
+		editor: PropTypes.node.isRequired,
+		selected: PropTypes.bool
+	};
+
+	static defaultProps = {
+		selected: false
+	};
+
+	componentDidMount() {
+		const {state, dispatch, selected} = this.props;
+
+		if (selected) {
+			selectAll(state, dispatch);
+		}
+	}
+
+	render() {
+		const {state, dispatch, editor, children, ...props} = this.props;
+		const processedMenu = processMenuRecursively(menu, {state, dispatch});
+
+		return children({
 			...props,
-			menu: processMenuRecursively(menu, {state, dispatch}),
+			menu: processedMenu,
+			toolbar: <Toolbar groups={processedMenu}/>,
 			editor: (
-				<AdjustProseMirrorStyles>{editor}</AdjustProseMirrorStyles>
+				<AdjustProseMirrorStyles>
+					{editor}
+				</AdjustProseMirrorStyles>
 			)
-		})}
-		{...props}
-	/>
-);
+		});
+	}
+}
+
+export class RichTextRenderer extends Component {
+	static propTypes = {
+		children: PropTypes.func.isRequired
+	};
+
+	render() {
+		const {children, ...topLevelProps} = this.props;
+
+		return (
+			<HtmlEditor
+				options={options}
+				render={props => (
+					<EditorRenderer {...props} {...topLevelProps}>
+						{children}
+					</EditorRenderer>
+				)}
+				{...topLevelProps}
+			/>
+		);
+	}
+}
 
 const RichText = props => (
 	<RichTextRenderer {...props}>
-		{({editor, menu}) => (
+		{({editor, toolbar}) => (
 			<Container>
-				<Toolbar groups={menu}/>
+				{toolbar}
 				{editor}
 			</Container>
 		)}
