@@ -63,6 +63,11 @@ class StoreMutation extends ObjectType
                             'type' => Type::nonNull(Type::string()),
                             'description' => 'The node type for the newly created object node'
                         ],
+                        'name' => [
+                            'type' => Type::string(),
+                            'description' => 'A node name proposal',
+                            'defaultValue' => 'object'
+                        ],
                         'properties' => [
                             'type' => JsonScalar::type(),
                             'description' => 'Properties for the newly created node'
@@ -73,7 +78,7 @@ class StoreMutation extends ObjectType
                         // @TODO: Invariant: nodeType must be of type Sitegeist.Objects:Object
                         //
                         $objectNode = $store->getNode()->createNode(
-                            $this->nodeService->generateUniqueNodeName($store->getNode()),
+                            $this->nodeService->generateUniqueNodeName($store->getNode(), $arguments['name']),
                             $this->nodeTypeManager->getNodeType($arguments['nodeType'])
                         );
 
