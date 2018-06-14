@@ -189,8 +189,21 @@ class NodeService
     public function buildUriFromNode(NodeInterface $node, $resolveShortcuts = true)
     {
         $previewUriGenerator = $node->getNodeType()->getConfiguration('options.sitegeist/objects.previewUriGenerator');
-        $generator = $this->objectManager->get($previewUriGenerator['generator']);
 
-        return $generator->generate($node, $previewUriGenerator['generatorOptions']);
+        if (
+            $previewUriGenerator &&
+            array_key_exists('generator', $previewUriGenerator) &&
+            class_exists($previewUriGenerator['generator'])
+        ) {
+            $generator = $this->objectManager->get($previewUriGenerator['generator']);
+
+            if (array_key_exists('generatorOptions', $previewUriGenerator)) {
+                $generatorOptions = $previewUriGenerator['generatorOptions'];
+            } else {
+                $generatorOptions = [];
+            }
+
+            return $generator->generate($node, $generatorOptions);
+        }
     }
 }
