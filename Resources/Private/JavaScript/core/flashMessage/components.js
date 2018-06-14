@@ -26,7 +26,8 @@ const FlashMessage = ({content, severity, message, onClose, ...props}) => (
 				<div className="neos-message">
 					<div
 						className={mergeClassNames({
-							'neos-notification-content expandable': Boolean(content),
+							'neos-notification-content': true,
+							expandable: Boolean(content),
 							expanded: expanded.is
 						})}
 					>
