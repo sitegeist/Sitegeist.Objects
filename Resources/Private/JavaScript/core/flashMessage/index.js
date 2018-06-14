@@ -15,7 +15,7 @@ import uuid from 'uuid';
 
 import FlashMessage, {FlashMessageContainer} from './components';
 
-const flashMessages$ = new BehaviorSubject();
+const {flashMessages$} = window.Sitegeist.Objects;
 
 export const publishFlashMessage = ({severity, message, timeout = 0}) => flashMessages$.next({
 	id: uuid.v4(),

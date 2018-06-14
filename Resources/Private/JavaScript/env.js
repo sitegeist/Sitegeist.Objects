@@ -52,6 +52,11 @@ window.Sitegeist.Objects.appContainer = document.getElementById('app');
 window.Sitegeist.Objects.csrfToken$ = new BehaviorSubject(window.Sitegeist.Objects.csrfToken);
 
 //
+// Expose flashMessages
+//
+window.Sitegeist.Objects.flashMessages$ = new BehaviorSubject();
+
+//
 // Expose Plugin API
 //
 window.Sitegeist.Objects.plugin = {
