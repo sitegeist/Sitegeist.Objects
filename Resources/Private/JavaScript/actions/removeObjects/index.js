@@ -28,7 +28,7 @@ const RemoveObjectsMutation = mutation/* GraphQL */`
 		$objectIdentifiers: [ID!]!
 	) {
 		store(context: $context, identifier: $storeIdentifier) {
-			objects(identifier: $objectIdentifiers) {
+			objects(identifiers: $objectIdentifiers) {
 				remove {
 					nodeType {
 						label
