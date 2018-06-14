@@ -56,7 +56,7 @@ class DetailHelper
     }
 
     /**
-     * @return array<TabHelper>
+     * @return \Generator<TabHelper>
      */
     public function getTabs()
     {
@@ -69,13 +69,20 @@ class DetailHelper
                     ->getConfiguration('ui.sitegeist/objects/detail.groups.' . $groupName . '.tab');
 
                 if ($tabName && !array_key_exists($tabName, $tabConfigurations)) {
-                    $tabConfigurations[$tabName] = new TabHelper($this->object, $tabName);
+                    $tabConfigurations[$tabName] = [
+                        'name' => $tabName,
+                        'configuration' => $this->object->getNodeType()
+                            ->getConfiguration('ui.sitegeist/objects/detail.tabs.' . $tabName)
+                    ];
                 }
             }
         }
 
-        $sorter = new PositionalArraySorter($tabConfigurations);
-        return $sorter->toArray();
+        $sorter = new PositionalArraySorter($tabConfigurations, 'configuration.position');
+
+        foreach ($sorter->toArray() as $item) {
+            yield new TabHelper($this->object, $item['name']);
+        }
     }
 
     /**
