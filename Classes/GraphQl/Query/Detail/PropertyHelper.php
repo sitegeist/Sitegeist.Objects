@@ -16,6 +16,9 @@ namespace Sitegeist\Objects\GraphQl\Query\Detail;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\I18n\EelHelper\TranslationHelper;
 use Neos\Utility\ObjectAccess;
+use Neos\Eel\EelEvaluatorInterface;
+use Neos\Eel\Utility as EelUtility;
+use Neos\Eel\Helper\StringHelper;
 use Sitegeist\Objects\GraphQl\Query\ObjectHelper;
 
 class PropertyHelper
@@ -34,6 +37,24 @@ class PropertyHelper
      * @var array
      */
     protected $propertyConfiguration;
+
+    /**
+     * @Flow\Inject
+     * @var EelEvaluatorInterface
+     */
+    protected $eelEvaluator;
+
+    /**
+     * @Flow\Inject
+     * @var StringHelper
+     */
+    protected $stringHelper;
+
+    /**
+     * @Flow\InjectConfiguration(package="Neos.Fusion", path="defaultContext")
+     * @var array
+     */
+    protected $defaultContextConfiguration;
 
     public function __construct(ObjectHelper $object, string $propertyName)
     {
@@ -119,7 +140,41 @@ class PropertyHelper
      */
     public function getEditorOptions()
     {
-        return ObjectAccess::getPropertyPath($this->propertyConfiguration, 'editorOptions');
+        $options = ObjectAccess::getPropertyPath($this->propertyConfiguration, 'editorOptions');
+
+        if (is_array($options)) {
+            return $this->evaluateEditorOptionsRecursively($options);
+        }
+
+        return $options;
+    }
+
+    protected function evaluateEditorOptionsRecursively(array $options)
+    {
+        $result = [];
+
+        foreach ($options as $key => $value) {
+            if (is_string($value) && $this->stringHelper->startsWith($value, '${')) {
+                $result[$key] = EelUtility::evaluateEelExpression(
+                    $value,
+                    $this->eelEvaluator,
+                    [
+                        'node' => $this->object->getNode()
+                    ],
+                    $this->defaultContextConfiguration
+                );
+                continue;
+            }
+
+            if (is_array($value)) {
+                $result[$key] = $this->evaluateEditorOptionsRecursively($value);
+                continue;
+            }
+
+            $result[$key] = $value;
+        }
+
+        return $result;
     }
 
     /**
