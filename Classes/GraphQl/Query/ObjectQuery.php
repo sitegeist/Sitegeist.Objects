@@ -35,6 +35,10 @@ class ObjectQuery extends ObjectType
                     'type' => Type::id(),
                     'description' => 'The id of the object node or null if empty'
                 ],
+                'name' => [
+                    'type' => Type::string(),
+                    'description' => 'The name of the object node or null if empty'
+                ],
                 'nodeType' => [
                     'type' => $typeResolver->get(NodeTypeQuery::class),
                     'description' => 'The node type of the object node'
