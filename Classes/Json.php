@@ -15,7 +15,7 @@ namespace Sitegeist\Objects;
 
 use Neos\Utility\ObjectAccess;
 
-class Json implements \JsonSerializable
+class Json implements \JsonSerializable, \ArrayAccess
 {
     /**
      * @var array
@@ -30,6 +30,30 @@ class Json implements \JsonSerializable
     public function get($path)
     {
         return ObjectAccess::getPropertyPath($this->data, $path);
+    }
+
+    public function offsetExists($offset)
+    {
+        return array_key_exists($offset, $this->data);
+    }
+
+    public function offsetGet($offset)
+    {
+        if ($this->offsetExists($offset)) {
+            return $this->data[$offset];
+        }
+
+        return null;
+    }
+
+    public function offsetSet($offset, $value)
+    {
+        throw new \Exception(self::class . ' is readonly!');
+    }
+
+    public function offsetUnset($offset)
+    {
+        throw new \Exception(self::class . ' is readonly!');
     }
 
     public function jsonSerialize()
