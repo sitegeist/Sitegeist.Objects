@@ -26,10 +26,11 @@ const CreateObjectMutation = mutation/* GraphQL */`
 		$context: ContentContextInput!,
 		$storeIdentifier: ID!,
 		$nodeTypeName: String!,
+		$name: String,
 		$properties: JSON!
 	) {
 		store(context: $context, identifier: $storeIdentifier) {
-			createObject(nodeType: $nodeTypeName, properties: $properties) {
+			createObject(nodeType: $nodeTypeName, name: $name, properties: $properties) {
 				identifier
 				label
 			}
@@ -72,6 +73,7 @@ export default class SaveObject extends Component {
 		}).isRequired,
 		object: PropTypes.shape({
 			identifier: PropTypes.string,
+			name: PropTypes.string,
 			nodeType: PropTypes.shape({
 				name: PropTypes.string.isRequired
 			})
@@ -79,10 +81,14 @@ export default class SaveObject extends Component {
 		renderAction: PropTypes.func,
 		onCreate: PropTypes.func,
 		onUpdate: PropTypes.func,
-		transient: PropTypes.object.isRequired
+		transient: PropTypes.object
 	};
 
 	static defaultProps = {
+		transient: {
+			hasValues: false,
+			values: {}
+		},
 		renderAction: (execute, {transient}) => (
 			<Button
 				disabled={!transient.hasValues}
@@ -118,9 +124,7 @@ export default class SaveObject extends Component {
 	handleSaveAction = async execute => {
 		const {transient} = this.props;
 		try {
-			console.log({before: transient.values});
 			const properties = await convertProperties(transient.values);
-			console.log({after: properties});
 			execute({properties});
 		} catch (error) {
 			publishFlashMessage({
@@ -149,6 +153,7 @@ export default class SaveObject extends Component {
 					<CreateObjectMutation
 						storeIdentifier={store.identifier}
 						nodeTypeName={object.nodeType.name}
+						name={object.name}
 						onCompleted={({store}) => onCreate(store, history, this.props)}
 					>
 						{({execute}) => renderAction(() => this.handleSaveAction(execute), this.props)}
