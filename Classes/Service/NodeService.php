@@ -14,13 +14,9 @@ namespace Sitegeist\Objects\Service;
  */
 
 use Neos\Flow\Annotations as Flow;
-use Neos\Flow\Http\Request;
-use Neos\Flow\Http\Uri;
-use Neos\Flow\Mvc\Routing\UriBuilder;
-use Neos\Flow\Mvc\ActionRequest;
+use Neos\Flow\ObjectManagement\ObjectManagerInterface;
 use Neos\Utility\ObjectAccess;
 use Neos\Eel\Helper\StringHelper;
-use Neos\Neos\Domain\Service\NodeShortcutResolver;
 use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\ContentRepository\Domain\Service\NodeTypeManager;
 use Neos\ContentRepository\Domain\Service\NodeServiceInterface;
@@ -64,9 +60,9 @@ class NodeService
 
     /**
      * @Flow\Inject
-     * @var NodeShortcutResolver
+     * @var ObjectManagerInterface
      */
-    protected $nodeShortcutResolver;
+    protected $objectManager;
 
     /**
      * For debugging purposes only!
@@ -192,35 +188,9 @@ class NodeService
      */
     public function buildUriFromNode(NodeInterface $node, $resolveShortcuts = true)
     {
-        if ($resolveShortcuts) {
-            $resolvedNode = $this->nodeShortcutResolver->resolveShortcutTarget($node);
-        } else {
-            $resolvedNode = $node;
-        }
+        $previewUriGenerator = $node->getNodeType()->getConfiguration('options.sitegeist/objects.previewUriGenerator');
+        $generator = $this->objectManager->get($previewUriGenerator['generator']);
 
-        if (is_string($resolvedNode)) {
-            return $resolvedNode;
-        }
-
-        if (!$resolvedNode instanceof NodeInterface) {
-            throw new \Exception(
-                sprintf('Could not resolve shortcut target for node "%s"', $node->getPath()),
-                1527066615
-            );
-        }
-
-        //
-        // Create a dummy parent request
-        //
-        $httpRequest = Request::create(new Uri('http://neos.io'));
-        $request = new ActionRequest($httpRequest);
-
-        $uriBuilder = new UriBuilder();
-        $uriBuilder->setRequest($request);
-
-        return $uriBuilder
-            ->reset()
-            ->setFormat($request->getFormat())
-            ->uriFor('show', array('node' => $resolvedNode), 'Frontend\Node', 'Neos.Neos');
+        return $generator->generate($node, $previewUriGenerator['generatorOptions']);
     }
 }

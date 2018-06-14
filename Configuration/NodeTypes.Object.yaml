@@ -6,6 +6,12 @@
   constraints:
     nodeTypes:
       '*': false
+  options:
+    sitegeist/objects:
+      previewUriGenerator:
+        generator: Sitegeist\Objects\Service\NodeUriGenerator\DefaultNodeUriGenerator
+        generatorOptions:
+          resolveShortcuts: true
   ui:
     sitegeist/objects/detail:
       tabs:
