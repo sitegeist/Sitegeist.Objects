@@ -24,7 +24,7 @@ const GetReferencesQuery = query/* GraphQL */`
 		references(
 			context: $context,
 			search: $search,
-			searchRoot: $searchRoot,
+			searchRootIdentifier: $searchRoot,
 			nodeType: $nodeType,
 			directChildrenOnly: $directChildrenOnly
 		) {

@@ -152,8 +152,11 @@ class RootQuery extends ObjectType
                             'type' => Type::nonNull(Type::string()),
                             'description' => 'A search term to filter by'
                         ],
-                        'searchRoot' => [
+                        'searchRootIdentifier' => [
                             'type' => Type::id()
+                        ],
+                        'searchRootPath' => [
+                            'type' => Type::string()
                         ],
                         'nodeType' => [
                             'type' => Type::string()
@@ -164,20 +167,29 @@ class RootQuery extends ObjectType
                     ],
                     'resolve' => function($_, $arguments) {
                         $contentContext = $this->contentContextFactory->create($arguments['context']);
-                        $searchRoot = array_key_exists('searchRoot', $arguments) && $arguments['searchRoot'] ?
-                            $contentContext->getNodeByIdentifier($arguments['searchRoot']) :
-                            $contentContext->getRootNode();
 
-                        $query = $this->queryBuilder->query($searchRoot);
+                        if (array_key_exists('searchRootIdentifier', $arguments) && $arguments['searchRootIdentifier']) {
+                            $searchRootNode = $contentContext->getNodeByIdentifier($arguments['searchRootIdentifier']);
+                        } else if (array_key_exists('searchRootPath', $arguments) && $arguments['searchRootPath']) {
+                            $searchRootNode = $contentContext->getNode($arguments['searchRootPath']);
+                        } else {
+                            $searchRootNode = $contentContext->getRootNode();
+                        }
+
+                        $query = $this->queryBuilder->query($searchRootNode);
 
                         if (array_key_exists('nodeType', $arguments) && $arguments['nodeType']) {
                             $query = $query->nodeType($arguments['nodeType']);
                         }
 
                         if (array_key_exists('directChildrenOnly', $arguments) && $arguments['directChildrenOnly']) {
-                            if (!array_key_exists('searchRoot', $arguments)) {
+                            if (
+                                !array_key_exists('searchRootIdentifier', $arguments) &&
+                                !array_key_exists('searchRootPath', $arguments)
+                            ) {
                                 throw new \InvalidArgumentException(
-                                    '"searchRoot" must be configured when using "directChildrenOnly" flag!',
+                                    '"searchRootIdentifier" or "searchRootPath" must be configured ' .
+                                    'when using "directChildrenOnly" flag.',
                                     1526825101
                                 );
                             }
