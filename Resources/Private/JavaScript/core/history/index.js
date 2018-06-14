@@ -37,6 +37,14 @@ class History extends Component {
 				setTimeout(() => {
 					history.replace(target);
 				});
+			},
+			reload: () => {
+				const {pathname} = history.location;
+
+				history.push(`/empty`);
+				setTimeout(() => {
+					history.replace(pathname);
+				});
 			}
 		});
 	}
