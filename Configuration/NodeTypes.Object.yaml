@@ -81,7 +81,7 @@
           type: string
           include_in_all: false
           index: 'not_analyzed'
-        indexing: ${node.properties.title}
+        indexing: ${q(node).property('label')}
     __label:
       search:
         elasticSearchMapping:
