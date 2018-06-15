@@ -9,6 +9,7 @@
  * For the full copyright and license information, please read the
  * LICENSE.md file that was distributed with this source code.
  */
+import React from 'shim/react';
 import PropTypes from 'shim/prop-types';
 
 import {query} from '../../core/graphql/gql';
@@ -17,14 +18,16 @@ const GetReferencesQuery = query/* GraphQL */`
 	query getReferences(
 		$context: ContentContextInput!,
 		$search: String!,
-		$searchRoot: ID,
+		$searchRootIdentifier: ID,
+		$searchRootPath: String,
 		$nodeType: String,
 		$directChildrenOnly: Boolean
 	) {
 		references(
 			context: $context,
 			search: $search,
-			searchRootIdentifier: $searchRoot,
+			searchRootIdentifier: $searchRootIdentifier,
+			searchRootPath: $searchRootPath,
 			nodeType: $nodeType,
 			directChildrenOnly: $directChildrenOnly
 		) {
@@ -45,7 +48,8 @@ GetReferencesQuery.propTypes = {
 		inaccessibleContentShown: PropTypes.bool.isRequired
 	}),
 	search: PropTypes.string.isRequired,
-	searchRoot: PropTypes.string,
+	searchRootIdentifier: PropTypes.string,
+	searchRootPath: PropTypes.string,
 	nodeType: PropTypes.string,
 	directChildrenOnly: PropTypes.bool,
 	children: PropTypes.func
@@ -54,10 +58,12 @@ GetReferencesQuery.propTypes = {
 GetReferencesQuery.defaultProps = {
 	/* @TODO: Better context handling */
 	context: window.Sitegeist.Objects.contentContext,
-	searchRoot: null,
+	searchRootIdentifier: null,
+	searchRootPath: null,
 	nodeType: null,
 	directChildrenOnly: null,
-	children: () => {}
+	children: () => {},
+	renderLoader: () => (<div>...</div>)
 };
 
 export default GetReferencesQuery;

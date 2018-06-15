@@ -21,12 +21,14 @@ class Query extends Component {
 		cache: PropTypes.object,
 		query: PropTypes.string.isRequired,
 		children: PropTypes.func.isRequired,
-		variables: PropTypes.object
+		variables: PropTypes.object,
+		renderLoader: PropTypes.func
 	};
 
 	static defaultProps = {
 		cache: null,
-		variables: {}
+		variables: {},
+		renderLoader: () => (<Loader/>)
 	};
 
 	state = {
@@ -104,7 +106,7 @@ class Query extends Component {
 	}
 
 	render() {
-		const {cache, children} = this.props;
+		const {cache, children, renderLoader} = this.props;
 		const {cacheIdentifier} = this.state;
 
 		if (cache && cache.get(cacheIdentifier)) {
@@ -113,7 +115,7 @@ class Query extends Component {
 
 		return (
 			<Fragment key={cacheIdentifier}>
-				{this.state.isLoading ? (<Loader/>) : null}
+				{this.state.isLoading ? renderLoader() : null}
 				{children(this.state)}
 			</Fragment>
 		);

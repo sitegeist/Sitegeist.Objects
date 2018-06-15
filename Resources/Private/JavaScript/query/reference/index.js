@@ -9,6 +9,7 @@
  * For the full copyright and license information, please read the
  * LICENSE.md file that was distributed with this source code.
  */
+import React from 'shim/react';
 import PropTypes from 'shim/prop-types';
 
 import {query} from '../../core/graphql/gql';
@@ -45,7 +46,8 @@ GetReferenceQuery.propTypes = {
 GetReferenceQuery.defaultProps = {
 	/* @TODO: Better context handling */
 	context: window.Sitegeist.Objects.contentContext,
-	children: () => {}
+	children: () => {},
+	renderLoader: () => (<div>...</div>)
 };
 
 export default GetReferenceQuery;

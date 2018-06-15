@@ -57,11 +57,13 @@ const SelectButton = styled(Button)`
 window.Sitegeist.Objects.plugin.registerEditor('References', class ReferencesEditor extends Component {
 	static propTypes = {
 		commit: PropTypes.func.isRequired,
-		value: PropTypes.array
+		value: PropTypes.array,
+		options: PropTypes.object
 	};
 
 	static defaultProps = {
-		value: []
+		value: [],
+		options: {}
 	};
 
 	state = {
@@ -84,6 +86,7 @@ window.Sitegeist.Objects.plugin.registerEditor('References', class ReferencesEdi
 
 	render() {
 		const {id, value} = this.props;
+		const options = this.props.options || {};
 
 		return (
 			<Editor {...this.props}>
@@ -119,7 +122,12 @@ window.Sitegeist.Objects.plugin.registerEditor('References', class ReferencesEdi
 								onChange={this.handleSearch}
 							/>
 							{this.state.search.length > 2 ? (
-								<ReferencesQuery search={this.state.search}>
+								<ReferencesQuery
+									search={this.state.search}
+									searchRootIdentifier={options.searchRootIdentifier}
+									searchRootPath={options.searchRootPath}
+									nodeType={options.nodeType}
+								>
 									{({references}) => references.length ? references.map(reference => (
 										<SelectButton
 											key={reference.identifier}

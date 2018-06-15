@@ -54,11 +54,13 @@ const SelectButton = styled(Button)`
 window.Sitegeist.Objects.plugin.registerEditor('Reference', class ReferenceEditor extends Component {
 	static propTypes = {
 		commit: PropTypes.func.isRequired,
-		value: PropTypes.string
+		value: PropTypes.string,
+		options: PropTypes.object
 	};
 
 	static defaultProps = {
-		value: null
+		value: null,
+		options: {}
 	};
 
 	state = {
@@ -84,6 +86,7 @@ window.Sitegeist.Objects.plugin.registerEditor('Reference', class ReferenceEdito
 
 	render() {
 		const {value} = this.props;
+		const options = this.props.options || {};
 
 		return (
 			<Editor {...this.props}>
@@ -106,7 +109,12 @@ window.Sitegeist.Objects.plugin.registerEditor('Reference', class ReferenceEdito
 						{/* @TODO: I18n */}
 						<TextInput placeholder="Suchbegriff eingeben..." onChange={this.handleSearch}/>
 						{this.state.search.length > 2 ? (
-							<ReferencesQuery search={this.state.search}>
+							<ReferencesQuery
+								search={this.state.search}
+								searchRootIdentifier={options.searchRootIdentifier}
+								searchRootPath={options.searchRootPath}
+								nodeType={options.nodeType}
+							>
 								{({references}) => references.length ? references.map(reference => (
 									<SelectButton key={reference.identifier} onClick={() => this.handleSelect(reference.identifier)}>
 										<Icon className={reference.nodeType.icon}/> {reference.label}
