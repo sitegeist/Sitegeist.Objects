@@ -152,9 +152,15 @@ class StoreHelper
      */
     public function getObjects(array $arguments)
     {
+        $currentWorkspaceNestingLevel = 1;
+        $workspace = $this->node->getContext()->getWorkspace();
+        while ($workspace->getBaseWorkspace() !== null) {
+            $currentWorkspaceNestingLevel++;
+            $workspace = $workspace->getBaseWorkspace();
+        }
+
         $query = $this->queryBuilder->query($this->node)
             ->nodeType('Sitegeist.Objects:Object')
-            ->exactMatch('__workspace', $this->node->getContext()->getWorkspace()->getName())
             ->exactMatch('__parentNode', $this->node->getIdentifier());
 
         if (array_key_exists('search', $arguments) && $arguments['search']) {
@@ -187,7 +193,7 @@ class StoreHelper
         }
 
         if (array_key_exists('from', $arguments)) {
-            $query = $query->from($arguments['from']);
+            $query = $query->from($arguments['from'] * $currentWorkspaceNestingLevel);
         }
 
         if (array_key_exists('length', $arguments)) {
@@ -202,13 +208,12 @@ class StoreHelper
             }
         }
 
-
         //
         // @TODO: Workaround for invalid queries
         //
         try {
             $result = $query->execute();
-            return [$result, $result->count()];
+            return [$result, intval($result->count() / $currentWorkspaceNestingLevel)];
         } catch (\Exception $e) {
             return [[], 0];
         }
