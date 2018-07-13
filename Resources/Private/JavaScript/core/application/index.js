@@ -10,21 +10,39 @@
  * LICENSE.md file that was distributed with this source code.
  */
 import React, {Component, Fragment} from 'shim/react';
+import moment from 'moment';
 import PropTypes from 'shim/prop-types';
 
 import FlashMessageManager from '../flashMessage';
+
+const today = moment();
+export const DateContext = React.createContext({
+	today,
+	lastChosenDate: null,
+	setLastChosenDate: () => {}
+});
 
 class Application extends Component {
 	static propTypes = {
 		children: PropTypes.node.isRequired
 	};
 
+	state = {lastChosenDate: null};
+
+	setLastChosenDate = lastChosenDate => this.setState({lastChosenDate});
+
 	render() {
 		return (
-			<Fragment>
+			<DateContext.Provider
+				value={{
+					today,
+					lastChosenDate: this.state.lastChosenDate,
+					setLastChosenDate: this.setLastChosenDate
+				}}
+			>
 				<FlashMessageManager/>
 				{this.props.children}
-			</Fragment>
+			</DateContext.Provider>
 		);
 	}
 }

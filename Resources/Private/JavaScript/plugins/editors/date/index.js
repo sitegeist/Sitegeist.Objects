@@ -14,6 +14,7 @@ import moment from 'moment';
 import styled from 'shim/styled-components';
 
 import Editor from '../../../lib/presentation/structures/editor';
+import {DateContext} from '../../../core/application';
 
 const {React, PropTypes} = window.Sitegeist.Objects.runtime;
 const {Component} = window.Sitegeist.Objects.runtime.React;
@@ -117,13 +118,21 @@ window.Sitegeist.Objects.plugin.registerEditor('Date', class DateEditor extends 
 				<AdjustStyles>
 					{/* @TODO: I18n */}
 					{/* @TODO: Make dateFormat configurable */}
-					<DatePicker
-						id={id}
-						locale="de"
-						selected={value}
-						onChange={this.handleChange}
-						dateFormat="LL"
-					/>
+					<DateContext.Consumer>
+						{({today, lastChosenDate, setLastChosenDate}) => (
+							<DatePicker
+								id={id}
+								locale="de"
+								openToDate={lastChosenDate || today}
+								selected={value}
+								onChange={value => {
+									setLastChosenDate(value);
+									this.handleChange(value);
+								}}
+								dateFormat="LL"
+							/>
+						)}
+					</DateContext.Consumer>
 				</AdjustStyles>
 			</Editor>
 		);
