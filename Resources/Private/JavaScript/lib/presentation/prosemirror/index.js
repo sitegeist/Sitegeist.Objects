@@ -23,6 +23,11 @@ const AdjustProseMirrorStyles = styled.div`
 	.ProseMirror {
 		background: #3f3f3f;
 
+		a,
+		a:hover {
+			color: #00b5ff;
+		}
+
 		h1 {
 			font-size: 5.06em;
 			line-height: 1.28em;
