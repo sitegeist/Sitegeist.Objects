@@ -112,7 +112,6 @@ export default class Filter extends Component {
 									}
 								}))}
 								onChange={selectedItem => {
-									console.log({selectedItem});
 									filter.replace(filter => ({
 										...filter,
 										property: selectedItem.data.value,

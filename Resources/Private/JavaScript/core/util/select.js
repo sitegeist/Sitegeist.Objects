@@ -78,7 +78,7 @@ export default class Select extends Component {
 		const {allItems} = this.props;
 		const [selectedItem] = allItems.filter(item => item.name === selected);
 
-		return selectedItem;
+		return selectedItem || allItems[0];
 	}
 
 	handleChange = selected => {
