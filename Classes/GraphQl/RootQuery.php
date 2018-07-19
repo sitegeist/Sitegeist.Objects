@@ -149,7 +149,7 @@ class RootQuery extends ObjectType
                             'description' => 'The content context for this query'
                         ],
                         'search' => [
-                            'type' => Type::nonNull(Type::string()),
+                            'type' => Type::string(),
                             'description' => 'A search term to filter by'
                         ],
                         'searchRootIdentifier' => [
@@ -176,7 +176,7 @@ class RootQuery extends ObjectType
                             $searchRootNode = $contentContext->getRootNode();
                         }
 
-                        $query = $this->queryBuilder->query($searchRootNode);
+                        $query = $this->queryBuilder->query($searchRootNode)->limit(999);
 
                         if (array_key_exists('nodeType', $arguments) && $arguments['nodeType']) {
                             $query = $query->nodeType($arguments['nodeType']);
@@ -197,7 +197,9 @@ class RootQuery extends ObjectType
                             $query = $query->exactMatch('__parentNode', $this->node->getIdentifier());
                         }
 
-                        $query = $query->fullText($arguments['search'] . '*');
+                        if (array_key_exists('search', $arguments) && $arguments['search']) {
+                            $query = $query->fullText($arguments['search'] . '*');
+                        }
 
                         foreach($query->execute() as $result) {
                             yield new ReferenceHelper($result);

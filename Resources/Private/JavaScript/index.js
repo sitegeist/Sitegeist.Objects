@@ -33,6 +33,7 @@ import './plugins/editors/store';
 import './plugins/editors/date';
 import './plugins/editors/reference';
 import './plugins/editors/references';
+import './plugins/editors/referencesCheckbox';
 
 //
 // Core converters

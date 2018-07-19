@@ -17,7 +17,7 @@ import {query} from '../../core/graphql/gql';
 const GetReferencesQuery = query/* GraphQL */`
 	query getReferences(
 		$context: ContentContextInput!,
-		$search: String!,
+		$search: String,
 		$searchRootIdentifier: ID,
 		$searchRootPath: String,
 		$nodeType: String,
@@ -47,7 +47,7 @@ GetReferencesQuery.propTypes = {
 		removedContentShown: PropTypes.bool.isRequired,
 		inaccessibleContentShown: PropTypes.bool.isRequired
 	}),
-	search: PropTypes.string.isRequired,
+	search: PropTypes.string,
 	searchRootIdentifier: PropTypes.string,
 	searchRootPath: PropTypes.string,
 	nodeType: PropTypes.string,
@@ -58,6 +58,7 @@ GetReferencesQuery.propTypes = {
 GetReferencesQuery.defaultProps = {
 	/* @TODO: Better context handling */
 	context: window.Sitegeist.Objects.contentContext,
+	search: null,
 	searchRootIdentifier: null,
 	searchRootPath: null,
 	nodeType: null,
