@@ -160,6 +160,7 @@ class StoreHelper
         }
 
         $query = $this->queryBuilder->query($this->node)
+            ->request('query.bool.filter.bool', ['must_not' => []])
             ->nodeType('Sitegeist.Objects:Object')
             ->exactMatch('__parentNode', $this->node->getIdentifier());
 
