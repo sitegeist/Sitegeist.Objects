@@ -199,7 +199,11 @@ export default class StoreView extends Component {
 												}
 											</Link>
 										) :
-										({original}) => original.tableCells[index].value
+										({original}) => (
+											<span
+												dangerouslySetInnerHTML={{__html: original.tableCells[index].value}}
+											/>
+										)
 								}))]}
 								data={store.objectIndex.tableRows.map(row => ({
 									_id: row.object.identifier,
