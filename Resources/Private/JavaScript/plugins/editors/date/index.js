@@ -13,6 +13,8 @@ import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import styled from 'shim/styled-components';
 
+import Button from '../../../lib/presentation/primitives/button';
+import Icon from '../../../lib/presentation/primitives/icon';
 import Editor from '../../../lib/presentation/structures/editor';
 import {DateContext} from '../../../core/application';
 
@@ -20,6 +22,12 @@ const {React, PropTypes} = window.Sitegeist.Objects.runtime;
 const {Component} = window.Sitegeist.Objects.runtime.React;
 
 const AdjustStyles = styled.div`
+	display: flex;
+
+	> div:first-child {
+		width: 100%;
+	}
+
 	.react-datepicker-wrapper,
 	.react-datepicker__input-container,
 	.react-datepicker-wrapper input[type="text"] {
@@ -106,7 +114,7 @@ window.Sitegeist.Objects.plugin.registerEditor('Date', class DateEditor extends 
 	handleChange = value => {
 		const {commit} = this.props;
 
-		commit(value.format('YYYY-MM-DDTHH:mm:ssZ'));
+		commit(value === null ? null : value.format('YYYY-MM-DDTHH:mm:ssZ'));
 	}
 
 	render() {
@@ -133,6 +141,9 @@ window.Sitegeist.Objects.plugin.registerEditor('Date', class DateEditor extends 
 							/>
 						)}
 					</DateContext.Consumer>
+					<Button onClick={() => this.handleChange(null)}>
+						<Icon className="icon-times"/>
+					</Button>
 				</AdjustStyles>
 			</Editor>
 		);
