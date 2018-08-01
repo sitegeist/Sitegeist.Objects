@@ -20,7 +20,7 @@ use Neos\Neos\Domain\Service\UserService;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use Wwwision\GraphQL\TypeResolver;
-use Flowpack\ElasticSearch\ContentRepositoryAdaptor\Eel\ElasticSearchQueryBuilder;
+use Neos\ContentRepository\Search\Search\QueryBuilderInterface;
 use Sitegeist\Objects\GraphQl\Input\ContentContextInput;
 use Sitegeist\Objects\GraphQl\Query\StoreHelper;
 use Sitegeist\Objects\GraphQl\Query\StoreQuery;
@@ -50,7 +50,7 @@ class RootQuery extends ObjectType
 
     /**
      * @Flow\Inject
-     * @var ElasticSearchQueryBuilder
+     * @var QueryBuilderInterface
      */
     protected $queryBuilder;
 

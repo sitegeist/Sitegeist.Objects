@@ -22,7 +22,7 @@ use Sitegeist\Objects\Service\NodeService;
 use Sitegeist\Objects\GraphQl\Query\Detail\DetailHelper;
 use Sitegeist\Objects\GraphQl\Query\Index\IndexHelper;
 use Neos\Eel\Helper\StringHelper;
-use Flowpack\ElasticSearch\ContentRepositoryAdaptor\Eel\ElasticSearchQueryBuilder;
+use Neos\ContentRepository\Search\Search\QueryBuilderInterface;
 
 class StoreHelper
 {
@@ -56,7 +56,7 @@ class StoreHelper
 
     /**
      * @Flow\Inject
-     * @var ElasticSearchQueryBuilder
+     * @var QueryBuilderInterface
      */
     protected $queryBuilder;
 
@@ -152,13 +152,6 @@ class StoreHelper
      */
     public function getObjects(array $arguments)
     {
-        $currentWorkspaceNestingLevel = 1;
-        $workspace = $this->node->getContext()->getWorkspace();
-        while ($workspace->getBaseWorkspace() !== null) {
-            $currentWorkspaceNestingLevel++;
-            $workspace = $workspace->getBaseWorkspace();
-        }
-
         $query = $this->queryBuilder->query($this->node)
             ->request('query.bool.filter.bool', ['must_not' => []])
             ->nodeType('Sitegeist.Objects:Object')
@@ -194,7 +187,7 @@ class StoreHelper
         }
 
         if (array_key_exists('from', $arguments)) {
-            $query = $query->from($arguments['from'] * $currentWorkspaceNestingLevel);
+            $query = $query->from($arguments['from']);
         }
 
         if (array_key_exists('length', $arguments)) {
@@ -214,7 +207,7 @@ class StoreHelper
         //
         try {
             $result = $query->execute();
-            return [$result, intval($result->count() / $currentWorkspaceNestingLevel)];
+            return [$result, $result->count()];
         } catch (\Exception $e) {
             return [[], 0];
         }

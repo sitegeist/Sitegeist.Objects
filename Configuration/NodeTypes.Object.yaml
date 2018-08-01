@@ -39,10 +39,6 @@
           group: document
           editable: true
           editor: SingleLineText
-      search:
-        elasticSearchMapping:
-          type: string
-          include_in_all: true
     uriPathSegment:
       type: string
       ui:
