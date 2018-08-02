@@ -11,6 +11,9 @@
       type: string
     description:
       type: string
+      search:
+        elasticSearchMapping:
+          type: text
   ui:
     sitegeist/objects/list:
       columns:
